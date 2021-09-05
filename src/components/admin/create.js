@@ -60,7 +60,7 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 export default function Create(props){
-	// console.log("props.userId", props.userId)
+	console.log("props.userId", props.userId)
 	const history = useHistory()
 	const initialFormData = Object.freeze({
 		title: '',
@@ -98,7 +98,7 @@ export default function Create(props){
 		postFormData.append('author', props.userId); 
 		postFormData.append('content', formData.content);
 		postFormData.append('picture', postImage.pictureFile, postImage.pictureFile.name)
-		console.log("postFormData", postFormData)
+		console.log("postFormData", postFormData['author'])
 		props.handleAdd(postFormData)
 		// axiosInstance.post('admin/create/', postFormData)
 		// history.push({

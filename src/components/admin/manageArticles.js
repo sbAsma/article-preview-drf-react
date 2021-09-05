@@ -67,6 +67,9 @@ export default function ManageArticles(props) {
 				isAdd: false,
 			})
 		})
+		.catch((err)=>{
+			console.log(err.response)
+		})
 	}
 	const onCancleAdd = () => {
 		setAppState({ 

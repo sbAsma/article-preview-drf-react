@@ -14,6 +14,25 @@ const axiosInstance = axios.create({
 	},
 });
 
+// axiosInstance.interceptors.request.use(
+// 	(request) => {
+// 		if (request.method == "post"){
+// 			console.log(request)
+// 		}
+// 		return request
+// 	}
+// )
+
+const noInterceptAxios = axios.create({
+	baseURL: baseURL,
+	timeout: 5000,
+	headers: {
+		Authorization: null,
+		'Content-Type': 'application/json',
+		accept: 'application/json',
+	},
+});
+
 axiosInstance.interceptors.response.use(
 	(response) => {
 		return response;
@@ -54,7 +73,7 @@ axiosInstance.interceptors.response.use(
 				console.log(tokenParts.exp);
 
 				if (tokenParts.exp > now) {
-					return axiosInstance
+					return noInterceptAxios
 						.post('token/refresh/', {
 							refresh: refreshToken,
 						})
