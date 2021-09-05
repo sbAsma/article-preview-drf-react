@@ -141,6 +141,7 @@ const Articles = (props) => {
 									</Button>
 								</Box>
 					{articles.map((article) => {
+						const isArticleofAuthor = article.author == props.userId
 						return (
 							// Enterprise card is full width at sm breakpoint
 							<Box m={1} key={article.id} display="flex" alignItems="center" flexDirection="column"
@@ -173,8 +174,15 @@ const Articles = (props) => {
 										</div>
 									</CardContent>
 									</div>
-									<CardActions >
-										<div className={classes.CardActions}>
+									<CardActions 
+										style={isArticleofAuthor ?{} : { display: 'none'}}
+												
+												
+										>
+										<div 
+											className={classes.CardActions}
+											
+											>
 											<IconButton >
 												<Link href={'/admin/edit/' + article.id}>
 													<EditIcon/>

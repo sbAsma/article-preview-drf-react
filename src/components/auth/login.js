@@ -54,7 +54,7 @@ export default function Login(props) {
 			localStorage.setItem('refresh_token', res.data.refresh)
       localStorage.setItem('current_user', formData.username)
 			axiosInstance.defaults.headers['Authorization'] = 
-				'JWT' + localStorage.getItem('access_token')
+				'JWT ' + localStorage.getItem('access_token')
 			// history.push('admin/');
       // window.location.reload();
         props.handleLogin(formData.username)
