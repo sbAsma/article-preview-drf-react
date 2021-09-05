@@ -7,8 +7,20 @@ import Link from '@material-ui/core/Link';
 import Box from '@material-ui/core/Box';
 
 const useStyles = makeStyles((theme) => ({
+	'@global': {
+		ul: {
+			margin: 0,
+			padding: 0,
+			listStyle: 'none',
+		},
+	},
+	root: {
+		marginTop: theme.spacing(16),
+		backgroundColor: 'hsl(210, 46%, 95%)', //45%
+		minHeight: '37.3vh',
+	},
 	footer: {
-		borderTop: `1px solid ${theme.palette.divider}`,
+		// borderTop: `1px solid ${theme.palette.divider}`,
 		marginTop: theme.spacing(8),
 		paddingTop: theme.spacing(3),
 		paddingBottom: theme.spacing(3),
@@ -16,7 +28,6 @@ const useStyles = makeStyles((theme) => ({
 			paddingTop: theme.spacing(6),
 			paddingBottom: theme.spacing(6),
 		},
-		backgroundColor: 'hsl(210, 46%, 95%)',
 	},
 }));
 
@@ -67,6 +78,7 @@ function Footer() {
 	const classes = useStyles();
 	return (
 		<React.Fragment>
+			<footer className={classes.root}>
 			<Container maxWidth="md" component="footer" className={classes.footer}>
 				<Grid container spacing={4} justify="space-evenly">
 					{footers.map((footer) => (
@@ -90,6 +102,7 @@ function Footer() {
 					<Copyright />
 				</Box>
 			</Container>
+			</footer>
 		</React.Fragment>
 	);
 }

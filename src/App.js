@@ -1,25 +1,35 @@
-import logo from './logo.svg';
+import React, { useEffect, useState } from 'react';
 import './App.css';
+import Articles from './components/articles/articles';
+import ArticleLoadingComponent from './components/articles/articleLoading';
+import Header from './components/header'
+import Footer from './components/footer'
+import axiosInstance from './axios';
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+    const ArticleLoading = ArticleLoadingComponent(Articles);
+    const [appState, setAppState] = useState({
+        loading: true,
+        articles: null,
+    });
 
+    useEffect(() => {
+        axiosInstance.get('articles/').then((res) => {
+            const allArticles = res.data;
+            console.log(res.data);
+            setAppState({ loading: false, articles: allArticles });
+            console.log(res.data);
+        });
+    }, [setAppState]);
+    return (
+        <React.Fragment>
+            <Header />
+                <div className="App">
+                    <h1>Latest Articles</h1>
+                    <ArticleLoading isLoading={appState.loading} articles={appState.articles} />
+                </div>
+            <Footer />
+        </React.Fragment>
+    );
+}
 export default App;
