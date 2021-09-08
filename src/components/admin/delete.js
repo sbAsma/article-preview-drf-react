@@ -1,52 +1,54 @@
-import React, { useState, useEffect } from 'react';
-import axiosInstance from '../../axios';
-import { useHistory, useParams } from 'react-router-dom';
-//MaterialUI
+import React from 'react';
 import Container from '@material-ui/core/Container';
 import Button from '@material-ui/core/Button';
 import Box from '@material-ui/core/Box';
 
-export default function Create() {
-	const history = useHistory();
-	const { id } = useParams();
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
 
-	const handleSubmit = (e) => {
-		e.preventDefault();
-		axiosInstance
-			.delete('admin/article/' + id +'/')
-			.catch(function (error) {
-				if (error.response) {
-					console.log(error.response.data);
-					console.log(error.response.status);
-					console.log(error.response.headers);
-				}
-			})
-			.then(function () {
-					history.push({
-						pathname: '/admin/',
-					});
-					window.location.reload();
-			});
+// const DeleteContent = () => {
+// 	if()
+// }
+export default function Delete(props) {
+	const handleSubmit = () => {
+		props.onDeleteConfirm(props.article.id, "isDelete")
 	};
-
+	const handleCancel = () =>{
+		props.onDeleteCancel("isDelete")
+	}
+	const txt = (props.article === undefined)? "article is undefined": props.article.title
 	return (
-		<Container component="main" maxWidth="sm">
-			<Box
-				display="flex"
-				justifyContent="center"
-				m={1}
-				p={1}
-				bgcolor="background.paper"
+		<Dialog
+			open={props.isDelete}
+			onClose={handleCancel}
+			// aria-labelledby="alert-dialog-title"
+			// aria-describedby="alert-dialog-description"
+		>
+			<DialogContent>
+			<DialogContentText 
+			// id="alert-dialog-description"
 			>
-				<Button
-					variant="contained"
-					color="secondary"
-					type="submit"
-					onClick={handleSubmit}
-				>
-					Press here to confirm delete
-				</Button>
-			</Box>
-		</Container>
+				Do you really want to delete article {txt}
+			</DialogContentText>
+			</DialogContent>
+			<DialogActions>
+			<Button 
+				variant="contained"
+				onClick={handleSubmit} 
+				type="submit"
+				color="primary">
+				Confirm delete
+			</Button>
+			<Button 
+				variant="contained"
+				onClick={handleCancel} 
+				color="secondary" 
+				autoFocus>
+				cancel
+			</Button>
+			</DialogActions>
+		</Dialog>
 	);
 }

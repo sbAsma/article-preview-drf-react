@@ -1,7 +1,5 @@
 import React from 'react';
 import Create from './create'
-import Edit from './edit'
-import Delete from './delete'
 import { makeStyles } from '@material-ui/core/styles';
 import Link from '@material-ui/core/Link';
 import Card from '@material-ui/core/Card';
@@ -14,7 +12,7 @@ import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
-import AddCircleIcon from '@material-ui/icons/AddCircle';
+// import AddCircleIcon from '@material-ui/icons/AddCircle';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 
@@ -68,8 +66,9 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Articles = (props) => {
-
-	// console.log("Article props", props)
+	const onOperationClick = (id, operation) =>{
+		props.onOperationClick(id, operation) 
+	}
 	const { articles } = props;
 	const classes = useStyles();
 	// console.log("!articles", !articles)
@@ -90,29 +89,29 @@ const Articles = (props) => {
 							// xs={12} md={4}
 							>
 							<Button
-									// href={'/admin/create'}
-									variant="contained"
-									color="secondary"
-									style={{
-										width: '600px',
-										}}
-									onClick={() => props.onAdd()}
-								>
-								{/* <AddCircleIcon/> */}
-									New Article
-								</Button>
-							</Box>
+								// href={'/admin/create'}
+								variant="contained"
+								color="secondary"
+								style={{
+									width: '600px',
+									}}
+								onClick={() => onOperationClick(null, "isAdd")}
+							>
+							{/* <AddCircleIcon/> */}
+								New Article
+							</Button>
+						</Box>
 					</Grid>
 				</Container>
 			</React.Fragment>
 			);}
-	else if(props.isAdd) return (
-			<Create
-				userId={props.userId}
-				handleAdd={(postFormData) => props.handleAdd(postFormData)}
-				onCancleAdd={() => props.onCancleAdd()}
-			/>
-		)
+	// else if(props.isAdd) return (
+	// 		<Create
+	// 			// userId={props.userId}
+	// 			// handleAdd={(postFormData) => props.handleAdd(postFormData)}
+	// 			// onCancleAdd={onCancelOperation}
+	// 		/>
+	// )
 	return (
 		<React.Fragment>
 			<Container maxWidth="md" component="main">
@@ -134,7 +133,7 @@ const Articles = (props) => {
 										style={{
 											width: '600px',
 										}}
-										onClick={()=>props.onAdd()}
+										onClick={() => onOperationClick(null, "isAdd")}
 									>
 									{/* <AddCircleIcon/> */}
 										New Article
@@ -175,23 +174,18 @@ const Articles = (props) => {
 									</CardContent>
 									</div>
 									<CardActions 
-										style={isArticleofAuthor ?{} : { display: 'none'}}
-												
-												
+										style={isArticleofAuthor ?{} : { display: 'none'}}	
 										>
-										<div 
-											className={classes.CardActions}
-											
-											>
+										<div className={classes.CardActions}>
 											<IconButton >
-												<Link href={'/admin/edit/' + article.id}>
+												{/* <Link href={'/admin/edit/' + article.id}> */}
 													<EditIcon/>
-												</Link>
+												{/* </Link> */}
 											</IconButton>
-											<IconButton  >
-												<Link href={'/admin/delete/' + article.id}>
-													<DeleteIcon/>
-												</Link>
+											<IconButton  
+												onClick = {() => onOperationClick(article.id, "isDelete")}
+											>
+												<DeleteIcon/>
 											</IconButton>
 										</div>
 							      </CardActions>
@@ -201,7 +195,20 @@ const Articles = (props) => {
 					})}
 				</Grid>
 			</Container>
+
 		</React.Fragment>
 	);
 };
 export default Articles;
+
+	// const onDeleteClick = (id) => {
+	// 	setAppState({idDelete: id})
+	// 	props.onDeleteClick()
+	// }
+	// const onDeleteConfirm = () => {
+	// 	props.handleDelete(appState.idDelete)
+	// }
+	// const onDeleteCancel = () => {
+	// 	setAppState({idDelete: null})
+	// 	props.onDeleteCancel()
+	// }
