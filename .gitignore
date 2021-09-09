@@ -24,7 +24,7 @@ yarn-error.log*
 
 # database
 /db/*.sqlite3
-*.sqlite3
+db.sqlite3
 
 # media files
 media/
