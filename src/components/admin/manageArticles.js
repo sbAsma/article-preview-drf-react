@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import '../../App.css';
 import Header from './header'
 import Articles from './articles';
+import Create from './create'
 import Delete from './delete'
 import ArticleLoadingComponent from '../articles/articleLoading';
 import axios from 'axios'
@@ -57,18 +58,30 @@ export default function ManageArticles(props) {
 			setAppState({...appState, [operation]: true, article: article_})
 		}
 		else{
+			// console.log(operation)
 			setAppState({...appState, [operation]: true})
 		}
 	}
-	const handleOperation = (id, operation) =>{
+	const handleOperation = (id, operation, formData) =>{
 		// console.log("operation ", operation)
-		if(operation === "isAdd"){}
+		if(operation === "isAdd"){
+			axiosInstance.post('admin/create/', formData)
+			.then((res) => {
+				// console.log("base url", res.config.baseURL)
+				console.log("response", res)
+				const newArticle = res.data
+				setAppState({
+					...appState, 
+					articles: [...appState.articles, newArticle],
+					isAdd: false,
+				})
+			})
+			.catch((err)=>{
+				console.log(err.response)
+			})
+		}
 		else if(operation === "isEdit"){}
 		else if(operation === "isDelete"){
-			// console.log("came inside ", operation)
-			// const newArticles = appState.articles.filter((article) =>{
-			// 	if(article.id =! appState.article.id) return article
-			// })
 			console.log("delete article N° ", id)
 			axiosInstance
 				.delete('admin/article/' + id +'/')
@@ -120,6 +133,13 @@ export default function ManageArticles(props) {
 					// onCancelOperation={onCancelOperation}
                 />
             </div>
+			<Create
+				userId={appState.userId}
+				isAdd={appState.isAdd}
+				onCancleAdd={onCancelOperation}
+				handleOperation={handleOperation}
+				onCancelOperation={onCancelOperation}
+			/>
 			<Delete
 				isDelete={appState.isDelete}
 				article={appState.article}
@@ -139,19 +159,7 @@ export default function ManageArticles(props) {
 	// 	})
 	// }
 	// const handleAdd = (articleFormData) => {
-	// 	axiosInstance.post('admin/create/', articleFormData)
-	// 	.then((res) => {
-	// 		console.log("re", res)
-	// 		const newArticle = res.data
-	// 		setAppState({
-	// 			...appState, 
-	// 			articles: [...appState.articles, newArticle],
-	// 			isAdd: false,
-	// 		})
-	// 	})
-	// 	.catch((err)=>{
-	// 		console.log(err.response)
-	// 	})
+	
 	// }
 	// const onCancleAdd = () => {
 	// 	setAppState({ 
