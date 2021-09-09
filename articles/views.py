@@ -21,12 +21,15 @@ class CreateArticle(APIView):
 	parser_classes = [MultiPartParser, FormParser]
 
 	def post(self, request, format=None):
-		serializer = ArticleSerializer(data=request.data)
+		# context={'request': request} helps generate hyperlinks
+		# so that I would have the full link to the created image in the response
+		serializer = ArticleSerializer(data=request.data, context={'request': request})
 		if serializer.is_valid():
 			serializer.save()
 			return Response(serializer.data, status=status.HTTP_200_OK)
 		else:
 			return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 class AdminManageArticle(generics.RetrieveUpdateDestroyAPIView):
 	permission_classes = [permissions.IsAuthenticated]

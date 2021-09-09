@@ -1,7 +1,5 @@
 import React from 'react';
-import Container from '@material-ui/core/Container';
 import Button from '@material-ui/core/Button';
-import Box from '@material-ui/core/Box';
 
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -13,7 +11,7 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 // }
 export default function Delete(props) {
 	const handleSubmit = () => {
-		props.onDeleteConfirm(props.article.id, "isDelete")
+		props.onDeleteConfirm(props.article.id, "isDelete", null)
 	};
 	const handleCancel = () =>{
 		props.onDeleteCancel("isDelete")
