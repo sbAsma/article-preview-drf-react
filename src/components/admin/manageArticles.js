@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-// import { useHistory } from 'react-router-dom';
 import '../../App.css';
 import Header from './header'
 import Articles from './articles';
@@ -11,7 +10,6 @@ import axios from 'axios'
 import axiosInstance from '../../axios';
 
 export default function ManageArticles(props) {
-	// const history = useHistory()
 	const ArticleLoading = ArticleLoadingComponent(Articles);
     const initialState = Object.freeze({
     	isLoggedIn: false,
@@ -24,7 +22,6 @@ export default function ManageArticles(props) {
         isEdit: false,
         isDelete: false,
     })
-    // const manageArticlesState
     const [appState, setAppState] = useState(initialState)
 	useEffect(() =>{
 		const username = localStorage.getItem('current_user')
@@ -33,7 +30,6 @@ export default function ManageArticles(props) {
 			const axiosReqUser = axiosInstance.get('user/user/'+ username +'/')
 			const axiosReqArticles = axiosInstance.get('articles/')
 			axios.all([axiosReqUser, axiosReqArticles]).then(axios.spread((...res) => {
-			    // console.log(res.data);
 			    const user = res[0].data;
 			    const allArticles = res[1].data;
 			    setAppState({ 
@@ -50,7 +46,6 @@ export default function ManageArticles(props) {
 		else{
 			console.log("current user isn't here yet")
 		}
-
 	}, [])
 	
 	const onOperationClick = (id, operation) =>{
@@ -59,16 +54,13 @@ export default function ManageArticles(props) {
 			setAppState({...appState, [operation]: true, article: article_})
 		}
 		else{
-			// console.log(operation)
 			setAppState({...appState, [operation]: true})
 		}
 	}
 	const handleOperation = (id, operation, formData) =>{
-		// console.log("operation ", operation)
 		if(operation === "isAdd"){
 			axiosInstance.post('admin/create/', formData)
 			.then((res) => {
-				// console.log("base url", res.config.baseURL)
 				console.log("response", res)
 				const newArticle = res.data
 				setAppState({
@@ -116,8 +108,7 @@ export default function ManageArticles(props) {
 						...appState, 
 						[operation]: false, 
 						article: {}, 
-						articles: 
-						newArticles
+						articles: newArticles,
 					})
 				});
 			
@@ -140,12 +131,7 @@ export default function ManageArticles(props) {
                 	isLoading={appState.loading} 
                 	articles={appState.articles} 
                 	userId = {appState.userId}
-                	// isAdd={appState.isAdd}
-					// isEdit={appState.isEdit}
-					// isDelete={appState.isDelete}
 					onOperationClick={onOperationClick}
-					// handleOperation={handleOperation}
-					// onCancelOperation={onCancelOperation}
                 />
             </div>
 			<Create
@@ -172,46 +158,3 @@ export default function ManageArticles(props) {
         </React.Fragment>
 	)
 }
-
-// const onAdd = () => {
-	// 	setAppState({ 
-	// 		...appState,
-	// 		isAdd: true,
-	//         isEdit: false,
-	//         isDelete: false,
-	// 	})
-	// }
-	// const handleAdd = (articleFormData) => {
-	
-	// }
-	// const onCancleAdd = () => {
-	// 	setAppState({ 
-	// 		...appState,
-	// 		isAdd: false,
-	//         isEdit: false,
-	//         isDelete: false,
-	// 	})
-	// }
-	// const onEdit = () =>{
-
-	// }
-	// const handleEdit = () =>{
-
-	// }
-	// const onDeleteClick = () =>{
-	// 	setAppState({ 
-	// 		...appState,
-	// 		isAdd: false,
-	//         isEdit: false,
-	//         isDelete: true,
-	// 	})
-	// }
-	// const handleDelete = (deleteId) =>{}
-	// const onDeleteCancel = () =>{
-	// 	setAppState({ 
-	// 		...appState,
-	// 		isAdd: false,
-	//         isEdit: false,
-	//         isDelete: false,
-	// 	})
-	// }
