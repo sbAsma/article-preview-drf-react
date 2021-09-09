@@ -5,12 +5,10 @@ import ImageUploading from "react-images-uploading";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
-import DialogContentText from "@material-ui/core/DialogContentText";
-import Button from "@material-ui/core/Button";
+import DialogTitle from "@material-ui/core/DialogTitle";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import TextField from "@material-ui/core/TextField";
 import Grid from "@material-ui/core/Grid";
-import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import IconButton from "@material-ui/core/IconButton";
@@ -20,10 +18,15 @@ import ClearIcon from "@material-ui/icons/Clear";
 
 const useStyles = makeStyles((theme) => ({
     paper: {
-        marginTop: theme.spacing(8),
+        // marginTop: theme.spacing(8),
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
+    },
+    titleDialog:{
+        display: "flex",
+        flexDirection: "column",
+        margin: 'auto',
     },
     form: {
         width: "100%",
@@ -96,10 +99,10 @@ export default function Create(props) {
             postImage.pictureFile.name
         );
         props.handleOperation(null, "isAdd", postFormData);
-		updateFormData({ initialFormData });
+		updateFormData(initialFormData);
     };
     const cancelCreateClick = () => {
-        updateFormData({ initialFormData });
+        updateFormData(initialFormData);
         props.onCancleAdd("isAdd");
     };
 
@@ -109,16 +112,19 @@ export default function Create(props) {
         <Dialog
             open={props.isAdd}
             onClose={cancelCreateClick}
-            // aria-labelledby="alert-dialog-title"
+            aria-labelledby="dialog-create-title"
             // aria-describedby="alert-dialog-description"
         >
+            <DialogTitle 
+                id="dialog-create-title"
+                className={classes.titleDialog}
+            >
+                Create Article
+            </DialogTitle>
             <DialogContent>
                 <Container component="main" maxWidth="sm">
                     <CssBaseline />
                     <div className={classes.paper}>
-                        <Typography component="h1" variant="h5">
-                            Create Article
-                        </Typography>
                         <form className={classes.form} noValidate>
                             <Grid item xs={12} alignItems="center">
                                 <div className={classes.imageContainer}>

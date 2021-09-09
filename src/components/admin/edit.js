@@ -1,13 +1,11 @@
 import React, { useState, useEffect } from "react";
-import axiosInstance from "../../axios";
-import { useHistory, useParams } from "react-router-dom";
 //upload image interface
 import ImageUploading from "react-images-uploading";
 //MaterialUI
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
-import Button from "@material-ui/core/Button";
+import DialogTitle from "@material-ui/core/DialogTitle";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import TextField from "@material-ui/core/TextField";
 import Grid from "@material-ui/core/Grid";
@@ -25,6 +23,11 @@ const useStyles = makeStyles((theme) => ({
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
+    },
+    titleDialog:{
+        display: "flex",
+        flexDirection: "column",
+        margin: 'auto',
     },
     form: {
         width: "100%",
@@ -83,7 +86,6 @@ export default function Edit(props) {
     }, [props.isEdit == true]);
 
     const handleUploadImage = (data) => {
-        // console.log(data)
         setPutImage({
             pictureFile: data[0].file,
         });
@@ -100,7 +102,6 @@ export default function Edit(props) {
     };
     const handleSubmit = (e) => {
         e.preventDefault();
-        // console.log(formData);
         let putFormData = new FormData();
         putFormData.append("title", formData.title);
         putFormData.append("author", formData.author);
@@ -113,11 +114,6 @@ export default function Edit(props) {
             );
 		props.handleOperation(formData.id, "isEdit", putFormData);
 		updateFormData(initialFormData);
-        // axiosInstance.put(`admin/article/` + id + "/", putFormData);
-        // history.push({
-        // 	pathname: '/admin/',
-        // });
-        // window.location.reload();
     };
     const cancelEditClick = () => {
         updateFormData(initialFormData);
@@ -134,13 +130,16 @@ export default function Edit(props) {
             // aria-labelledby="alert-dialog-title"
             // aria-describedby="alert-dialog-description"
         >
+            <DialogTitle
+                id="dialog-create-title"
+                className={classes.titleDialog}
+            >
+                Edit Article
+            </DialogTitle>
             <DialogContent>
                 <Container component="main" maxWidth="sm">
                     <CssBaseline />
                     <div className={classes.paper}>
-                        <Typography component="h1" variant="h5">
-                            Edit Article
-                        </Typography>
                         <form className={classes.form} noValidate>
                             <Grid item xs={12} alignItems="center">
                                 <div className={classes.imageContainer}>
@@ -159,9 +158,7 @@ export default function Edit(props) {
                                                 }}
                                                 onClick={onImageUpload}
                                             >
-                                                <ImageIcon
-                                                    style={{ fontSize: 40 }}
-                                                />
+                                                <ImageIcon style={{ fontSize: 40 }}/>
                                             </IconButton>
                                         )}
                                     </ImageUploading>
