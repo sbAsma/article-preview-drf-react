@@ -1,21 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import '../../App.css';
-import Header from './header'
 import Articles from './articles';
 import Create from './create'
 import Edit from './edit'
 import Delete from './delete'
 import ArticleLoadingComponent from '../articles/articleLoading';
-import axios from 'axios'
 import axiosInstance from '../../axios';
 
 export default function ManageArticles(props) {
 	const ArticleLoading = ArticleLoadingComponent(Articles);
     const initialState = Object.freeze({
-    	isLoggedIn: false,
         loading: false,
-        user: null,
-        username: '',
+        user: props.user,
+        username: props.username,
         articles: [],
 		article: {},
         isAdd: false,
@@ -24,29 +21,18 @@ export default function ManageArticles(props) {
     })
     const [appState, setAppState] = useState(initialState)
 	useEffect(() =>{
-		const username = localStorage.getItem('current_user')
-		if(username != null && appState.isLoggedIn != true){
 			setAppState({ ...appState, loading:true, })
-			const axiosReqUser = axiosInstance.get('user/user/'+ username +'/')
-			const axiosReqArticles = axiosInstance.get('articles/')
-			axios.all([axiosReqUser, axiosReqArticles]).then(axios.spread((...res) => {
-			    const user = res[0].data;
-			    const allArticles = res[1].data;
+			axiosInstance.get('articles/')
+			.then((res) => {
+			    const allArticles = res.data;
 			    setAppState({ 
-			        isLoggedIn: true,
+					...appState,
 			        loading: false, 
-			        user: user,
-			        userId: user.id,
-			        username: user.user_name,
 			        articles: allArticles,
 			    });
 
-			}))
-		}
-		else{
-			console.log("current user isn't here yet")
-		}
-	}, [])
+			})
+	}, [props.username])
 	
 	const onOperationClick = (id, operation) =>{
 		if (id != null){
@@ -100,7 +86,6 @@ export default function ManageArticles(props) {
 					}
 				})
 				.then(() => {
-					// correct articles: newArticles
 					const newArticles = appState.articles.filter((article) =>{
 						if(article.id != id) return article
 					})
@@ -120,29 +105,24 @@ export default function ManageArticles(props) {
 	}
 	return(
 		<React.Fragment>
-            <Header 
-                isLoggedIn={appState.isLoggedIn} 
-                username={appState.username} 
-                handleLogout={props.handleLogout}
-            />
             <div className="App">
                 <h1>Latest Articles</h1>
                 <ArticleLoading 
                 	isLoading={appState.loading} 
                 	articles={appState.articles} 
-                	userId = {appState.userId}
+                	userId = {appState.user.id}
 					onOperationClick={onOperationClick}
                 />
             </div>
 			<Create
-				userId={appState.userId}
+				userId={appState.user.id}
 				isAdd={appState.isAdd}
 				onCancleAdd={onCancelOperation}
 				handleOperation={handleOperation}
 				onCancelOperation={onCancelOperation}
 			/>
 			<Edit
-				userId={appState.userId}
+				userId={appState.user.id}
 				isEdit={appState.isEdit}
 				article={appState.article}
 				onCancleEdit={onCancelOperation}
@@ -158,3 +138,28 @@ export default function ManageArticles(props) {
         </React.Fragment>
 	)
 }
+
+// useEffect(() =>{
+// 	const username = localStorage.getItem('current_user')
+// 	if(username != null && appState.isLoggedIn != true){
+// 		setAppState({ ...appState, loading:true, })
+// 		const axiosReqUser = axiosInstance.get('user/user/'+ username +'/')
+// 		const axiosReqArticles = axiosInstance.get('articles/')
+// 		axios.all([axiosReqUser, axiosReqArticles]).then(axios.spread((...res) => {
+// 			const user = res[0].data;
+// 			const allArticles = res[1].data;
+// 			setAppState({ 
+// 				isLoggedIn: true,
+// 				loading: false, 
+// 				user: user,
+// 				userId: user.id,
+// 				username: user.user_name,
+// 				articles: allArticles,
+// 			});
+
+// 		}))
+// 	}
+// 	else{
+// 		console.log("current user isn't here yet")
+// 	}
+// }, [])
