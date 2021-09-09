@@ -177,10 +177,10 @@ const Articles = (props) => {
 										style={isArticleofAuthor ?{} : { display: 'none'}}	
 										>
 										<div className={classes.CardActions}>
-											<IconButton >
-												{/* <Link href={'/admin/edit/' + article.id}> */}
+											<IconButton 
+												onClick = {() => onOperationClick(article.id, "isEdit")}
+											>
 													<EditIcon/>
-												{/* </Link> */}
 											</IconButton>
 											<IconButton  
 												onClick = {() => onOperationClick(article.id, "isDelete")}

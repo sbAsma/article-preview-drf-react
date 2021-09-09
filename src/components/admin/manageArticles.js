@@ -4,6 +4,7 @@ import '../../App.css';
 import Header from './header'
 import Articles from './articles';
 import Create from './create'
+import Edit from './edit'
 import Delete from './delete'
 import ArticleLoadingComponent from '../articles/articleLoading';
 import axios from 'axios'
@@ -80,7 +81,21 @@ export default function ManageArticles(props) {
 				console.log(err.response)
 			})
 		}
-		else if(operation === "isEdit"){}
+		else if(operation === "isEdit"){
+			axiosInstance.put(`admin/article/` + id + "/", formData)
+			.then((res) => {
+				const updateArticles = appState.articles.map((article) =>{
+					if(article.id != id) return article
+					else return res.data
+				})
+				setAppState({
+					...appState, 
+					[operation]: false, 
+					article: {}, 
+					articles: updateArticles
+				})
+			})
+		}
 		else if(operation === "isDelete"){
 			console.log("delete article N° ", id)
 			axiosInstance
@@ -93,7 +108,7 @@ export default function ManageArticles(props) {
 					}
 				})
 				.then(() => {
-					// var articles = appState.articles
+					// correct articles: newArticles
 					const newArticles = appState.articles.filter((article) =>{
 						if(article.id != id) return article
 					})
@@ -139,6 +154,14 @@ export default function ManageArticles(props) {
 				onCancleAdd={onCancelOperation}
 				handleOperation={handleOperation}
 				onCancelOperation={onCancelOperation}
+			/>
+			<Edit
+				userId={appState.userId}
+				isEdit={appState.isEdit}
+				article={appState.article}
+				onCancleEdit={onCancelOperation}
+				handleOperation={handleOperation}
+				onCancleEdit={onCancelOperation}
 			/>
 			<Delete
 				isDelete={appState.isDelete}
