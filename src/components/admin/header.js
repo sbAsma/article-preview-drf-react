@@ -1,4 +1,5 @@
 import React from 'react';
+import {useHistory} from "react-router-dom"
 import { NavLink } from 'react-router-dom';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -66,6 +67,7 @@ const LogInOutButtons = (props) => {
 }
 
 export default function Header(props) {
+	const history = useHistory()
 	// to be optimized with another function component fo loging buttons
 	const {adminState: {
 		isLoggedIn,
@@ -95,7 +97,7 @@ export default function Header(props) {
                 username: '',
                 user: {},
             })
-            
+            history.push('/admin')
         })
     }
 	const classes = useStyles();

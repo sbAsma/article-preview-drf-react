@@ -6,13 +6,17 @@ import Edit from './edit'
 import Delete from './delete'
 import ArticleLoadingComponent from '../articles/articleLoading';
 import axiosInstance from '../../axios';
+import {useAdminContext} from '../context/AdminContexProvider'
 
 export default function ManageArticles(props) {
 	const ArticleLoading = ArticleLoadingComponent(Articles);
+	const {adminState: {
+			username,
+			user}} = useAdminContext()
     const initialState = Object.freeze({
         loading: false,
-        user: props.user,
-        username: props.username,
+        // user: props.user,
+        // username: props.username,
         articles: [],
 		article: {},
         isAdd: false,
@@ -32,7 +36,7 @@ export default function ManageArticles(props) {
 			    });
 
 			})
-	}, [props.username])
+	}, [username])
 	
 	const onOperationClick = (id, operation) =>{
 		if (id != null){
@@ -103,26 +107,27 @@ export default function ManageArticles(props) {
 	const onCancelOperation = (operation) =>{
 		setAppState({...appState, [operation]: false, article: {}})
 	}
-	return(
+	if(user == undefined) return <div>loading</div>
+	else return(
 		<React.Fragment>
             <div className="App">
                 <h1>Latest Articles</h1>
                 <ArticleLoading 
                 	isLoading={appState.loading} 
                 	articles={appState.articles} 
-                	userId = {appState.user.id}
+                	userId = {user.id}
 					onOperationClick={onOperationClick}
                 />
             </div>
 			<Create
-				userId={appState.user.id}
+				userId={user.id}
 				isAdd={appState.isAdd}
 				onCancleAdd={onCancelOperation}
 				handleOperation={handleOperation}
 				onCancelOperation={onCancelOperation}
 			/>
 			<Edit
-				userId={appState.user.id}
+				userId={user.id}
 				isEdit={appState.isEdit}
 				article={appState.article}
 				onCancleEdit={onCancelOperation}
