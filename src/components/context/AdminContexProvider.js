@@ -1,5 +1,6 @@
 import * as React from 'react'
-
+import {useEffect} from 'react'
+import axiosInstance from "../../axios";
 // check what is exacted used to import correctly
 const AdminContext = React.createContext()
 
@@ -11,7 +12,19 @@ function AdminProvider({children}){
         username: '',
         user: {},
     })
-
+    useEffect(() =>{
+        const username = localStorage.getItem("current_user")
+        if(username!=null){ // adminState.isLoggedIn && 
+            axiosInstance.get('user/user/'+ username +'/')
+				.then((res) => {
+					setAdminState({ 
+						isLoggedIn: true,
+						user: res.data,
+						username: res.data.user_name,
+					});
+				})
+        }
+    }, [adminState.isLoggedIn==true])
     const value = {adminState, setAdminState}
     return <AdminContext.Provider value={value}>{children}</AdminContext.Provider>
 }
