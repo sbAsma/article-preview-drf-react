@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import {useHistory} from "react-router-dom"
 import axiosInstance from "../../axios";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -27,6 +28,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function Login(props) {
+	const history = useHistory()
+	// console.log("history ", history)
 	const {setAdminState} = useAdminContext()
 
     const initialFormData = Object.freeze({
@@ -58,15 +61,17 @@ export default function Login(props) {
                 localStorage.setItem("current_user", formData.username);
                 axiosInstance.defaults.headers["Authorization"] =
                     "JWT " + localStorage.getItem("access_token");
-
-				axiosInstance.get('user/user/'+ formData.username +'/')
-				.then((res) => {
+				
+				// axiosInstance.get('user/user/'+ formData.username +'/')
+				// .then((res) => {
 					setAdminState({ 
 						isLoggedIn: true,
-						user: res.data,
-						username: res.data.user_name,
+						// user: res.data,
+						// username: res.data.user_name,
 					});
-				})
+					// console.log("location ", history.location )
+					// history.push('admin/articles')
+				// })
             });
     };
 
