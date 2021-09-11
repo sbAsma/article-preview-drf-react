@@ -5,7 +5,7 @@ import Login from './components/auth/login'
 import Signup from './components/auth/signup'
 import ManageArticles from './components/admin/manageArticles';
 import {AdminProvider, useAdminContext} from './components/context/AdminContexProvider'
-
+import {Redirect} from 'react-router-dom'
 function AdminContent() {
     const {adminState: {
             isLoggedIn,
@@ -26,22 +26,27 @@ function AdminContent() {
             <Signup/>
         </div>
     )
-    else return (
-        <ManageArticles 
-            username={username}
-            user={user}
-        />
+    else return(
+        <Redirect to="/admin/articles" />
+        // <div>admin profile</div>
     )
+    // else return (
+    //     <ManageArticles 
+    //         username={username}
+    //         user={user}
+    //     />
+    // )
 }
 
 export default function Admin() {
     return(
-        <AdminProvider>
-            <Header/>
-            {/* <Login/>
-            <Signup/>
-            <ManageArticles/> */}
-            <AdminContent/>
-        </AdminProvider>
+        <AdminContent/>
+        // <AdminProvider>
+            
+            // {/* <Login/>
+            // <Signup/>
+            // <ManageArticles/> */}
+            
+        // {/* </AdminProvider> */}
     )
 }
