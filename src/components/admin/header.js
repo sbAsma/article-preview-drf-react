@@ -30,7 +30,15 @@ const LogInOutButtons = (props) => {
 	if(props.isLoggedIn == true){
 		return (
 			<React.Fragment>
-				<Typography >{props.username}</Typography>
+				{/* <Typography >{props.username}</Typography> */}
+				<Link
+					component={NavLink}
+					to="profile"
+					underline="none"
+					color="textPrimary"
+				>
+					{props.username}
+				</Link>
 				<Button
 					color="primary"
 					variant="outlined"
