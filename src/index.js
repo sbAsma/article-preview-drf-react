@@ -6,7 +6,7 @@ import App from './App';
 import Admin from './Admin'
 import Header from './components/admin/header'
 import ManageArticles from './components/admin/manageArticles'
-// import Create from './components/admin/create'
+import AdminProfile from './components/admin/adminProfile'
 // import Edit from './components/admin/edit'
 // import Delete from './components/admin/delete'
 // import Login from './components/auth/login'
@@ -28,6 +28,7 @@ const routing = (
 					<Route exact path="/admin/articles">
 						{isNotLoggedIn ? <Redirect to="/admin" /> : <ManageArticles />}
 					</Route>
+					<Route exact path ="/admin/profile" component={AdminProfile} />
 				</AdminProvider>
 		    	<Route path="/logout" component={Logout} />
 		    </Switch>
