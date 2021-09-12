@@ -1,20 +1,21 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
 import List from '@material-ui/core/List';
 import Link from '@material-ui/core/Link';
-import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
 import MailIcon from '@material-ui/icons/Mail';
+import Grid from '@material-ui/core/Grid'
+import Avatar from '@material-ui/core/Avatar'
+import Typography from '@material-ui/core/Typography'
+import Box from '@material-ui/core/Box';
+import {useAdminContext} from '../context/AdminContexProvider'
 
-const drawerWidth = 240;
+
+const drawerWidth = 180;
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -38,37 +39,71 @@ const useStyles = makeStyles((theme) => ({
         backgroundColor: theme.palette.background.default,
         padding: theme.spacing(3),
     },
+    avatar: {
+        width: theme.spacing(15),
+        height: theme.spacing(15),
+    },
 }));
 
+const CustomDrawer = (props) => {
+    return (
+        //   {/* <CssBaseline /> */}
+        <Drawer
+            className={props.classes.drawer}
+            variant="permanent"
+            classes={{
+                paper: props.classes.drawerPaper,
+            }}
+            anchor="left"
+        >
+            <div className={props.classes.toolbar} />
+            <Divider />
+            <List>
+                <ListItem button component={Link} href={"articles"}>
+                    <ListItemIcon>
+                        <MailIcon />
+                    </ListItemIcon>
+                    <ListItemText primary={"articles"} />
+                </ListItem>
+            </List>
+        </Drawer>
+    );
+}
+
 export default function AdminProfile(){
-    console.log("inside admin profile")
+    const {adminState: {
+        user,
+    }, setAdminState} = useAdminContext()
+    console.log("user", user)
     const classes = useStyles();
     return (
         <div className={classes.root}>
-            <CssBaseline />
-            <Drawer
-                className={classes.drawer}
-                variant="permanent"
-                classes={{
-                    paper: classes.drawerPaper,
-                }}
-                anchor="left"
-            >
+            <CustomDrawer classes={classes} />
+            <Grid className={classes.content}>
                 <div className={classes.toolbar} />
-                <Divider />
-                <List>
-                    <ListItem button component={Link} href={'articles'}>
-                            <ListItemIcon>
-                                <MailIcon />
-                            </ListItemIcon>
-                            <ListItemText primary={"articles"} />
-                    </ListItem>
-                </List>
-            </Drawer>
-            <main className={classes.content}>
-                <div className={classes.toolbar} />
-                <div>this is admin profile</div>
-            </main>
+                {/* <div>Hello {user.user_name}</div> */}
+                <Avatar
+                    alt={user.user_name}
+                    src={user.avatar}
+                    className={classes.avatar}
+                />
+                <Typography variant="h6" gutterBottom fontWeight="fontWeightBold">
+                    <Box fontWeight="fontWeightBold" >
+                        Basic Details
+                    </Box>
+                </Typography>
+                <Typography variant="body2" gutterBottom>
+                    fullname: {user.first_name} {user.last_name}
+                </Typography>
+                <Typography variant="h6" gutterBottom fontWeight="fontWeightBold">
+                    <Box fontWeight="fontWeightBold" >
+                        Contact Details
+                    </Box>
+                </Typography>
+                <Typography variant="body2" gutterBottom>
+                    email: {user.email}
+                </Typography>
+            </Grid>
         </div>
     )
 }
