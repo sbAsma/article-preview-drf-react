@@ -6,6 +6,7 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Link from '@material-ui/core/Link';
+import Avatar from '@material-ui/core/Avatar'
 import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/core/styles';
 import { useAdminContext } from "../context/AdminContexProvider";
@@ -23,25 +24,42 @@ const useStyles = makeStyles((theme) => ({
 	toolbarTitle: {
 		marginLeft: '10px',
 		flexGrow: 1,
-	}
+	},
+	profileNavLink: {
+		display: 'flex',
+		flexDirection: 'row',
+		backgroundColor: 'hsl(212, 23%, 56%)',
+		width: '110px',
+		padding: '5px',
+		borderRadius: '15px',
+	},
+	userName: {
+		margin: 'auto',
+		marginLeft: '5px',
+		fontWeight: 'bold',
+		color: 'white',
+	},
 }));
 
 const LogInOutButtons = (props) => {
 	if(props.isLoggedIn == true){
 		return (
 			<React.Fragment>
-				{/* <Typography >{props.username}</Typography> */}
 				<Link
 					component={NavLink}
 					to="profile"
 					underline="none"
 					color="textPrimary"
+					className={props.classes.profileNavLink}
 				>
-					{props.username}
+					<Avatar src={props.user.avatar}/>
+					<div className={props.classes.userName} >
+						{props.user.user_name}
+					</div>
 				</Link>
 				<Button
-					color="primary"
-					variant="outlined"
+					// color="primary"
+					// variant="outlined"
 					className={props.classes.link}
 					onClick = {() => props.handleLogout() }
 				>
@@ -140,6 +158,7 @@ export default function Header(props) {
 						isSigningUp={isSigningUp}
 						isLoggingIn={isLoggingIn}
 						isLoggedIn={isLoggedIn}
+						user={user}
 						username={username}
 						redirectLogin={redirectLogin}
 						redirectSignUp={redirectSignUp}
