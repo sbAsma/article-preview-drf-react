@@ -14,6 +14,7 @@ import axiosInstance from '../../axios';
 const useStyles = makeStyles((theme) => ({
 	appBar: {
 		// borderBottom: `1px solid ${theme.palette.divider}`,
+		zIndex: theme.zIndex.drawer + 1,
 		backgroundColor: 'hsl(212, 23%, 69%)',
 	},
 	link: {
@@ -29,7 +30,15 @@ const LogInOutButtons = (props) => {
 	if(props.isLoggedIn == true){
 		return (
 			<React.Fragment>
-				<Typography >{props.username}</Typography>
+				{/* <Typography >{props.username}</Typography> */}
+				<Link
+					component={NavLink}
+					to="profile"
+					underline="none"
+					color="textPrimary"
+				>
+					{props.username}
+				</Link>
 				<Button
 					color="primary"
 					variant="outlined"
@@ -106,7 +115,7 @@ export default function Header(props) {
 		<React.Fragment>
 			<CssBaseline />
 			<AppBar
-				position="static"
+				position="fixed"
 				color="white"
 				elevation={0}
 				className={classes.appBar}

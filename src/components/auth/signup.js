@@ -98,7 +98,7 @@ export default function SignUp(props) {
         postFormData.append("email", formData.email);
         postFormData.append("password", formData.password);
         postFormData.append(
-            "picture",
+            "avatar",
             formAvatar.avatarFile,
             formAvatar.avatarFile.name
         );
