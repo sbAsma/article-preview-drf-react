@@ -1,13 +1,20 @@
 import React from 'react';
 import {useHistory} from "react-router-dom"
 import { NavLink } from 'react-router-dom';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import Link from '@material-ui/core/Link';
-import Avatar from '@material-ui/core/Avatar'
-import Button from '@material-ui/core/Button';
+import {
+	AppBar,
+	Toolbar,
+	Link,
+	Avatar,
+	Menu,
+	MenuItem,
+	Button,
+	Typography,
+} from '@material-ui/core'
+import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
+import PersonIcon from '@material-ui/icons/Person';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import { makeStyles } from '@material-ui/core/styles';
 import { useAdminContext } from "../context/AdminContexProvider";
 import axiosInstance from '../../axios';
@@ -25,48 +32,83 @@ const useStyles = makeStyles((theme) => ({
 		marginLeft: '10px',
 		flexGrow: 1,
 	},
-	profileNavLink: {
+	profileButton: {
 		display: 'flex',
 		flexDirection: 'row',
-		backgroundColor: 'hsl(212, 23%, 56%)',
-		width: '110px',
+		width: '80px',
 		padding: '5px',
-		borderRadius: '15px',
-	},
-	userName: {
-		margin: 'auto',
-		marginLeft: '5px',
-		fontWeight: 'bold',
 		color: 'white',
+	},
+	profileMenu: {
+		marginTop: '40px',
+		width: '120px',
+	},
+	menuPaper: {},
+	menuItem: {
+		fontWeight: 'bold',
+	},
+	menuItemIcon: {
+		marginRight: '10px',
 	},
 }));
 
 const LogInOutButtons = (props) => {
+	const [anchorEl, setAnchorEl] = React.useState(null);
+	const open = Boolean(anchorEl);
+	const handleClick = (event) => {
+	  setAnchorEl(event.currentTarget);
+	};
+	const handleClose = () =>{
+		setAnchorEl(null);
+	}
+	const handleLogout = () => {
+		props.handleLogout()
+		setAnchorEl(null);
+	}
 	if(props.isLoggedIn == true){
 		return (
-			<React.Fragment>
-				<Link
-					component={NavLink}
-					to="profile"
-					underline="none"
-					color="textPrimary"
-					className={props.classes.profileNavLink}
-				>
-					<Avatar src={props.user.avatar}/>
-					<div className={props.classes.userName} >
-						{props.user.user_name}
-					</div>
-				</Link>
-				<Button
-					// color="primary"
-					// variant="outlined"
-					className={props.classes.link}
-					onClick = {() => props.handleLogout() }
-				>
-					Logout
-				</Button>
-			</React.Fragment>
-		)
+            <div>
+                <Button
+                    id="basic-button"
+                    aria-controls="basic-menu"
+                    aria-haspopup="true"
+                    aria-expanded={open ? "true" : undefined}
+					className={props.classes.profileButton}
+                    onClick={handleClick}
+                >
+                    <Avatar src={props.user.avatar}/>
+					<ArrowDropDownIcon/>
+                </Button>
+                <Menu
+                    id="basic-menu"
+                    anchorEl={anchorEl}
+                    open={open}
+                    onClose={handleClose}
+                    MenuListProps={{
+                        "aria-labelledby": "basic-button",
+                    }}
+					classes={{ paper: props.classes.profileMenu }}
+					className={props.classes.menuPaper}
+                >
+                    <MenuItem onClick={handleClose} className={props.classes.menuItem}>
+						<PersonIcon className={props.classes.menuItemIcon}/>
+						<Link
+							component={NavLink}
+							to="profile"
+							underline="none"
+							color="textPrimary"
+							onClick={() => setAnchorEl(null)}
+						>
+							Profile
+						</Link>
+					</MenuItem>
+                    <MenuItem onClick={handleLogout} className={props.classes.menuItem}>
+						<ExitToAppIcon className={props.classes.menuItemIcon}/>
+						Logout
+					</MenuItem>
+                </Menu>
+            </div>
+        );
 	}
 	else if(props.isSigningUp){
 		return(
@@ -95,7 +137,6 @@ const LogInOutButtons = (props) => {
 
 export default function Header(props) {
 	const history = useHistory()
-	// to be optimized with another function component fo loging buttons
 	const {adminState: {
 		isLoggedIn,
 		isSigningUp,
@@ -113,7 +154,6 @@ export default function Header(props) {
         const response = axiosInstance.post('user/logout/blacklist/', {
             refresh_token: localStorage.getItem('refresh_token')
         }).then((res) => {
-            // test the response !!!
             localStorage.removeItem('access_token')
             localStorage.removeItem('refresh_token')
             localStorage.removeItem('current_user')
