@@ -65,7 +65,7 @@ const LogInOutButtons = (props) => {
 		props.handleLogout()
 		setAnchorEl(null);
 	}
-	if(props.isLoggedIn == true){
+	if(props.isLoggedIn == true && props.user != undefined){
 		return (
             <div>
                 <Button
