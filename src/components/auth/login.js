@@ -6,6 +6,7 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import TextField from "@material-ui/core/TextField";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
+import Link from "@material-ui/core/Link";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 
@@ -30,14 +31,18 @@ const useStyles = makeStyles((theme) => ({
 export default function Login(props) {
 	const history = useHistory()
 	// console.log("history ", history)
-	const {setAdminState} = useAdminContext()
+	const {adminState: {
+        isSigningUp,
+        isLoggingIn,}, setAdminState} = useAdminContext()
 
     const initialFormData = Object.freeze({
         username: "",
         password: "",
     });
     const [formData, updateFormData] = useState(initialFormData);
-
+	const redirectSignUp = () =>{
+        setAdminState({isSigningUp: true, isLoggingIn: false})
+    }
     const handleChange = (e) => {
         updateFormData({
             ...formData,
@@ -123,6 +128,16 @@ export default function Login(props) {
 					>
 						Login
 					</Button>
+					<Grid container justifyContent="flex-end">
+                        <Grid item>
+                            <Link
+								variant="body2"
+                                onClick={redirectSignUp}
+                                >
+                                Not registered yet? Sign up
+                            </Link>
+                        </Grid>
+                    </Grid>
 				</form>
 			</div>
 		</Container>

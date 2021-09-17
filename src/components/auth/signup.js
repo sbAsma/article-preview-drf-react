@@ -59,7 +59,10 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function SignUp(props) {
-	const {adminState: {isSigningUp,}, setAdminState} = useAdminContext()
+	const {adminState: {
+        isSigningUp,
+        isLoggedIn,
+        isLoggingIn,}, setAdminState} = useAdminContext()
 
     const initialFormData = Object.freeze({
         firstName: "",
@@ -71,7 +74,9 @@ export default function SignUp(props) {
     });
     const [formData, updateFormData] = useState(initialFormData);
     const [formAvatar, updateFormAvatar] = useState(null);
-
+    const redirectLogin = () =>{
+        setAdminState({isSigningUp: false, isLoggedIn: false,isLoggingIn: true,})
+    }
     const handleUploadImage = (data) => {
         updateFormAvatar({
             avatarFile: data[0].file,
@@ -221,10 +226,10 @@ export default function SignUp(props) {
                     </Button>
                     <Grid container justifyContent="flex-end">
                         <Grid item>
-                            <Link 
-							// should be a button link that would trigger login
-								// href="/login" 
-								variant="body2">
+                            <Link
+								variant="body2"
+                                onClick={redirectLogin}
+                                >
                                 Already have an account? Sign in
                             </Link>
                         </Grid>
