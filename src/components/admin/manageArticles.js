@@ -7,11 +7,12 @@ import Delete from './delete'
 import ArticleLoadingComponent from '../articles/articleLoading';
 import axiosInstance from '../../axios';
 import {useAdminContext} from '../context/AdminContexProvider'
+import userEvent from '@testing-library/user-event';
 
 export default function ManageArticles(props) {
 	const ArticleLoading = ArticleLoadingComponent(Articles);
 	const {adminState: {
-			username,
+			userId,
 			user}} = useAdminContext()
     const initialState = Object.freeze({
         loading: false,
@@ -29,14 +30,17 @@ export default function ManageArticles(props) {
 			axiosInstance.get('articles/')
 			.then((res) => {
 			    const allArticles = res.data;
+				const userArticles = allArticles.filter((article)=>{
+					if (article.author==userId) return article
+				})
 			    setAppState({ 
 					...appState,
 			        loading: false, 
-			        articles: allArticles,
+			        articles: userArticles,
 			    });
 
 			})
-	}, [username])
+	}, [user])
 	
 	const onOperationClick = (id, operation) =>{
 		if (id != null){
@@ -64,8 +68,9 @@ export default function ManageArticles(props) {
 			})
 		}
 		else if(operation === "isEdit"){
-			axiosInstance.put(`admin/article/` + id + "/", formData)
+			axiosInstance.patch(`admin/article/` + id + "/", formData)
 			.then((res) => {
+				console.log(res)
 				const updateArticles = appState.articles.map((article) =>{
 					if(article.id != id) return article
 					else return res.data

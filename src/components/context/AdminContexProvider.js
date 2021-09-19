@@ -11,6 +11,7 @@ function AdminProvider({children}){
         isSigningUp: false,
         username: '',
         user: {},
+        userId: '',
     })
     useEffect(() =>{
         const username = localStorage.getItem("current_user")
@@ -21,6 +22,7 @@ function AdminProvider({children}){
 						isLoggedIn: true,
 						user: res.data,
 						username: res.data.user_name,
+                        userId: res.data.id,
 					});
 				})
         }
