@@ -17,7 +17,7 @@ const useStyles = makeStyles((theme) => ({
 function ArticleLoading(Component) {
 	const classes = useStyles();
 	return function articleLoadingComponent({ isLoading, ...props }) {
-		if (!isLoading) return <Component {...props} />;
+		if (!isLoading) return <Component {...props} isLoading={isLoading}/>;
 		return (
 			<div className={classes.root}>
 				<Box

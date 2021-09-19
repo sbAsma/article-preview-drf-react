@@ -126,7 +126,7 @@ const Articles = (props) => {
     if (!articles){
         return <div>Server Error</div>
     }
-    else if (articles.length == 0 && props.loading == false){
+    else if (articles.length == 0 && props.isLoading == false){
         return (
             <Box
                 m={2}
