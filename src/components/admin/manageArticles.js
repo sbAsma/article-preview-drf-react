@@ -1,5 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import '../../App.css';
+import { makeStyles } from "@material-ui/core/styles"
+import {
+	Container,
+	Grid,
+	Box,
+	Button
+} from '@material-ui/core'
 import Articles from './articles';
 import Create from './create'
 import Edit from './edit'
@@ -7,9 +13,25 @@ import Delete from './delete'
 import ArticleLoadingComponent from '../articles/articleLoading';
 import axiosInstance from '../../axios';
 import {useAdminContext} from '../context/AdminContexProvider'
-import userEvent from '@testing-library/user-event';
 
+const useStyles = makeStyles((theme) => ({
+	root: {
+		marginTop: '100px',
+	},
+	addButton: {
+		[theme.breakpoints.down('xs')]: {
+			width: "90%",
+		},
+		[theme.breakpoints.between('sm', 'md')]: {
+			width: "500px",
+		},
+		[theme.breakpoints.up('md')]: {
+			width: "700px",
+		},
+	},
+}))
 export default function ManageArticles(props) {
+	const classes = useStyles()
 	const ArticleLoading = ArticleLoadingComponent(Articles);
 	const {adminState: {
 			userId,
@@ -115,14 +137,40 @@ export default function ManageArticles(props) {
 	if(user == undefined) return <div>loading</div>
 	else return(
 		<React.Fragment>
-            <div className="App">
-                <h1>Latest Articles</h1>
-                <ArticleLoading 
-                	isLoading={appState.loading} 
-                	articles={appState.articles} 
-                	userId = {user.id}
-					onOperationClick={onOperationClick}
-                />
+            <div className={classes.root}>
+				<Container 
+					maxWidth="md" 
+					component="main"
+				>
+					<Grid
+						item
+						direction="column"
+						alignItems="center"
+						justify="center"
+					>
+						<Box
+							m={2}
+							display="flex"
+							alignItems="center"
+							flexDirection="column"
+						>
+							<Button
+								variant="contained"
+								color="secondary"
+								className={classes.addButton}
+								onClick={() => onOperationClick(null, "isAdd")}
+							>
+								New Article
+							</Button>
+						</Box>
+						<ArticleLoading 
+							isLoading={appState.loading} 
+							articles={appState.articles} 
+							userId = {user.id}
+							onOperationClick={onOperationClick}
+						/>
+					</Grid>
+				</Container>
             </div>
 			<Create
 				userId={user.id}

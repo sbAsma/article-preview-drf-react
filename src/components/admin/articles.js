@@ -4,11 +4,8 @@ import {
     Card,
     CardContent,
     CardActions,
-    Grid,
     Box,
     Typography,
-    Container,
-    Button,
     IconButton
 } from '@material-ui/core'
 import EditIcon from "@material-ui/icons/Edit"
@@ -127,144 +124,102 @@ const Articles = (props) => {
     const { articles } = props;
     const classes = useStyles();
     if (articles!=undefined && articles.length != 0) {
-    return (
-        <React.Fragment>
-            <Container 
-				maxWidth="md" 
-				component="main"
-			>
-                <Grid
-                    item
-                    direction="column"
-                    alignItems="center"
-                    justify="center"
-                >
-                    <Box
-                        m={2}
-                        display="flex"
-                        alignItems="center"
-                        flexDirection="column"
-                    >
-                        <Button
-                            variant="contained"
-                            color="secondary"
-							className={classes.addButton}
-                            onClick={() => onOperationClick(null, "isAdd")}
+        return (
+            <React.Fragment>
+                {articles.map((article) => {
+                    var articleTitle = article.title.substr(0, 60) + '...'
+                    if(article.title.length < 60){
+                        articleTitle = article.title
+                    }
+                    var articleContent = article.content.substr(0, 320) + '...'
+                    if(article.content.length< 260){
+                        articleContent = article.content
+                    }
+                    return (
+                        <Box
+                            m={2}
+                            key={article.id}
+                            display="flex"
+                            alignItems="center"
+                            flexDirection="column"
                         >
-                            New Article
-                        </Button>
-                    </Box>
-                    {articles.map((article) => {
-                        var articleTitle = article.title.substr(0, 60) + '...'
-                        if(article.title.length < 60){
-                            articleTitle = article.title
-                        }
-                        var articleContent = article.content.substr(0, 320) + '...'
-                        if(article.content.length< 260){
-                            articleContent = article.content
-                        }
-                        return (
-                            <Box
-                                m={2}
-                                key={article.id}
-                                display="flex"
-                                alignItems="center"
-                                flexDirection="column"
-                            >
-                                <Card className={classes.cardRoot}>
-									<div className={classes.cardDetails}>
-										<div 
-											className={classes.cardMedia}
-											style={{
-												backgroundImage: `url(${article.picture} )`,
-												backgroundPosition: 'center',
-												backgroundSize: 'cover',
-											}}
-										/>
-                                        <CardContent
-                                            className={classes.cardContent}
+                            <Card className={classes.cardRoot}>
+                                <div className={classes.cardDetails}>
+                                    <div 
+                                        className={classes.cardMedia}
+                                        style={{
+                                            backgroundImage: `url(${article.picture} )`,
+                                            backgroundPosition: 'center',
+                                            backgroundSize: 'cover',
+                                        }}
+                                    />
+                                    <CardContent
+                                        className={classes.cardContent}
+                                    >
+                                        <Typography
+                                            gutterBottom
+                                            variant="h6"
+                                            component="h2"
+                                            className={classes.articleTitle}
                                         >
-                                            <Typography
-                                                gutterBottom
-                                                variant="h6"
-                                                component="h2"
-                                                className={classes.articleTitle}
-                                            >
-                                                {articleTitle}
-                                            </Typography>
-                                            <Typography
-                                                variant="p"
-                                                color="textSecondary"
-                                                className={classes.articleText}
-                                            >
-                                                {articleContent}
-                                            </Typography>
-                                        </CardContent>
-									</div>
-                                    <CardActions className={classes.cardActions}>
-                                        <IconButton
-                                            onClick={() =>
-                                                onOperationClick(
-                                                    article.id,
-                                                    "isEdit"
-                                                )
-                                            }
+                                            {articleTitle}
+                                        </Typography>
+                                        <Typography
+                                            variant="p"
+                                            color="textSecondary"
+                                            className={classes.articleText}
                                         >
-                                            <EditIcon />
-                                        </IconButton>
-                                        <IconButton
-                                            onClick={() =>
-                                                onOperationClick(
-                                                    article.id,
-                                                    "isDelete"
-                                                )
-                                            }
-                                        >
-                                            <DeleteIcon />
-                                        </IconButton>
-                                    </CardActions>
-                                </Card>
-                            </Box>
-                        );
-                    })}
-                </Grid>
-            </Container>
-        </React.Fragment>
-    )
+                                            {articleContent}
+                                        </Typography>
+                                    </CardContent>
+                                </div>
+                                <CardActions className={classes.cardActions}>
+                                    <IconButton
+                                        onClick={() =>
+                                            onOperationClick(
+                                                article.id,
+                                                "isEdit"
+                                            )
+                                        }
+                                    >
+                                        <EditIcon />
+                                    </IconButton>
+                                    <IconButton
+                                        onClick={() =>
+                                            onOperationClick(
+                                                article.id,
+                                                "isDelete"
+                                            )
+                                        }
+                                    >
+                                        <DeleteIcon />
+                                    </IconButton>
+                                </CardActions>
+                            </Card>
+                        </Box>
+                    );
+                })}
+            </React.Fragment>
+        )
 	}
 	else {
-		console.log("no article to show");
         return (
-            <Container maxWidth="md" component="main">
-                <Grid
-                    item
-                    // md={6}
-                    // xs={12}
-                    direction="column"
-                    alignItems="center"
-                    justify="center"
+            <Box
+                m={2}
+                display="flex"
+                alignItems="center"
+                flexDirection="column"
+            >
+                <Typography
+                    gutterBottom
+                    variant="h6"
+                    component="h2"
+                    color="textSecondary"
                 >
-                    <Box
-                        m={1}
-                        display="flex"
-                        alignItems="center"
-                        flexDirection="column"
-                        // xs={12} md={4}
-                    >
-                        <Button
-                            variant="contained"
-                            color="secondary"
-                            style={{
-                                width: "600px",
-                            }}
-                            onClick={() => onOperationClick(null, "isAdd")}
-                        >
-                            {/* <AddCircleIcon/> */}
-                            New Article
-                        </Button>
-                    </Box>
-                </Grid>
-            </Container>
+                    You don't currently have any articles
+                </Typography>
+                
+            </Box>
         );
 	}
 };
