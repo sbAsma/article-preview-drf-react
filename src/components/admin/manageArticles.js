@@ -157,6 +157,7 @@ export default function ManageArticles(props) {
 								variant="contained"
 								color="secondary"
 								className={classes.addButton}
+								style={{display: appState.loading && 'none'}}
 								onClick={() => onOperationClick(null, "isAdd")}
 							>
 								New Article
