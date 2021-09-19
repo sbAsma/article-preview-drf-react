@@ -48,7 +48,6 @@ export default function ManageArticles(props) {
     })
     const [appState, setAppState] = useState(initialState)
 	useEffect(() =>{
-			setAppState({ ...appState, }) // loading:true, 
 			axiosInstance.get('articles/')
 			.then((res) => {
 			    const allArticles = res.data;
