@@ -37,7 +37,7 @@ export default function ManageArticles(props) {
 			userId,
 			user}} = useAdminContext()
     const initialState = Object.freeze({
-        loading: false,
+        loading: true,
         // user: props.user,
         // username: props.username,
         articles: [],
@@ -48,7 +48,6 @@ export default function ManageArticles(props) {
     })
     const [appState, setAppState] = useState(initialState)
 	useEffect(() =>{
-			setAppState({ ...appState, loading:true, })
 			axiosInstance.get('articles/')
 			.then((res) => {
 			    const allArticles = res.data;
@@ -158,6 +157,7 @@ export default function ManageArticles(props) {
 								variant="contained"
 								color="secondary"
 								className={classes.addButton}
+								style={{display: appState.loading && 'none'}}
 								onClick={() => onOperationClick(null, "isAdd")}
 							>
 								New Article

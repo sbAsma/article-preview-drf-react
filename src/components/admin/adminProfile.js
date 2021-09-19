@@ -7,7 +7,7 @@ import Divider from '@material-ui/core/Divider';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import MailIcon from '@material-ui/icons/Mail';
+import BallotIcon from '@material-ui/icons/Ballot';
 import Grid from '@material-ui/core/Grid'
 import ImageUploading from "react-images-uploading";
 import TextField from '@material-ui/core/TextField'
@@ -110,7 +110,7 @@ const CustomDrawer = (props) => {
             <List>
                 <ListItem button component={Link} href={"articles"}>
                     <ListItemIcon>
-                        <MailIcon />
+                        <BallotIcon />
                     </ListItemIcon>
                     <ListItemText primary={"articles"} />
                 </ListItem>
