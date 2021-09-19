@@ -123,7 +123,30 @@ const Articles = (props) => {
     };
     const { articles } = props;
     const classes = useStyles();
-    if (articles!=undefined && articles.length != 0) {
+    if (!articles){
+        return <div>Server Error</div>
+    }
+    else if (articles.length == 0 && props.loading == false){
+        return (
+            <Box
+                m={2}
+                display="flex"
+                alignItems="center"
+                flexDirection="column"
+            >
+                <Typography
+                    gutterBottom
+                    variant="h6"
+                    component="h2"
+                    color="textSecondary"
+                >
+                    You don't currently have any articles
+                </Typography>
+                
+            </Box>
+        );
+    }
+    else {
         return (
             <React.Fragment>
                 {articles.map((article) => {
@@ -201,26 +224,6 @@ const Articles = (props) => {
                 })}
             </React.Fragment>
         )
-	}
-	else {
-        return (
-            <Box
-                m={2}
-                display="flex"
-                alignItems="center"
-                flexDirection="column"
-            >
-                <Typography
-                    gutterBottom
-                    variant="h6"
-                    component="h2"
-                    color="textSecondary"
-                >
-                    You don't currently have any articles
-                </Typography>
-                
-            </Box>
-        );
 	}
 };
 export default Articles;
