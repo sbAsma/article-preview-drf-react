@@ -21,8 +21,6 @@ function App() {
         axios.all([usersReq, articlesReq]).then(axios.spread((...responses) => {
             const usersRes = responses[0].data
             const articlesRes = responses[1].data
-            console.log(usersRes)
-            console.log(articlesRes)
             setAppState({ 
                 loading: false, 
                 articles: articlesRes,
@@ -35,7 +33,11 @@ function App() {
             <Header />
                 <div className="App">
                     <h1>Latest Articles</h1>
-                    <ArticleLoading isLoading={appState.loading} articles={appState.articles} />
+                    <ArticleLoading 
+                        isLoading={appState.loading} 
+                        articles={appState.articles} 
+                        authors={appState.users}
+                    />
                 </div>
             <Footer />
         </React.Fragment>
