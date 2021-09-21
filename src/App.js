@@ -5,21 +5,30 @@ import ArticleLoadingComponent from './components/articles/articleLoading';
 import Header from './components/header'
 import Footer from './components/footer'
 import axiosInstance from './axios';
+import axios from 'axios'
 
 function App() {
     const ArticleLoading = ArticleLoadingComponent(Articles);
     const [appState, setAppState] = useState({
         loading: true,
         articles: null,
+        users: null,
     });
 
     useEffect(() => {
-        axiosInstance.get('articles/').then((res) => {
-            const allArticles = res.data;
-            console.log(res.data);
-            setAppState({ loading: false, articles: allArticles });
-            console.log(res.data);
-        });
+        const usersReq = axiosInstance.get('user/user/')
+        const articlesReq = axiosInstance.get('articles/')
+        axios.all([usersReq, articlesReq]).then(axios.spread((...responses) => {
+            const usersRes = responses[0].data
+            const articlesRes = responses[1].data
+            console.log(usersRes)
+            console.log(articlesRes)
+            setAppState({ 
+                loading: false, 
+                articles: articlesRes,
+                users: usersRes,
+            });
+        }))
     }, [setAppState]);
     return (
         <React.Fragment>
