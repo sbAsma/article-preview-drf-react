@@ -16,8 +16,8 @@ function App() {
     });
 
     useEffect(() => {
-        const usersReq = axiosInstance.get('user/user/')
-        const articlesReq = axiosInstance.get('articles/')
+        const usersReq = axios.get('http://127.0.0.1:8000/user/user/')
+        const articlesReq = axios.get('http://127.0.0.1:8000/articles/')
         axios.all([usersReq, articlesReq]).then(axios.spread((...responses) => {
             const usersRes = responses[0].data
             const articlesRes = responses[1].data
