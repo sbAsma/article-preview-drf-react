@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState, useEffect} from "react";
 import { makeStyles } from "@material-ui/core/styles"
 import {
     Card,
@@ -121,12 +121,23 @@ const Articles = (props) => {
     const onOperationClick = (id, operation) => {
         props.onOperationClick(id, operation);
     };
-    const { articles } = props;
+    const { articles, userId } = props;
+    const [noArticles, setNoArticles] = useState(true)
+    const [loadingPlop, setLoadingPlop] = useState(true)
+    useEffect(()=>{
+        articles.map((article)=>{
+            if(article.author === userId){
+                setNoArticles(false)
+            }
+        
+        })
+        setLoadingPlop(false)
+    }, [articles])
     const classes = useStyles();
     if (!articles){
         return <div>Server Error</div>
     }
-    else if (articles.length == 0 && props.isLoading == false){
+    else if (noArticles === true && loadingPlop === false){
         return (
             <Box
                 m={2}
@@ -150,77 +161,79 @@ const Articles = (props) => {
         return (
             <React.Fragment>
                 {articles.map((article) => {
-                    var articleTitle = article.title.substr(0, 60) + '...'
-                    if(article.title.length < 60){
-                        articleTitle = article.title
-                    }
-                    var articleContent = article.content.substr(0, 320) + '...'
-                    if(article.content.length< 260){
-                        articleContent = article.content
-                    }
-                    return (
-                        <Box
-                            m={2}
-                            key={article.id}
-                            display="flex"
-                            alignItems="center"
-                            flexDirection="column"
-                        >
-                            <Card className={classes.cardRoot}>
-                                <div className={classes.cardDetails}>
-                                    <div 
-                                        className={classes.cardMedia}
-                                        style={{
-                                            backgroundImage: `url(${article.picture} )`,
-                                            backgroundPosition: 'center',
-                                            backgroundSize: 'cover',
-                                        }}
-                                    />
-                                    <CardContent
-                                        className={classes.cardContent}
-                                    >
-                                        <Typography
-                                            gutterBottom
-                                            variant="h6"
-                                            component="h2"
-                                            className={classes.articleTitle}
+                    if(article.author===userId){
+                        var articleTitle = article.title.substr(0, 60) + '...'
+                        if(article.title.length < 60){
+                            articleTitle = article.title
+                        }
+                        var articleContent = article.content.substr(0, 320) + '...'
+                        if(article.content.length< 260){
+                            articleContent = article.content
+                        }
+                        return (
+                            <Box
+                                m={2}
+                                key={article.id}
+                                display="flex"
+                                alignItems="center"
+                                flexDirection="column"
+                            >
+                                <Card className={classes.cardRoot}>
+                                    <div className={classes.cardDetails}>
+                                        <div 
+                                            className={classes.cardMedia}
+                                            style={{
+                                                backgroundImage: `url(${article.picture} )`,
+                                                backgroundPosition: 'center',
+                                                backgroundSize: 'cover',
+                                            }}
+                                        />
+                                        <CardContent
+                                            className={classes.cardContent}
                                         >
-                                            {articleTitle}
-                                        </Typography>
-                                        <Typography
-                                            variant="p"
-                                            color="textSecondary"
-                                            className={classes.articleText}
+                                            <Typography
+                                                gutterBottom
+                                                variant="h6"
+                                                component="h2"
+                                                className={classes.articleTitle}
+                                            >
+                                                {articleTitle}
+                                            </Typography>
+                                            <Typography
+                                                variant="p"
+                                                color="textSecondary"
+                                                className={classes.articleText}
+                                            >
+                                                {articleContent}
+                                            </Typography>
+                                        </CardContent>
+                                    </div>
+                                    <CardActions className={classes.cardActions}>
+                                        <IconButton
+                                            onClick={() =>
+                                                onOperationClick(
+                                                    article.id,
+                                                    "isEdit"
+                                                )
+                                            }
                                         >
-                                            {articleContent}
-                                        </Typography>
-                                    </CardContent>
-                                </div>
-                                <CardActions className={classes.cardActions}>
-                                    <IconButton
-                                        onClick={() =>
-                                            onOperationClick(
-                                                article.id,
-                                                "isEdit"
-                                            )
-                                        }
-                                    >
-                                        <EditIcon />
-                                    </IconButton>
-                                    <IconButton
-                                        onClick={() =>
-                                            onOperationClick(
-                                                article.id,
-                                                "isDelete"
-                                            )
-                                        }
-                                    >
-                                        <DeleteIcon />
-                                    </IconButton>
-                                </CardActions>
-                            </Card>
-                        </Box>
-                    );
+                                            <EditIcon />
+                                        </IconButton>
+                                        <IconButton
+                                            onClick={() =>
+                                                onOperationClick(
+                                                    article.id,
+                                                    "isDelete"
+                                                )
+                                            }
+                                        >
+                                            <DeleteIcon />
+                                        </IconButton>
+                                    </CardActions>
+                                </Card>
+                            </Box>
+                        );
+                    }else return <div></div>
                 })}
             </React.Fragment>
         )
