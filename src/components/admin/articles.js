@@ -125,12 +125,12 @@ const Articles = (props) => {
     const [noArticles, setNoArticles] = useState(true)
     const [loadingPlop, setLoadingPlop] = useState(true)
     useEffect(()=>{
-        articles.map((article)=>{
+        for(const article of articles){
             if(article.author === userId){
                 setNoArticles(false)
+                break
             }
-        
-        })
+        }
         setLoadingPlop(false)
     }, [articles, userId])
     const classes = useStyles();

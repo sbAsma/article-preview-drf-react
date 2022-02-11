@@ -73,7 +73,7 @@ export default function Edit(props) {
 
     const [formData, updateFormData] = useState(initialFormData);
     const [putImage, setPutImage] = useState(null);
-
+    var editOp = props.isEdit === true
     useEffect(() => {
 		updateFormData({
 			id: props.article.id,
@@ -82,7 +82,7 @@ export default function Edit(props) {
 			content: props.article.content,
 			author: props.article.author,
 		});
-    }, [props.isEdit === true]);
+    }, [editOp, props]);
 
     const handleUploadImage = (data) => {
         setPutImage({

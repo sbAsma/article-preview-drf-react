@@ -112,7 +112,7 @@ export default function ManageArticles(props) {
 				})
 				.then(() => {
 					const newArticles = appState.articles.filter((article) =>{
-						if(article.id !== id) return article
+						return article.id !== id
 					})
 					setAppState({
 						...appState, 

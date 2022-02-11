@@ -13,6 +13,7 @@ function AdminProvider({children}){
         user: {},
         userId: '',
     })
+    var userLog = adminState.isLoggedIn===true
     useEffect(() =>{
         const username = localStorage.getItem("current_user")
         if(username!==null){ // adminState.isLoggedIn && 
@@ -26,7 +27,7 @@ function AdminProvider({children}){
 					});
 				})
         }
-    }, [adminState.isLoggedIn===true])
+    }, [userLog])
     const value = {adminState, setAdminState}
     return <AdminContext.Provider value={value}>{children}</AdminContext.Provider>
 }
