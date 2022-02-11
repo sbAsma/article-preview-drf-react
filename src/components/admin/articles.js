@@ -200,7 +200,7 @@ const Articles = (props) => {
                                                 {articleTitle}
                                             </Typography>
                                             <Typography
-                                                variant="p"
+                                                variant="body1"
                                                 color="textSecondary"
                                                 className={classes.articleText}
                                             >
@@ -233,7 +233,7 @@ const Articles = (props) => {
                                 </Card>
                             </Box>
                         );
-                    }else return <div></div>
+                    }else return <div key={article.id}></div>
                 })}
             </React.Fragment>
         )

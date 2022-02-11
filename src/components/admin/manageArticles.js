@@ -153,13 +153,15 @@ export default function ManageArticles(props) {
 					<Grid
 						item
 						direction="column"
-						alignItems="center"
-						justify="center"
+						container
+						// alignItems="center"
+						justifyContent="center"
 					>
 						<Box
 							m={2}
 							display="flex"
 							alignItems="center"
+							variant = "container"
 							flexDirection="column"
 						>
 							<Button

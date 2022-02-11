@@ -140,7 +140,7 @@ export default function Edit(props) {
                     <CssBaseline />
                     <div className={classes.paper}>
                         <form className={classes.form} noValidate>
-                            <Grid item xs={12} alignItems="center">
+                            <Grid item xs={12} alignItems="center" container justifyContent="center">
                                 <div className={classes.imageContainer}>
                                     <ImageUploading
                                         multiple={false}

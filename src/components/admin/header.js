@@ -177,7 +177,7 @@ export default function Header(props) {
 			<CssBaseline />
 			<AppBar
 				position="fixed"
-				color="white"
+				// color="white"
 				elevation={0}
 				className={classes.appBar}
 			>
