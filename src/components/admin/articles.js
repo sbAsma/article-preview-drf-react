@@ -132,7 +132,7 @@ const Articles = (props) => {
         
         })
         setLoadingPlop(false)
-    }, [articles])
+    }, [articles, userId])
     const classes = useStyles();
     if (!articles){
         return <div>Server Error</div>

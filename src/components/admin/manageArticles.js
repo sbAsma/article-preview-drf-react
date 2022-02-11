@@ -34,15 +34,10 @@ export default function ManageArticles(props) {
 	const classes = useStyles()
 	const ArticleLoading = ArticleLoadingComponent(Articles);
 	const {adminState: {
-			userId,
 			isLoggedIn,
-			isSigningUp,
-        	isLoggingIn,
 			user}} = useAdminContext()
     const initialState = Object.freeze({
         loading: true,
-        // user: props.user,
-        // username: props.username,
         articles: [],
 		article: {},
         isAdd: false,
@@ -52,23 +47,19 @@ export default function ManageArticles(props) {
     const [appState, setAppState] = useState(initialState)
 	var locStr = localStorage.getItem('current_user')
 	useEffect(() =>{
-			axiosInstance.get('articles/')
-			.then((res) => {
-			    const allArticles = res.data;
-				// const userArticles = allArticles.filter((article)=>{
-				// 	if (article.author==userId) return article
-				// })
-			    setAppState({ 
-					...appState,
-			        loading: false, 
-			        articles: allArticles,
-			    });
-
-			})
+		axiosInstance.get('articles/')
+		.then((res) => {
+			const allArticles = res.data;
+			setAppState({ 
+				...appState,
+				loading: false, 
+				articles: allArticles,
+			});
+		})
 	}, [user])
 	
 	const onOperationClick = (id, operation) =>{
-		if (id != null){
+		if (id !== null){
 			const article_ = appState.articles.find(article => article.id === id)
 			setAppState({...appState, [operation]: true, article: article_})
 		}
@@ -97,7 +88,7 @@ export default function ManageArticles(props) {
 			.then((res) => {
 				console.log(res)
 				const updateArticles = appState.articles.map((article) =>{
-					if(article.id != id) return article
+					if(article.id !== id) return article
 					else return res.data
 				})
 				setAppState({
@@ -121,7 +112,7 @@ export default function ManageArticles(props) {
 				})
 				.then(() => {
 					const newArticles = appState.articles.filter((article) =>{
-						if(article.id != id) return article
+						if(article.id !== id) return article
 					})
 					setAppState({
 						...appState, 
@@ -151,7 +142,7 @@ export default function ManageArticles(props) {
 				</div>
 			</React.Fragment>
 		)
-	}else if (user == undefined) return <div>loading</div>
+	}else if (user === undefined) return <div>loading</div>
 	else return(
 		<React.Fragment>
             <div className={classes.root}>
@@ -203,7 +194,6 @@ export default function ManageArticles(props) {
 				article={appState.article}
 				onCancleEdit={onCancelOperation}
 				handleOperation={handleOperation}
-				onCancleEdit={onCancelOperation}
 			/>
 			<Delete
 				isDelete={appState.isDelete}
@@ -214,28 +204,3 @@ export default function ManageArticles(props) {
         </React.Fragment>
 	)
 }
-
-// useEffect(() =>{
-// 	const username = localStorage.getItem('current_user')
-// 	if(username != null && appState.isLoggedIn != true){
-// 		setAppState({ ...appState, loading:true, })
-// 		const axiosReqUser = axiosInstance.get('user/user/'+ username +'/')
-// 		const axiosReqArticles = axiosInstance.get('articles/')
-// 		axios.all([axiosReqUser, axiosReqArticles]).then(axios.spread((...res) => {
-// 			const user = res[0].data;
-// 			const allArticles = res[1].data;
-// 			setAppState({ 
-// 				isLoggedIn: true,
-// 				loading: false, 
-// 				user: user,
-// 				userId: user.id,
-// 				username: user.user_name,
-// 				articles: allArticles,
-// 			});
-
-// 		}))
-// 	}
-// 	else{
-// 		console.log("current user isn't here yet")
-// 	}
-// }, [])

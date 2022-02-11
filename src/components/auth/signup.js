@@ -29,13 +29,11 @@ const useStyles = makeStyles((theme) => ({
     imageIcon: {
         marginRight: "auto",
         marginLeft: "auto",
-        color: "white",
         opacity: 1,
         transition: theme.transitions.create("opacity"),
         color: "black",
         "&:hover": {
             opacity: 0.5,
-            color: "black",
             transition: "none",
         },
         width: "160px",
@@ -59,10 +57,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function SignUp(props) {
-	const {adminState: {
-        isSigningUp,
-        isLoggedIn,
-        isLoggingIn,}, setAdminState} = useAdminContext()
+	const {setAdminState} = useAdminContext()
 
     const initialFormData = Object.freeze({
         firstName: "",

@@ -65,7 +65,7 @@ const LogInOutButtons = (props) => {
 		props.handleLogout()
 		setAnchorEl(null);
 	}
-	if(props.isLoggedIn == true && props.user != undefined){
+	if(props.isLoggedIn === true && props.user !== undefined){
 		return (
             <div>
                 <Button
@@ -154,7 +154,7 @@ export default function Header(props) {
         setAdminState({isSigningUp: true, })
     }
 	const handleLogout = () => {
-        const response = axiosInstance.post('user/logout/blacklist/', {
+        axiosInstance.post('user/logout/blacklist/', {
             refresh_token: localStorage.getItem('refresh_token')
         }).then((res) => {
             localStorage.removeItem('access_token')

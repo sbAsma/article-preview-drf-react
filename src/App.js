@@ -4,7 +4,6 @@ import Articles from './components/articles/articles';
 import ArticleLoadingComponent from './components/articles/articleLoading';
 import Header from './components/header'
 import Footer from './components/footer'
-import axiosInstance from './axios';
 import axios from 'axios'
 
 function App() {

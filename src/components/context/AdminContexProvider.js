@@ -15,7 +15,7 @@ function AdminProvider({children}){
     })
     useEffect(() =>{
         const username = localStorage.getItem("current_user")
-        if(username!=null){ // adminState.isLoggedIn && 
+        if(username!==null){ // adminState.isLoggedIn && 
             axiosInstance.get('user/user/'+ username +'/')
 				.then((res) => {
 					setAdminState({ 
@@ -26,7 +26,7 @@ function AdminProvider({children}){
 					});
 				})
         }
-    }, [adminState.isLoggedIn==true])
+    }, [adminState.isLoggedIn===true])
     const value = {adminState, setAdminState}
     return <AdminContext.Provider value={value}>{children}</AdminContext.Provider>
 }
