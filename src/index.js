@@ -15,7 +15,7 @@ import Logout from './components/auth/logout'
 import reportWebVitals from './reportWebVitals';
 import {AdminProvider} from './components/context/AdminContexProvider'
 
-const isNotLoggedIn = localStorage.getItem('current_user') == null
+const isLoggedIn = localStorage.getItem('current_user') != null
 
 const routing = (
 	<Router>
@@ -24,10 +24,8 @@ const routing = (
 		    	<Route exact path="/" component={App} />
 				<AdminProvider>
 					<Header/>
-					<Route exact path="/admin" component={Admin} />
-					<Route exact path="/admin/articles">
-						{isNotLoggedIn ? <Redirect to="/admin" /> : <ManageArticles />}
-					</Route>
+					<Route exact path="/admin" component={Admin}/>
+					<Route exact path="/admin/articles" component={ManageArticles}/>
 					<Route exact path ="/admin/profile" component={AdminProfile} />
 				</AdminProvider>
 		    	<Route path="/logout" component={Logout} />
