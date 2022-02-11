@@ -122,7 +122,7 @@ const LogInOutButtons = (props) => {
 			</Button>
 		)
 	}
-	else{
+	else if(props.isLoggingIn){
 		return(
 			<Button
 				color="textPrimary"
@@ -132,6 +132,9 @@ const LogInOutButtons = (props) => {
 				Sign up
 			</Button>
 		)
+	}
+	else{
+		return <div></div>
 	}
 }
 
