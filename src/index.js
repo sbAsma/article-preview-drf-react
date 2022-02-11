@@ -13,7 +13,7 @@ import {AdminProvider} from './components/context/AdminContexProvider'
 
 const routing = (
 	<Router>
-		<React.StrictMode>
+		{/* <React.StrictMode> */}
 			<Switch>
 		    	<Route exact path="/" component={App} />
 				<AdminProvider>
@@ -24,7 +24,7 @@ const routing = (
 				</AdminProvider>
 		    	<Route path="/logout" component={Logout} />
 		    </Switch>
-		</React.StrictMode>
+		{/* </React.StrictMode> */}
   </Router>
 )
 ReactDOM.render(routing, document.getElementById('root'));
