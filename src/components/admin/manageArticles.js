@@ -35,6 +35,9 @@ export default function ManageArticles(props) {
 	const ArticleLoading = ArticleLoadingComponent(Articles);
 	const {adminState: {
 			userId,
+			isLoggedIn,
+			isSigningUp,
+        	isLoggingIn,
 			user}} = useAdminContext()
     const initialState = Object.freeze({
         loading: true,
@@ -47,17 +50,18 @@ export default function ManageArticles(props) {
         isDelete: false,
     })
     const [appState, setAppState] = useState(initialState)
+	var locStr = localStorage.getItem('current_user')
 	useEffect(() =>{
 			axiosInstance.get('articles/')
 			.then((res) => {
 			    const allArticles = res.data;
-				const userArticles = allArticles.filter((article)=>{
-					if (article.author==userId) return article
-				})
+				// const userArticles = allArticles.filter((article)=>{
+				// 	if (article.author==userId) return article
+				// })
 			    setAppState({ 
 					...appState,
 			        loading: false, 
-			        articles: userArticles,
+			        articles: allArticles,
 			    });
 
 			})
@@ -133,7 +137,21 @@ export default function ManageArticles(props) {
 	const onCancelOperation = (operation) =>{
 		setAppState({...appState, [operation]: false, article: {}})
 	}
-	if(user == undefined) return <div>loading</div>
+	if(isLoggedIn === false && appState.loading === false && locStr === null) {
+		return (
+			<React.Fragment>
+				<div className={classes.root}>
+					<Container 
+						maxWidth="md" 
+						component="main"
+					>
+						 403 You don't have permission to access this page
+
+					</Container>
+				</div>
+			</React.Fragment>
+		)
+	}else if (user == undefined) return <div>loading</div>
 	else return(
 		<React.Fragment>
             <div className={classes.root}>
