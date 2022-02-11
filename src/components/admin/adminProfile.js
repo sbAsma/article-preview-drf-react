@@ -131,14 +131,16 @@ export default function AdminProfile(){
         avatarFile: null,
         avatarUrl: '',
     })
-    
+    console.log("user", user)
     useEffect(()=>{
-        setUserProfile({
-            firstName: user.first_name,
-            lastName: user.last_name,
-            email: user.email,
-            avatarUrl: user.avatar
-        })
+        if(Object.keys(user).length !== 0){
+            setUserProfile({
+                firstName: user.first_name,
+                lastName: user.last_name,
+                email: user.email,
+                avatarUrl: user.avatar
+            })
+        }
     }, [user])
 
     const handleUploadImage = (data) => {
@@ -180,7 +182,7 @@ export default function AdminProfile(){
                 <div className={classes.toolbar} />
                 <form className={classes.form} noValidate>
                     <Grid container spacing={2}>
-                        <Grid item xs={12} display="flex" alignItems="center">
+                        <Grid item xs={12} display="flex" alignItems="center" container>
                             <div className={classes.avatarContainer}>
                                 <div
                                     src={userProfile.avatarUrl}
@@ -214,7 +216,7 @@ export default function AdminProfile(){
                                 </div>
                             </div>
                         </Grid>
-                        <Grid item xs={12} display="flex" alignItems="center">
+                        <Grid item xs={12} display="flex" alignItems="center" container>
                             <Typography
                                 variant="h6"
                                 gutterBottom
@@ -256,7 +258,7 @@ export default function AdminProfile(){
                                 onChange={handleChange}
                             />
                         </Grid>
-                        <Grid item xs={12} display="flex" alignContent="center" >
+                        <Grid item xs={12} display="flex" alignContent="center" container>
                             <Typography
                                 variant="h6"
                                 gutterBottom
