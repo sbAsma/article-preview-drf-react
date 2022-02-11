@@ -37,21 +37,22 @@ export default function ManageArticles(props) {
 			isLoggedIn,
 			user}} = useAdminContext()
     const initialState = Object.freeze({
-        loading: true,
-        articles: [],
 		article: {},
         isAdd: false,
         isEdit: false,
         isDelete: false,
     })
+	const [articlesState, setArticlesState] = useState({
+		loading: true,
+        articles: [],
+	})
     const [appState, setAppState] = useState(initialState)
 	var locStr = localStorage.getItem('current_user')
 	useEffect(() =>{
 		axiosInstance.get('articles/')
 		.then((res) => {
 			const allArticles = res.data;
-			setAppState({ 
-				...appState,
+			setArticlesState({ 
 				loading: false, 
 				articles: allArticles,
 			});
@@ -60,7 +61,7 @@ export default function ManageArticles(props) {
 	
 	const onOperationClick = (id, operation) =>{
 		if (id !== null){
-			const article_ = appState.articles.find(article => article.id === id)
+			const article_ = articlesState.articles.find(article => article.id === id)
 			setAppState({...appState, [operation]: true, article: article_})
 		}
 		else{
@@ -75,7 +76,7 @@ export default function ManageArticles(props) {
 				const newArticle = res.data
 				setAppState({
 					...appState, 
-					articles: [...appState.articles, newArticle],
+					articles: [...articlesState.articles, newArticle],
 					isAdd: false,
 				})
 			})
@@ -87,7 +88,7 @@ export default function ManageArticles(props) {
 			axiosInstance.patch(`admin/article/` + id + "/", formData)
 			.then((res) => {
 				console.log(res)
-				const updateArticles = appState.articles.map((article) =>{
+				const updateArticles = articlesState.articles.map((article) =>{
 					if(article.id !== id) return article
 					else return res.data
 				})
@@ -111,7 +112,7 @@ export default function ManageArticles(props) {
 					}
 				})
 				.then(() => {
-					const newArticles = appState.articles.filter((article) =>{
+					const newArticles = articlesState.articles.filter((article) =>{
 						return article.id !== id
 					})
 					setAppState({
@@ -128,7 +129,7 @@ export default function ManageArticles(props) {
 	const onCancelOperation = (operation) =>{
 		setAppState({...appState, [operation]: false, article: {}})
 	}
-	if(isLoggedIn === false && appState.loading === false && locStr === null) {
+	if(isLoggedIn === false && articlesState.loading === false && locStr === null) {
 		return (
 			<React.Fragment>
 				<div className={classes.root}>
@@ -168,15 +169,15 @@ export default function ManageArticles(props) {
 								variant="contained"
 								color="secondary"
 								className={classes.addButton}
-								style={{display: appState.loading && 'none'}}
+								style={{display: articlesState.loading && 'none'}}
 								onClick={() => onOperationClick(null, "isAdd")}
 							>
 								New Article
 							</Button>
 						</Box>
 						<ArticleLoading 
-							isLoading={appState.loading} 
-							articles={appState.articles} 
+							isLoading={articlesState.loading} 
+							articles={articlesState.articles} 
 							userId = {user.id}
 							onOperationClick={onOperationClick}
 						/>
