@@ -6,6 +6,7 @@ import TextField from "@material-ui/core/TextField";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import Link from "@material-ui/core/Link";
+import Box from "@material-ui/core/Box"
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 
@@ -25,6 +26,14 @@ const useStyles = makeStyles((theme) => ({
     submit: {
         margin: theme.spacing(3, 0, 2),
     },
+	wrongCredentials: {
+		border: "1px solid red",
+		borderRadius: '10px',
+		color: "red",
+		padding: theme.spacing(1),
+		marginBottom: '10px',
+		marginTop: '15px',
+	},
 }));
 
 export default function Login(props) {
@@ -35,6 +44,7 @@ export default function Login(props) {
         password: "",
     });
     const [formData, updateFormData] = useState(initialFormData);
+	const [wrongCred, setWrongCred] = useState(false)
 	const redirectSignUp = () =>{
         setAdminState({isSigningUp: true, isLoggingIn: false})
     }
@@ -55,15 +65,18 @@ export default function Login(props) {
             })
             .then((res) => {
 				console.log(res)
-                localStorage.setItem("access_token", res.data.access);
-                localStorage.setItem("refresh_token", res.data.refresh);
-                localStorage.setItem("current_user", formData.username);
-                axiosInstance.defaults.headers["Authorization"] =
-                    "JWT " + localStorage.getItem("access_token");
+				localStorage.setItem("access_token", res.data.access);
+				localStorage.setItem("refresh_token", res.data.refresh);
+				localStorage.setItem("current_user", formData.username);
+				axiosInstance.defaults.headers["Authorization"] =
+					"JWT " + localStorage.getItem("access_token");
 				setAdminState({ 
 					isLoggedIn: true,
 				});
-            });
+            }).catch((err) => {
+				console.log(err);
+				setWrongCred(true)
+			});
     };
 
     const classes = useStyles();
@@ -75,6 +88,13 @@ export default function Login(props) {
 				<Typography component="h1" variant="h5">
 					Login
 				</Typography>
+				<Box 
+					style={{display: !wrongCred && 'none'}}
+					className={classes.wrongCredentials}
+				>
+					There seems to be an error with your username and/or password. Please
+					verify your credentials.
+				</Box>
 				<form className={classes.form} noValidate>
 					<Grid container spacing={2}>
 						<Grid item xs={12}>
@@ -88,6 +108,7 @@ export default function Login(props) {
 								id="username"
 								autoComplete="current-username"
 								onChange={handleChange}
+								error={wrongCred}
 							/>
 						</Grid>
 						<Grid item xs={12}>
@@ -101,6 +122,7 @@ export default function Login(props) {
 								id="password"
 								autoComplete="current-password"
 								onChange={handleChange}
+								
 							/>
 						</Grid>
 					</Grid>
