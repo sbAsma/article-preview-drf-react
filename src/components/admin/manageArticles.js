@@ -74,9 +74,12 @@ export default function ManageArticles(props) {
 			.then((res) => {
 				console.log("response", res)
 				const newArticle = res.data
+				setArticlesState({
+					...articlesState,
+					articles: [...articlesState.articles, newArticle],
+				})
 				setAppState({
 					...appState, 
-					articles: [...articlesState.articles, newArticle],
 					isAdd: false,
 				})
 			})
@@ -92,11 +95,14 @@ export default function ManageArticles(props) {
 					if(article.id !== id) return article
 					else return res.data
 				})
+				setArticlesState({
+					...articlesState,
+					articles: updateArticles
+				})
 				setAppState({
 					...appState, 
 					[operation]: false, 
-					article: {}, 
-					articles: updateArticles
+					article: {},
 				})
 			})
 		}
@@ -115,11 +121,14 @@ export default function ManageArticles(props) {
 					const newArticles = articlesState.articles.filter((article) =>{
 						return article.id !== id
 					})
+					setArticlesState({
+						...articlesState,
+						articles: newArticles,
+					})
 					setAppState({
 						...appState, 
 						[operation]: false, 
 						article: {}, 
-						articles: newArticles,
 					})
 				});
 			
@@ -146,10 +155,11 @@ export default function ManageArticles(props) {
 	}else if (user === undefined) return <div>loading</div>
 	else return(
 		<React.Fragment>
-            <div className={classes.root}>
+            <div className={classes.root} >
 				<Container 
 					maxWidth="md" 
 					component="main"
+					
 				>
 					<Grid
 						item
@@ -157,6 +167,7 @@ export default function ManageArticles(props) {
 						container
 						// alignItems="center"
 						justifyContent="center"
+						
 					>
 						<Box
 							m={2}
