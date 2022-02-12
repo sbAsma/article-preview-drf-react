@@ -222,7 +222,6 @@ export default function AdminProfile(){
                                 gutterBottom
                                 fontWeight="fontWeightBold"
                                 style={{
-                                    width: '30%',
                                     margin: 'auto',
                                 }}
                             >
@@ -264,7 +263,6 @@ export default function AdminProfile(){
                                 gutterBottom
                                 fontWeight="fontWeightBold"
                                 style={{
-                                    width: '34%',
                                     margin: 'auto',
                                 }}
                             >
