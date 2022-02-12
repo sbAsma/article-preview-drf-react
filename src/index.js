@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useMemo} from 'react';
 import ReactDOM from 'react-dom';
 import {Route, BrowserRouter as Router, Switch} from 'react-router-dom'
 import './index.css';
@@ -11,18 +11,29 @@ import Logout from './components/auth/logout'
 import reportWebVitals from './reportWebVitals';
 import {AdminProvider} from './components/context/AdminContexProvider'
 
+import { ThemeProvider, createTheme } from '@material-ui/core/styles'
+const font =  "'Manrope', sans-serif";
+
+const customTheme = createTheme({
+	typography: {
+		fontFamily: font,
+	},
+})
+
 const routing = (
 	<Router>
 		{/* <React.StrictMode> */}
 			<Switch>
-		    	<Route exact path="/" component={App} />
-				<AdminProvider>
-					<Header/>
-					<Route exact path="/admin" component={Admin}/>
-					<Route exact path="/admin/articles" component={ManageArticles}/>
-					<Route exact path ="/admin/profile" component={AdminProfile} />
-				</AdminProvider>
-		    	<Route path="/logout" component={Logout} />
+				<ThemeProvider theme={customTheme}>
+					<Route exact path="/" component={App} />
+					<AdminProvider>
+						<Header/>
+						<Route exact path="/admin" component={Admin}/>
+						<Route exact path="/admin/articles" component={ManageArticles}/>
+						<Route exact path ="/admin/profile" component={AdminProfile} />
+					</AdminProvider>
+					<Route path="/logout" component={Logout} />
+				</ThemeProvider>
 		    </Switch>
 		{/* </React.StrictMode> */}
   </Router>
