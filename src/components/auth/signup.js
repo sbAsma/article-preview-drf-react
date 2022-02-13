@@ -14,6 +14,9 @@ import IconButton from "@material-ui/core/IconButton";
 import PhotoCameraIcon from "@material-ui/icons/PhotoCamera";
 import { useAdminContext } from "../context/AdminContexProvider";
 
+import CheckCircleIcon from '@material-ui/icons/CheckCircle';
+import CancelIcon from '@material-ui/icons/Cancel';
+
 const useStyles = makeStyles((theme) => ({
     paper: {
         marginTop: theme.spacing(8),
@@ -26,6 +29,7 @@ const useStyles = makeStyles((theme) => ({
         marginBottom: theme.spacing(3),
         position: "relative",
         display: "flex",
+        margin: "auto",
     },
     imageIcon: {
         marginRight: "auto",
@@ -70,6 +74,16 @@ export default function SignUp(props) {
     });
     const [formData, updateFormData] = useState(initialFormData);
     const [formAvatar, updateFormAvatar] = useState(null);
+    const [formErrors, setFormErrors] = useState({
+        firstName: "",
+        lastName: "",
+        avatar: "", 
+        email: "",
+        isEmailValid: "",
+        username: "",
+        password: "",
+    })
+
     const redirectLogin = () =>{
         setAdminState({isSigningUp: false, isLoggedIn: false,isLoggingIn: true,})
     }
@@ -83,33 +97,121 @@ export default function SignUp(props) {
         });
     };
     const handleChange = (e) => {
-        updateFormData({
-            ...formData,
-            // Trimming any whitespace
-            [e.target.name]: e.target.value.trim(),
-        });
+        if(e.target.name === "email"){
+            const value = e.target.value
+            updateFormData({
+                ...formData,
+                // Trimming any whitespace
+                email: value,
+            });
+        }else{
+            updateFormData({
+                ...formData,
+                // Trimming any whitespace
+                [e.target.name]: e.target.value.trim(),
+            });
+        }
     };
-
+    var emailError
+    var emailErrorMsg
+    const formValidation = (formData) => {
+        console.log("came inside validation")
+        let isValid = true
+        let errors = {
+            firstName: false,
+            lastName: false,
+            avatar: false, 
+            email: false,
+            username: false,
+            password: false,
+        };
+        if(formData["firstName"] === ""){
+            errors["firstName"] = "This field is required"
+            isValid = false
+        }
+        if(formData["lastName"] === ""){
+            errors["lastName"] = "This field is required"
+            isValid = false
+        }
+        if(formData["username"] === ""){
+            errors["username"] = "This field is required"
+            isValid = false
+        }
+        if (formData["email"] !== "") {
+            var pattern = new RegExp(
+                /^(("[\w-\s]+")|([\w-]+(?:\.[\w-]+)*)|("[\w-\s]+")([\w-]+(?:\.[\w-]+)*))(@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$)|(@\[?((25[0-5]\.|2[0-4][0-9]\.|1[0-9]{2}\.|[0-9]{1,2}\.))((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\.){2}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\]?$)/i
+            );
+            if (!pattern.test(formData["email"])) {
+                isValid = false;
+                errors["email"] = "Please enter valid email address";
+            }
+        }else{
+            errors["email"] = "This field is required"
+            isValid = false
+        }
+        if(formData["password"] === ""){
+            errors["password"] = "This field is required"
+            isValid = false
+        }
+        setFormErrors(errors)
+        
+        return isValid
+    }
     const handleSubmit = (e) => {
         e.preventDefault();
-        let postFormData = new FormData();
-        postFormData.append("first_name", formData.firstName);
-        postFormData.append("last_name", formData.lastName);
-        postFormData.append("user_name", formData.username);
-        postFormData.append("email", formData.email);
-        postFormData.append("password", formData.password);
-        postFormData.append(
-            "avatar",
-            formAvatar.avatarFile,
-            formAvatar.avatarFile.name
-        );
-        axiosInstance.post(`user/create/`, postFormData).then((res) => {
-            console.log(res);
-			setAdminState({isSigningUp: false})
-        });
+        const isValid = formValidation(formData)
+        if(isValid){
+            let postFormData = new FormData();
+            postFormData.append("first_name", formData.firstName);
+            postFormData.append("last_name", formData.lastName);
+            postFormData.append("user_name", formData.username);
+            postFormData.append("email", formData.email);
+            postFormData.append("password", formData.password);
+            if(formAvatar!=null){
+                postFormData.append(
+                    "avatar",
+                    formAvatar.avatarFile,
+                    formAvatar.avatarFile.name
+                );
+            }
+            axiosInstance.post(`user/create/`, postFormData).then((res) => {
+                console.log(res);
+                setAdminState({isSigningUp: false})
+            });
+        }
     };
     const classes = useStyles();
 
+    var emailValidationIcon
+    var emailValidationIconColor
+
+    if(formData["email"] === ""){
+        emailValidationIcon = <CheckCircleIcon style={{ fontSize: 28 }}/> 
+        if(formErrors["email"]===""){
+            emailValidationIconColor = '#6c6c6c'   
+            emailError = false
+            emailErrorMsg = null
+        }else{
+            emailValidationIconColor = '#FF0000'
+            emailError = true 
+            emailErrorMsg = "This field is required"
+        }
+    }else{
+        var pattern = new RegExp(/^(("[\w-\s]+")|([\w-]+(?:\.[\w-]+)*)|("[\w-\s]+")([\w-]+(?:\.[\w-]+)*))(@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$)|(@\[?((25[0-5]\.|2[0-4][0-9]\.|1[0-9]{2}\.|[0-9]{1,2}\.))((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\.){2}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\]?$)/i);
+        if (pattern.test(formData["email"])) {
+            emailValidationIcon = <CheckCircleIcon style={{ fontSize: 28 }}/>
+            emailValidationIconColor = '#008000'
+            emailError = false
+            emailErrorMsg = null
+        }else{
+            emailValidationIcon = <CancelIcon style={{ fontSize: 28 }}/> 
+            emailValidationIconColor = '#FF0000'    
+            if(formErrors["email"]!==""){
+                emailError = true 
+                emailErrorMsg = "Please enter valid email address" 
+            }
+        }
+    }
     return (
         <Container component="main" maxWidth="xs">
             <CssBaseline />
@@ -119,7 +221,7 @@ export default function SignUp(props) {
                 </Typography>
                 <form className={classes.form} noValidate>
                     <Grid container spacing={2}>
-                        <Grid item xs={12} alignItems="center">
+                        <Grid item xs={12} alignItems="center" container>
                             <div className={classes.imageContainer}>
                                 <ImageUploading
                                     multiple={false}
@@ -148,6 +250,7 @@ export default function SignUp(props) {
                         </Grid>
                         <Grid item xs={12} sm={6}>
                             <TextField
+                                error = {formErrors["firstName"]!=="" && formData["firstName"]===""}
                                 autoComplete="fname"
                                 name="firstName"
                                 variant="outlined"
@@ -155,12 +258,15 @@ export default function SignUp(props) {
                                 fullWidth
                                 id="firstName"
                                 label="First Name"
+                                // value={formData["firstName"]}
                                 onChange={handleChange}
                                 autoFocus
+                                helperText={formData["firstName"]==="" ? formErrors["firstName"]: null}
                             />
                         </Grid>
                         <Grid item xs={12} sm={6}>
                             <TextField
+                                error = {formErrors["lastName"]!=="" && formData["lastName"]===""}
                                 variant="outlined"
                                 required
                                 fullWidth
@@ -169,10 +275,16 @@ export default function SignUp(props) {
                                 name="lastName"
                                 autoComplete="lname"
                                 onChange={handleChange}
+                                helperText={formData["lastName"]==="" ? formErrors["lastName"]: null}
                             />
                         </Grid>
-                        <Grid item xs={12}>
+                        <Grid item xs={12}
+                            style={{
+                                position: "relative",
+                            }}
+                        >
                             <TextField
+                                error = {emailError}
                                 variant="outlined"
                                 required
                                 fullWidth
@@ -181,10 +293,23 @@ export default function SignUp(props) {
                                 name="email"
                                 autoComplete="email"
                                 onChange={handleChange}
+                                helperText={emailErrorMsg}
                             />
+                            <div 
+                                style={{
+                                    color: emailValidationIconColor,
+                                    position: "absolute",
+                                    margin: "auto",
+                                    right: "15px",
+                                    top: "22px",
+                                }}
+                            >
+                                {emailValidationIcon}
+                            </div>
                         </Grid>
                         <Grid item xs={12}>
                             <TextField
+                                error = {formErrors["username"]!=="" && formData["username"]===""}
                                 variant="outlined"
                                 required
                                 fullWidth
@@ -194,10 +319,12 @@ export default function SignUp(props) {
                                 id="username"
                                 autoComplete="current-username"
                                 onChange={handleChange}
+                                helperText={formData["username"]==="" ? formErrors["username"]: null}
                             />
                         </Grid>
                         <Grid item xs={12}>
                             <TextField
+                                error = {formErrors["password"]!=="" && formData["password"]===""}
                                 variant="outlined"
                                 required
                                 fullWidth
@@ -207,6 +334,7 @@ export default function SignUp(props) {
                                 id="password"
                                 autoComplete="current-password"
                                 onChange={handleChange}
+                                helperText={formData["password"]==="" ? formErrors["password"]: null}
                             />
                         </Grid>
                     </Grid>
