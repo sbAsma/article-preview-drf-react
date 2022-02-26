@@ -1,4 +1,4 @@
-import React, {useMemo} from 'react';
+import React from 'react';
 import ReactDOM from 'react-dom';
 import {Route, BrowserRouter as Router, Switch} from 'react-router-dom'
 import './index.css';
@@ -7,6 +7,8 @@ import Admin from './Admin'
 import Header from './components/admin/header'
 import ManageArticles from './components/admin/manageArticles'
 import AdminProfile from './components/admin/adminProfile'
+import ChangePassword from './components/auth/changePassword'
+import DeleteProfile from './components/auth/deleteProfile'
 import Logout from './components/auth/logout'
 import reportWebVitals from './reportWebVitals';
 import {AdminProvider} from './components/context/AdminContexProvider'
@@ -22,20 +24,20 @@ const customTheme = createTheme({
 
 const routing = (
 	<Router>
-		{/* <React.StrictMode> */}
-			<Switch>
-				<ThemeProvider theme={customTheme}>
-					<Route exact path="/" component={App} />
-					<AdminProvider>
-						<Header/>
-						<Route exact path="/admin" component={Admin}/>
-						<Route exact path="/admin/articles" component={ManageArticles}/>
-						<Route exact path ="/admin/profile" component={AdminProfile} />
-					</AdminProvider>
-					<Route path="/logout" component={Logout} />
-				</ThemeProvider>
-		    </Switch>
-		{/* </React.StrictMode> */}
+		<Switch>
+			<ThemeProvider theme={customTheme}>
+				<Route exact path="/" component={App} />
+				<AdminProvider>
+					<Header/>
+					<Route exact path="/admin" component={Admin}/>
+					<Route exact path="/admin/articles" component={ManageArticles}/>
+					<Route exact path ="/admin/profile" component={AdminProfile} />
+					<Route exact path ="/admin/change_password" component={ChangePassword} />
+					<Route exact path ="/admin/delete" component={DeleteProfile} />
+				</AdminProvider>
+				<Route path="/logout" component={Logout} />
+			</ThemeProvider>
+		</Switch>
   </Router>
 )
 ReactDOM.render(routing, document.getElementById('root'));

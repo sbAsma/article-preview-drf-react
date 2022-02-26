@@ -13,6 +13,8 @@ import ImageUploading from "react-images-uploading";
 import TextField from '@material-ui/core/TextField'
 import IconButton from "@material-ui/core/IconButton";
 import SaveIcon from '@material-ui/icons/Save';
+import LockIcon from '@material-ui/icons/Lock';
+import DeleteIcon from '@material-ui/icons/Delete';
 import PhotoCameraIcon from "@material-ui/icons/PhotoCamera";
 import Button from '@material-ui/core/Button'
 import Typography from '@material-ui/core/Typography'
@@ -113,6 +115,18 @@ const CustomDrawer = (props) => {
                         <BallotIcon />
                     </ListItemIcon>
                     <ListItemText primary={"articles"} />
+                </ListItem>
+                <ListItem button component={Link} href={"change_password"}>
+                    <ListItemIcon>
+                        <LockIcon />
+                    </ListItemIcon>
+                    <ListItemText primary={"change password"} />
+                </ListItem>
+                <ListItem button component={Link} href={"delete"}>
+                    <ListItemIcon>
+                        <DeleteIcon />
+                    </ListItemIcon>
+                    <ListItemText primary={"delete account"} />
                 </ListItem>
             </List>
         </Drawer>
