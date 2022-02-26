@@ -21,24 +21,11 @@ import Typography from '@material-ui/core/Typography'
 import Box from '@material-ui/core/Box';
 import {useAdminContext} from '../context/AdminContexProvider'
 import axiosInstance from "../../axios";
-
-
-const drawerWidth = 180;
+import CustomDrawer from '../customDrawer';
 
 const useStyles = makeStyles((theme) => ({
     root: {
         display: "flex",
-    },
-    appBar: {
-        width: `calc(100% - ${drawerWidth}px)`,
-        marginLeft: drawerWidth,
-    },
-    drawer: {
-        width: drawerWidth,
-        flexShrink: 0,
-    },
-    drawerPaper: {
-        width: drawerWidth,
     },
     // necessary for content to be below app bar
     toolbar: theme.mixins.toolbar,
@@ -97,41 +84,26 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const CustomDrawer = (props) => {
-    return (
-        <Drawer
-            className={props.classes.drawer}
-            variant="permanent"
-            classes={{
-                paper: props.classes.drawerPaper,
-            }}
-            anchor="left"
-        >
-            <div className={props.classes.toolbar} />
-            <Divider />
-            <List>
-                <ListItem button component={Link} href={"articles"}>
-                    <ListItemIcon>
-                        <BallotIcon />
-                    </ListItemIcon>
-                    <ListItemText primary={"articles"} />
-                </ListItem>
-                <ListItem button component={Link} href={"change_password"}>
-                    <ListItemIcon>
-                        <LockIcon />
-                    </ListItemIcon>
-                    <ListItemText primary={"change password"} />
-                </ListItem>
-                <ListItem button component={Link} href={"delete"}>
-                    <ListItemIcon>
-                        <DeleteIcon />
-                    </ListItemIcon>
-                    <ListItemText primary={"delete account"} />
-                </ListItem>
-            </List>
-        </Drawer>
-    );
-}
+const drawerItems = [
+    {
+        id: 1,
+        href: "articles",
+        icon: <BallotIcon/>,
+        text: "articles",
+    },
+    {
+        id: 2,
+        href: "change_password",
+        icon: <LockIcon/>,
+        text: "change password",
+    },
+    {
+        id: 3,
+        href: "delete",
+        icon: <DeleteIcon/>,
+        text: "delete account",
+    },
+]
 
 export default function AdminProfile(){
     const classes = useStyles();
@@ -191,7 +163,7 @@ export default function AdminProfile(){
     }
     return (
         <div className={classes.root}>
-            <CustomDrawer classes={classes} />
+            <CustomDrawer drawerItems={drawerItems} />
             <main className={classes.content}>
                 <div className={classes.toolbar} />
                 <form className={classes.form} noValidate>

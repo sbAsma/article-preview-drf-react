@@ -1,12 +1,5 @@
 import React from 'react'
 import {
-    Link,
-    Drawer,
-    Divider,
-    List,
-    ListItem,
-    ListItemIcon,
-    ListItemText,
     Button,
     makeStyles,
 } from '@material-ui/core';
@@ -16,19 +9,11 @@ import DeleteIcon from '@material-ui/icons/Delete';
 
 import {useAdminContext} from '../context/AdminContexProvider'
 import axiosInstance from "../../axios";
-
-const drawerWidth = 180;
+import CustomDrawer from '../customDrawer';
 
 const useStyles = makeStyles((theme) => ({
     root: {
         display: "flex",
-    },
-    drawer: {
-        width: drawerWidth,
-        flexShrink: 0,
-    },
-    drawerPaper: {
-        width: drawerWidth,
     },
     // necessary for content to be below app bar
     toolbar: theme.mixins.toolbar,
@@ -47,35 +32,21 @@ const useStyles = makeStyles((theme) => ({
     },
 }))
 
-const CustomDrawer = (props) => {
-    return (
-        <Drawer
-            className={props.classes.drawer}
-            variant="permanent"
-            classes={{
-                paper: props.classes.drawerPaper,
-            }}
-            anchor="left"
-        >
-            <div className={props.classes.toolbar} />
-            <Divider />
-            <List>
-                <ListItem button component={Link} href={"articles"}>
-                    <ListItemIcon>
-                        <BallotIcon />
-                    </ListItemIcon>
-                    <ListItemText primary={"articles"} />
-                </ListItem>
-                <ListItem button component={Link} href={"change_password"}>
-                    <ListItemIcon>
-                        <LockIcon />
-                    </ListItemIcon>
-                    <ListItemText primary={"change password"} />
-                </ListItem>
-            </List>
-        </Drawer>
-    );
-}
+const drawerItems = [
+    {
+        id: 1,
+        href: "articles",
+        icon: <BallotIcon/>,
+        text: "articles",
+    },
+    {
+        id: 2,
+        href: "change_password",
+        icon: <LockIcon/>,
+        text: "change password",
+    },
+]
+
 export default function DeleteProfile() {
     const {adminState: {user,}} = useAdminContext()
     const classes = useStyles()
@@ -95,7 +66,7 @@ export default function DeleteProfile() {
     }
     return (
         <div className={classes.root}>
-            <CustomDrawer classes={classes} />
+            <CustomDrawer drawerItems={drawerItems} />
             <main className={classes.content}>
                 <div className={classes.toolbar} />
                 <div className={classes.container}>

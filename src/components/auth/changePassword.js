@@ -1,18 +1,10 @@
 import React, {useState} from 'react'
 import {
-    Link,
-    Drawer,
-    Divider,
-    List,
-    ListItem,
-    ListItemIcon,
-    ListItemText,
     Grid,
     TextField,
     Typography,
     Box,
     Button,
-    IconButton,
     makeStyles,
 } from '@material-ui/core';
 import BallotIcon from '@material-ui/icons/Ballot';
@@ -23,20 +15,10 @@ import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
 
 import {useAdminContext} from '../context/AdminContexProvider'
 import axiosInstance from "../../axios";
+import CustomDrawer from '../customDrawer';
 
-const drawerWidth = 180;
 
 const useStyles = makeStyles((theme) => ({
-    root: {
-        display: "flex",
-    },
-    drawer: {
-        width: drawerWidth,
-        flexShrink: 0,
-    },
-    drawerPaper: {
-        width: drawerWidth,
-    },
     // necessary for content to be below app bar
     toolbar: theme.mixins.toolbar,
     content: {
@@ -76,35 +58,21 @@ const useStyles = makeStyles((theme) => ({
 	},
 }))
 
-const CustomDrawer = (props) => {
-    return (
-        <Drawer
-            className={props.classes.drawer}
-            variant="permanent"
-            classes={{
-                paper: props.classes.drawerPaper,
-            }}
-            anchor="left"
-        >
-            <div className={props.classes.toolbar} />
-            <Divider />
-            <List>
-                <ListItem button component={Link} href={"articles"}>
-                    <ListItemIcon>
-                        <BallotIcon />
-                    </ListItemIcon>
-                    <ListItemText primary={"articles"} />
-                </ListItem>
-                <ListItem button component={Link} href={"delete"}>
-                    <ListItemIcon>
-                        <DeleteIcon />
-                    </ListItemIcon>
-                    <ListItemText primary={"delete account"} />
-                </ListItem>
-            </List>
-        </Drawer>
-    );
-}
+const drawerItems = [
+    {
+        id: 1,
+        href: "articles",
+        icon: <BallotIcon/>,
+        text: "articles",
+    },
+    {
+        id: 2,
+        href: "delete",
+        icon: <DeleteIcon/>,
+        text: "delete account",
+    },
+]
+
 export default function ChangePassword() {
     const {adminState: {user,}} = useAdminContext()
     const [passwordState, setPasswordState] = useState({
@@ -218,7 +186,7 @@ export default function ChangePassword() {
     const visibilityIconStyle = { fontSize: 30 }
     return (
         <div className={classes.root}>
-            <CustomDrawer classes={classes} />
+            <CustomDrawer drawerItems={drawerItems} />
             <main className={classes.content}>
                 <div className={classes.toolbar} />
                 <Grid container spacing={1} display="flex" 
