@@ -7,6 +7,7 @@ import {
     ListItem,
     ListItemIcon,
     ListItemText,
+    Typography,
     makeStyles,
 } from '@material-ui/core';
 
@@ -24,6 +25,10 @@ const useStyles = makeStyles((theme) => ({
         width: drawerWidth,
     },
     toolbar: theme.mixins.toolbar,
+    text:{
+        color: "gray",
+        fontWeight : "bold",
+    }
 }))
 
 export default function CustomDrawer({drawerItems}){
@@ -47,17 +52,19 @@ export default function CustomDrawer({drawerItems}){
                             <ListItemIcon>
                                 {item.icon}
                             </ListItemIcon>
-                            <ListItemText primary={item.text} />
+                            <ListItemText 
+                                primary={
+                                    <Typography 
+                                        variant="body1" 
+                                        className={classes.text}
+                                    >
+                                      {item.text}
+                                    </Typography>
+                                }
+                            />
                         </ListItem>
                     )
                 })}
-                
-                {/* <ListItem button component={Link} href={"delete"}>
-                    <ListItemIcon>
-                        <DeleteIcon />
-                    </ListItemIcon>
-                    <ListItemText primary={"delete account"} />
-                </ListItem> */}
             </List>
         </Drawer>
     );
