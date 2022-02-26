@@ -8,6 +8,7 @@ import {
     makeStyles,
 } from '@material-ui/core';
 import BallotIcon from '@material-ui/icons/Ballot';
+import PersonIcon from '@material-ui/icons/Person';
 import DeleteIcon from '@material-ui/icons/Delete';
 import SaveIcon from '@material-ui/icons/Save';
 import VisibilityIcon from '@material-ui/icons/Visibility';
@@ -64,6 +65,12 @@ const drawerItems = [
         href: "articles",
         icon: <BallotIcon/>,
         text: "articles",
+    },
+    {
+        id: 2,
+        href: "profile",
+        icon: <PersonIcon/>,
+        text: "profile",
     },
     {
         id: 2,

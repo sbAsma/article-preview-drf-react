@@ -4,6 +4,7 @@ import {
     makeStyles,
 } from '@material-ui/core';
 import BallotIcon from '@material-ui/icons/Ballot';
+import PersonIcon from '@material-ui/icons/Person';
 import LockIcon from '@material-ui/icons/Lock';
 import DeleteIcon from '@material-ui/icons/Delete';
 
@@ -41,6 +42,12 @@ const drawerItems = [
     },
     {
         id: 2,
+        href: "profile",
+        icon: <PersonIcon/>,
+        text: "profile",
+    },
+    {
+        id: 3,
         href: "change_password",
         icon: <LockIcon/>,
         text: "change password",
