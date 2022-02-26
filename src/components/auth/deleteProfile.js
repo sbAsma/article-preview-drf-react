@@ -66,7 +66,7 @@ const CustomDrawer = (props) => {
                     </ListItemIcon>
                     <ListItemText primary={"articles"} />
                 </ListItem>
-                <ListItem button >
+                <ListItem button component={Link} href={"change_password"}>
                     <ListItemIcon>
                         <LockIcon />
                     </ListItemIcon>
