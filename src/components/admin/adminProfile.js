@@ -99,7 +99,7 @@ const drawerItems = [
     },
     {
         id: 3,
-        href: "delete",
+        href: "delete_account",
         icon: <DeleteIcon/>,
         text: "delete account",
     },

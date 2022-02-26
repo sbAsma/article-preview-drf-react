@@ -33,7 +33,7 @@ const routing = (
 					<Route exact path="/admin/articles" component={ManageArticles}/>
 					<Route exact path ="/admin/profile" component={AdminProfile} />
 					<Route exact path ="/admin/change_password" component={ChangePassword} />
-					<Route exact path ="/admin/delete" component={DeleteProfile} />
+					<Route exact path ="/admin/delete_account" component={DeleteProfile} />
 				</AdminProvider>
 				<Route path="/logout" component={Logout} />
 			</ThemeProvider>

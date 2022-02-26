@@ -67,7 +67,7 @@ const drawerItems = [
     },
     {
         id: 2,
-        href: "delete",
+        href: "delete_account",
         icon: <DeleteIcon/>,
         text: "delete account",
     },
