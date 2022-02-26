@@ -1,11 +1,11 @@
 from rest_framework import status
 from rest_framework.views import APIView
-from rest_framework.generics import ListAPIView, RetrieveAPIView, RetrieveUpdateDestroyAPIView
+from rest_framework.generics import ListAPIView, RetrieveAPIView, UpdateAPIView, RetrieveUpdateDestroyAPIView
 from django.shortcuts import get_object_or_404
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
-from .serializers import CustomUserSerializer
+from .serializers import CustomUserSerializer, ChangePasswordSerializer
 from .models import CustomUser
 
 class CustomUserCreate(APIView):
@@ -35,6 +35,11 @@ class CustomUserDetail(RetrieveAPIView):
 	def get_object(self, queryset=None, **kwargs):
 		item = self.kwargs.get('pk')
 		return get_object_or_404(CustomUser, user_name=item)
+
+class ChangePasswordView(UpdateAPIView):
+	queryset = CustomUser.objects.all()
+	permission_classes = [IsAuthenticated]
+	serializer_class = ChangePasswordSerializer
 
 class BlacklistTokenUpdateView(APIView):
 	permission_classes = [AllowAny]
