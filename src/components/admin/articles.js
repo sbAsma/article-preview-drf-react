@@ -1,12 +1,12 @@
 import React, {useState, useEffect} from "react";
-import { makeStyles } from "@material-ui/core/styles"
 import {
     Card,
     CardContent,
     CardActions,
     Box,
     Typography,
-    IconButton
+    IconButton,
+    makeStyles
 } from '@material-ui/core'
 import EditIcon from "@material-ui/icons/Edit"
 import DeleteIcon from "@material-ui/icons/Delete"

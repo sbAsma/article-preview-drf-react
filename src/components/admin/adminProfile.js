@@ -1,24 +1,19 @@
 import React, {useState, useEffect} from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import Drawer from '@material-ui/core/Drawer';
-import List from '@material-ui/core/List';
-import Link from '@material-ui/core/Link';
-import Divider from '@material-ui/core/Divider';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import BallotIcon from '@material-ui/icons/Ballot';
-import Grid from '@material-ui/core/Grid'
+import {
+        Button,
+        Typography,
+        Box,
+        Grid,
+        TextField,
+        IconButton,
+        makeStyles 
+} from '@material-ui/core';
 import ImageUploading from "react-images-uploading";
-import TextField from '@material-ui/core/TextField'
-import IconButton from "@material-ui/core/IconButton";
+import BallotIcon from '@material-ui/icons/Ballot';
 import SaveIcon from '@material-ui/icons/Save';
 import LockIcon from '@material-ui/icons/Lock';
 import DeleteIcon from '@material-ui/icons/Delete';
 import PhotoCameraIcon from "@material-ui/icons/PhotoCamera";
-import Button from '@material-ui/core/Button'
-import Typography from '@material-ui/core/Typography'
-import Box from '@material-ui/core/Box';
 import {useAdminContext} from '../context/AdminContexProvider'
 import axiosInstance from "../../axios";
 import CustomDrawer from '../customDrawer';

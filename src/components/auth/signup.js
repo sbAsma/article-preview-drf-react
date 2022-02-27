@@ -1,21 +1,22 @@
 import React, { useState } from "react";
-import axiosInstance from "../../axios";
-// import Avatar from '@material-ui/core/Avatar';
+import {
+    Button,
+    TextField,
+    Link,
+    Grid,
+    Typography,
+    Container,
+    IconButton,
+    CssBaseline,
+    makeStyles 
+} from "@material-ui/core";
 import ImageUploading from "react-images-uploading";
-import Button from "@material-ui/core/Button";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import TextField from "@material-ui/core/TextField";
-import Link from "@material-ui/core/Link";
-import Grid from "@material-ui/core/Grid";
-import Typography from "@material-ui/core/Typography";
-import { makeStyles } from "@material-ui/core/styles";
-import Container from "@material-ui/core/Container";
-import IconButton from "@material-ui/core/IconButton";
 import PhotoCameraIcon from "@material-ui/icons/PhotoCamera";
-import { useAdminContext } from "../context/AdminContexProvider";
-
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import CancelIcon from '@material-ui/icons/Cancel';
+
+import { useAdminContext } from "../context/AdminContexProvider";
+import axiosInstance from "../../axios";
 
 const useStyles = makeStyles((theme) => ({
     paper: {

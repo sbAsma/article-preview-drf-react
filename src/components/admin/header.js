@@ -1,7 +1,5 @@
 import React from 'react';
-import {useHistory} from "react-router-dom"
-import { NavLink } from 'react-router-dom';
-import CssBaseline from '@material-ui/core/CssBaseline';
+import {useHistory, NavLink} from "react-router-dom"
 import {
 	AppBar,
 	Toolbar,
@@ -11,11 +9,12 @@ import {
 	MenuItem,
 	Button,
 	Typography,
+	CssBaseline,
+	makeStyles
 } from '@material-ui/core'
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 import PersonIcon from '@material-ui/icons/Person';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
-import { makeStyles } from '@material-ui/core/styles';
 import { useAdminContext } from "../context/AdminContexProvider";
 import axiosInstance from '../../axios';
 

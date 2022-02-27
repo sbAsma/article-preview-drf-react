@@ -1,9 +1,10 @@
 import React from 'react';
+import {Redirect} from 'react-router-dom'
 import './App.css';
 import Login from './components/auth/login'
 import Signup from './components/auth/signup'
 import {useAdminContext} from './components/context/AdminContexProvider'
-import {Redirect} from 'react-router-dom'
+
 function AdminContent() {
     const {adminState: {
             isLoggedIn,
