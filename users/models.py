@@ -3,6 +3,12 @@ from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
 
+from django.dispatch import receiver
+from django.urls import reverse
+from django_rest_passwordreset.signals import reset_password_token_created
+from django.core.mail import send_mail  
+from conf import settings
+
 def upload_to(instance, filename):
 	return 'media/users/{filename}'.format(filename=filename)
 
@@ -54,3 +60,20 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
 	def __str__(self):
 		return self.user_name
+
+# password reset request handler
+@receiver(reset_password_token_created)
+def password_reset_token_created(sender, instance, reset_password_token, *args, **kwargs):
+
+    email_plaintext_message = "{}token={}".format(reverse('password_reset:reset-password-request'), reset_password_token.key)
+
+    send_mail(
+        # title:
+        "Password Reset for {title}".format(title="Articles Previer"),
+        # message:
+        "http://localhost:3000" + email_plaintext_message,
+        # from:
+        settings.EMAIL_HOST_USER,
+        # to:
+        [reset_password_token.user.email]
+    )
