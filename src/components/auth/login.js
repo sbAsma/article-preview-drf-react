@@ -10,6 +10,9 @@ import {
 	CssBaseline,
 	makeStyles 
 } from "@material-ui/core";
+import VisibilityIcon from '@material-ui/icons/Visibility';
+import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
+
 import { useAdminContext } from "../context/AdminContexProvider";
 import axiosInstance from "../../axios";
 
@@ -35,6 +38,13 @@ const useStyles = makeStyles((theme) => ({
 		marginBottom: '10px',
 		marginTop: '15px',
 	},
+	visibility: {
+        color: "gray",
+        position: "absolute",
+        margin: "auto",
+        right: "20px",
+        top: "25px",
+    },
 }));
 
 export default function Login(props) {
@@ -46,6 +56,7 @@ export default function Login(props) {
     });
     const [formData, updateFormData] = useState(initialFormData);
 	const [wrongCred, setWrongCred] = useState(false)
+	const [visibility, setVisibility] = useState(false)
 	const redirectSignUp = () =>{
         setAdminState({isSigningUp: true, isLoggingIn: false})
     }
@@ -81,7 +92,7 @@ export default function Login(props) {
     };
 
     const classes = useStyles();
-
+	const visibilityIconStyle = { fontSize: 24 }
 	return (
 		<Container component="main" maxWidth="xs">
 			<CssBaseline />
@@ -112,19 +123,33 @@ export default function Login(props) {
 								error={wrongCred}
 							/>
 						</Grid>
-						<Grid item xs={12}>
+						<Grid item xs={12}
+							style={{
+                                position: "relative",
+                            }}
+						>
 							<TextField
 								variant="outlined"
 								required
 								fullWidth
 								name="password"
 								label="Password"
-								type="password"
+								type={!(visibility)? "password": null}
 								id="password"
 								autoComplete="current-password"
 								onChange={handleChange}
-								
 							/>
+							<div
+								className={classes.visibility}
+								onClick={() => setVisibility(!visibility)}
+							>
+								{
+									(visibility)? 
+										<VisibilityOffIcon style={visibilityIconStyle}/> : 
+										<VisibilityIcon style={visibilityIconStyle}/>
+								}
+								
+							</div>
 						</Grid>
 					</Grid>
 					<Button
