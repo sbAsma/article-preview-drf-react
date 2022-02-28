@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {useHistory, NavLink} from "react-router-dom"
 import {
 	AppBar,
@@ -74,6 +74,9 @@ const LogInOutButtons = (props) => {
                     aria-expanded={open ? "true" : undefined}
 					className={props.classes.profileButton}
                     onClick={handleClick}
+					style={{
+						display: (props.hideButton) && "none"
+					}}
                 >
                     <Avatar src={props.user.avatar}/>
 					<ArrowDropDownIcon/>
@@ -145,7 +148,7 @@ export default function Header(props) {
 		isLoggingIn,
 		username,
 		user}, setAdminState} = useAdminContext()
-    
+    const [hideButton, setHideButton] = useState(false)
 	const redirectLogin = () =>{
         setAdminState({isSigningUp: false, isLoggedIn: false,isLoggingIn: true,})
     }
@@ -192,11 +195,13 @@ export default function Header(props) {
 							to="/"
 							underline="none"
 							color="textPrimary"
+							onClick={()=>setHideButton(true)}
 						>
 						Articles Preview Page
 						</Link>
 					</Typography>
 					<LogInOutButtons
+						hideButton={hideButton}
 						isSigningUp={isSigningUp}
 						isLoggingIn={isLoggingIn}
 						isLoggedIn={isLoggedIn}
