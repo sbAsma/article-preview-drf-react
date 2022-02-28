@@ -137,13 +137,21 @@ export default function Login(props) {
 					>
 						Login
 					</Button>
-					<Grid container justifyContent="flex-end">
+					<Grid container justifyContent="space-between">
                         <Grid item>
                             <Link
 								variant="body2"
                                 onClick={redirectSignUp}
                                 >
                                 Not registered yet? Sign up
+                            </Link>
+                        </Grid>
+						<Grid item>
+                            <Link
+								variant="body2"
+								href="admin/password_reset"
+                                >
+                                Forgot your password?
                             </Link>
                         </Grid>
                     </Grid>

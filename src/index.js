@@ -10,10 +10,13 @@ import AdminProfile from './components/admin/adminProfile'
 import ChangePassword from './components/auth/changePassword'
 import DeleteProfile from './components/auth/deleteProfile'
 import Logout from './components/auth/logout'
+import PasswordReset from './components/auth/passwordReset';
+import PasswordResetConfirmation from './components/auth/passwordResetConfirmation';
 import reportWebVitals from './reportWebVitals';
 import {AdminProvider} from './components/context/AdminContexProvider'
 
 import { ThemeProvider, createTheme } from '@material-ui/core/styles'
+
 const font =  "'Manrope', sans-serif";
 
 const customTheme = createTheme({
@@ -34,6 +37,8 @@ const routing = (
 					<Route exact path ="/admin/profile" component={AdminProfile} />
 					<Route exact path ="/admin/change_password" component={ChangePassword} />
 					<Route exact path ="/admin/delete_account" component={DeleteProfile} />
+					<Route exact path ="/admin/password_reset" component={PasswordReset} />
+					<Route path ="/password_reset/token=:token" component={PasswordResetConfirmation} />
 				</AdminProvider>
 				<Route path="/logout" component={Logout} />
 			</ThemeProvider>
