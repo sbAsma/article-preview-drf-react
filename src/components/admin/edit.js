@@ -1,18 +1,17 @@
 import React, { useState, useEffect } from "react";
-//upload image interface
+import {
+        Dialog,
+        DialogActions,
+        DialogContent,
+        DialogTitle,
+        TextField,
+        Grid,
+        Container,
+        IconButton,
+        CssBaseline,
+        makeStyles 
+} from "@material-ui/core";
 import ImageUploading from "react-images-uploading";
-//MaterialUI
-import Dialog from "@material-ui/core/Dialog";
-import DialogActions from "@material-ui/core/DialogActions";
-import DialogContent from "@material-ui/core/DialogContent";
-import DialogTitle from "@material-ui/core/DialogTitle";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import TextField from "@material-ui/core/TextField";
-import Grid from "@material-ui/core/Grid";
-import Typography from "@material-ui/core/Typography";
-import { makeStyles } from "@material-ui/core/styles";
-import Container from "@material-ui/core/Container";
-import IconButton from "@material-ui/core/IconButton";
 import ImageIcon from "@material-ui/icons/Image";
 import CheckIcon from "@material-ui/icons/Check";
 import ClearIcon from "@material-ui/icons/Clear";
@@ -74,7 +73,7 @@ export default function Edit(props) {
 
     const [formData, updateFormData] = useState(initialFormData);
     const [putImage, setPutImage] = useState(null);
-
+    var editOp = props.isEdit === true
     useEffect(() => {
 		updateFormData({
 			id: props.article.id,
@@ -83,7 +82,7 @@ export default function Edit(props) {
 			content: props.article.content,
 			author: props.article.author,
 		});
-    }, [props.isEdit == true]);
+    }, [editOp, props]);
 
     const handleUploadImage = (data) => {
         setPutImage({
@@ -141,7 +140,7 @@ export default function Edit(props) {
                     <CssBaseline />
                     <div className={classes.paper}>
                         <form className={classes.form} noValidate>
-                            <Grid item xs={12} alignItems="center">
+                            <Grid item xs={12} alignItems="center" container justifyContent="center">
                                 <div className={classes.imageContainer}>
                                     <ImageUploading
                                         multiple={false}

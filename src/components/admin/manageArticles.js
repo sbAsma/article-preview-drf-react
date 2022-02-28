@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { makeStyles } from "@material-ui/core/styles"
 import {
-	Container,
-	Grid,
-	Box,
-	Button
+		Container,
+		Grid,
+		Box,
+		Button,
+		makeStyles
 } from '@material-ui/core'
 import Articles from './articles';
 import Create from './create'
@@ -34,38 +34,34 @@ export default function ManageArticles(props) {
 	const classes = useStyles()
 	const ArticleLoading = ArticleLoadingComponent(Articles);
 	const {adminState: {
-			userId,
+			isLoggedIn,
 			user}} = useAdminContext()
     const initialState = Object.freeze({
-        loading: true,
-        // user: props.user,
-        // username: props.username,
-        articles: [],
 		article: {},
         isAdd: false,
         isEdit: false,
         isDelete: false,
     })
+	const [articlesState, setArticlesState] = useState({
+		loading: true,
+        articles: [],
+	})
     const [appState, setAppState] = useState(initialState)
+	var locStr = localStorage.getItem('current_user')
 	useEffect(() =>{
-			axiosInstance.get('articles/')
-			.then((res) => {
-			    const allArticles = res.data;
-				const userArticles = allArticles.filter((article)=>{
-					if (article.author==userId) return article
-				})
-			    setAppState({ 
-					...appState,
-			        loading: false, 
-			        articles: userArticles,
-			    });
-
-			})
+		axiosInstance.get('articles/')
+		.then((res) => {
+			const allArticles = res.data;
+			setArticlesState({ 
+				loading: false, 
+				articles: allArticles,
+			});
+		})
 	}, [user])
 	
 	const onOperationClick = (id, operation) =>{
-		if (id != null){
-			const article_ = appState.articles.find(article => article.id === id)
+		if (id !== null){
+			const article_ = articlesState.articles.find(article => article.id === id)
 			setAppState({...appState, [operation]: true, article: article_})
 		}
 		else{
@@ -78,9 +74,12 @@ export default function ManageArticles(props) {
 			.then((res) => {
 				console.log("response", res)
 				const newArticle = res.data
+				setArticlesState({
+					...articlesState,
+					articles: [...articlesState.articles, newArticle],
+				})
 				setAppState({
 					...appState, 
-					articles: [...appState.articles, newArticle],
 					isAdd: false,
 				})
 			})
@@ -92,15 +91,18 @@ export default function ManageArticles(props) {
 			axiosInstance.patch(`admin/article/` + id + "/", formData)
 			.then((res) => {
 				console.log(res)
-				const updateArticles = appState.articles.map((article) =>{
-					if(article.id != id) return article
+				const updateArticles = articlesState.articles.map((article) =>{
+					if(article.id !== id) return article
 					else return res.data
+				})
+				setArticlesState({
+					...articlesState,
+					articles: updateArticles
 				})
 				setAppState({
 					...appState, 
 					[operation]: false, 
-					article: {}, 
-					articles: updateArticles
+					article: {},
 				})
 			})
 		}
@@ -116,14 +118,17 @@ export default function ManageArticles(props) {
 					}
 				})
 				.then(() => {
-					const newArticles = appState.articles.filter((article) =>{
-						if(article.id != id) return article
+					const newArticles = articlesState.articles.filter((article) =>{
+						return article.id !== id
+					})
+					setArticlesState({
+						...articlesState,
+						articles: newArticles,
 					})
 					setAppState({
 						...appState, 
 						[operation]: false, 
 						article: {}, 
-						articles: newArticles,
 					})
 				});
 			
@@ -133,39 +138,57 @@ export default function ManageArticles(props) {
 	const onCancelOperation = (operation) =>{
 		setAppState({...appState, [operation]: false, article: {}})
 	}
-	if(user == undefined) return <div>loading</div>
+	if(isLoggedIn === false && articlesState.loading === false && locStr === null) {
+		return (
+			<React.Fragment>
+				<div className={classes.root}>
+					<Container 
+						maxWidth="md" 
+						component="main"
+					>
+						 403 You don't have permission to access this page
+
+					</Container>
+				</div>
+			</React.Fragment>
+		)
+	}else if (user === undefined) return <div>loading</div>
 	else return(
 		<React.Fragment>
-            <div className={classes.root}>
+            <div className={classes.root} >
 				<Container 
 					maxWidth="md" 
 					component="main"
+					
 				>
 					<Grid
 						item
 						direction="column"
-						alignItems="center"
-						justify="center"
+						container
+						// alignItems="center"
+						justifyContent="center"
+						
 					>
 						<Box
 							m={2}
 							display="flex"
 							alignItems="center"
+							variant = "container"
 							flexDirection="column"
 						>
 							<Button
 								variant="contained"
 								color="secondary"
 								className={classes.addButton}
-								style={{display: appState.loading && 'none'}}
+								style={{display: articlesState.loading && 'none'}}
 								onClick={() => onOperationClick(null, "isAdd")}
 							>
 								New Article
 							</Button>
 						</Box>
 						<ArticleLoading 
-							isLoading={appState.loading} 
-							articles={appState.articles} 
+							isLoading={articlesState.loading} 
+							articles={articlesState.articles} 
 							userId = {user.id}
 							onOperationClick={onOperationClick}
 						/>
@@ -185,7 +208,6 @@ export default function ManageArticles(props) {
 				article={appState.article}
 				onCancleEdit={onCancelOperation}
 				handleOperation={handleOperation}
-				onCancleEdit={onCancelOperation}
 			/>
 			<Delete
 				isDelete={appState.isDelete}
@@ -196,28 +218,3 @@ export default function ManageArticles(props) {
         </React.Fragment>
 	)
 }
-
-// useEffect(() =>{
-// 	const username = localStorage.getItem('current_user')
-// 	if(username != null && appState.isLoggedIn != true){
-// 		setAppState({ ...appState, loading:true, })
-// 		const axiosReqUser = axiosInstance.get('user/user/'+ username +'/')
-// 		const axiosReqArticles = axiosInstance.get('articles/')
-// 		axios.all([axiosReqUser, axiosReqArticles]).then(axios.spread((...res) => {
-// 			const user = res[0].data;
-// 			const allArticles = res[1].data;
-// 			setAppState({ 
-// 				isLoggedIn: true,
-// 				loading: false, 
-// 				user: user,
-// 				userId: user.id,
-// 				username: user.user_name,
-// 				articles: allArticles,
-// 			});
-
-// 		}))
-// 	}
-// 	else{
-// 		console.log("current user isn't here yet")
-// 	}
-// }, [])

@@ -1,7 +1,5 @@
 import React from 'react';
-import {useHistory} from "react-router-dom"
-import { NavLink } from 'react-router-dom';
-import CssBaseline from '@material-ui/core/CssBaseline';
+import {useHistory, NavLink} from "react-router-dom"
 import {
 	AppBar,
 	Toolbar,
@@ -11,11 +9,12 @@ import {
 	MenuItem,
 	Button,
 	Typography,
+	CssBaseline,
+	makeStyles
 } from '@material-ui/core'
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 import PersonIcon from '@material-ui/icons/Person';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
-import { makeStyles } from '@material-ui/core/styles';
 import { useAdminContext } from "../context/AdminContexProvider";
 import axiosInstance from '../../axios';
 
@@ -65,7 +64,7 @@ const LogInOutButtons = (props) => {
 		props.handleLogout()
 		setAnchorEl(null);
 	}
-	if(props.isLoggedIn == true && props.user != undefined){
+	if(props.isLoggedIn === true && props.user !== undefined){
 		return (
             <div>
                 <Button
@@ -122,7 +121,7 @@ const LogInOutButtons = (props) => {
 			</Button>
 		)
 	}
-	else{
+	else if(props.isLoggingIn){
 		return(
 			<Button
 				color="textPrimary"
@@ -132,6 +131,9 @@ const LogInOutButtons = (props) => {
 				Sign up
 			</Button>
 		)
+	}
+	else{
+		return <div></div>
 	}
 }
 
@@ -151,7 +153,7 @@ export default function Header(props) {
         setAdminState({isSigningUp: true, })
     }
 	const handleLogout = () => {
-        const response = axiosInstance.post('user/logout/blacklist/', {
+        axiosInstance.post('user/logout/blacklist/', {
             refresh_token: localStorage.getItem('refresh_token')
         }).then((res) => {
             localStorage.removeItem('access_token')
@@ -174,7 +176,7 @@ export default function Header(props) {
 			<CssBaseline />
 			<AppBar
 				position="fixed"
-				color="white"
+				// color="white"
 				elevation={0}
 				className={classes.appBar}
 			>

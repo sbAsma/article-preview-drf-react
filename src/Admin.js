@@ -1,52 +1,34 @@
 import React from 'react';
-import './App.css';
-import Header from './components/admin/header'
+import {Redirect} from 'react-router-dom'
 import Login from './components/auth/login'
 import Signup from './components/auth/signup'
-import ManageArticles from './components/admin/manageArticles';
-import {AdminProvider, useAdminContext} from './components/context/AdminContexProvider'
-import {Redirect} from 'react-router-dom'
-function AdminContent() {
-    const {adminState: {
-            isLoggedIn,
-            isSigningUp,
-            username,
-            user}} = useAdminContext()
+import {useAdminContext} from './components/context/AdminContexProvider'
+import {makeStyles} from '@material-ui/core'
 
+const useStyles = makeStyles((theme) => ({
+    toolbar: theme.mixins.toolbar,
+}))
+
+export default function Admin() {
+    const {adminState: {
+        isLoggedIn,
+        isSigningUp,}} = useAdminContext()
+
+    const classes = useStyles()
     if(!isLoggedIn && !isSigningUp) {
         return (
-            <div className="App">
-                <h1>Admin Page</h1>
+            <div>
+                <div className={classes.toolbar} />
                 <Login/>
             </div>
         )}
     else if(!isLoggedIn && isSigningUp) return (
-        <div className="App">
-            <h1>Admin Page</h1>
+        <div>
+            <div className={classes.toolbar} />
             <Signup/>
         </div>
     )
     else return(
         <Redirect to="/admin/articles" />
-        // <div>admin profile</div>
-    )
-    // else return (
-    //     <ManageArticles 
-    //         username={username}
-    //         user={user}
-    //     />
-    // )
-}
-
-export default function Admin() {
-    return(
-        <AdminContent/>
-        // <AdminProvider>
-            
-            // {/* <Login/>
-            // <Signup/>
-            // <ManageArticles/> */}
-            
-        // {/* </AdminProvider> */}
     )
 }

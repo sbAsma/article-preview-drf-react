@@ -1,42 +1,26 @@
 import React, {useState, useEffect} from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import Drawer from '@material-ui/core/Drawer';
-import List from '@material-ui/core/List';
-import Link from '@material-ui/core/Link';
-import Divider from '@material-ui/core/Divider';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import BallotIcon from '@material-ui/icons/Ballot';
-import Grid from '@material-ui/core/Grid'
+import {
+        Button,
+        Typography,
+        Box,
+        Grid,
+        TextField,
+        IconButton,
+        makeStyles 
+} from '@material-ui/core';
 import ImageUploading from "react-images-uploading";
-import TextField from '@material-ui/core/TextField'
-import IconButton from "@material-ui/core/IconButton";
+import BallotIcon from '@material-ui/icons/Ballot';
 import SaveIcon from '@material-ui/icons/Save';
+import LockIcon from '@material-ui/icons/Lock';
+import DeleteIcon from '@material-ui/icons/Delete';
 import PhotoCameraIcon from "@material-ui/icons/PhotoCamera";
-import Button from '@material-ui/core/Button'
-import Typography from '@material-ui/core/Typography'
-import Box from '@material-ui/core/Box';
 import {useAdminContext} from '../context/AdminContexProvider'
 import axiosInstance from "../../axios";
-
-
-const drawerWidth = 180;
+import CustomDrawer from '../customDrawer';
 
 const useStyles = makeStyles((theme) => ({
     root: {
         display: "flex",
-    },
-    appBar: {
-        width: `calc(100% - ${drawerWidth}px)`,
-        marginLeft: drawerWidth,
-    },
-    drawer: {
-        width: drawerWidth,
-        flexShrink: 0,
-    },
-    drawerPaper: {
-        width: drawerWidth,
     },
     // necessary for content to be below app bar
     toolbar: theme.mixins.toolbar,
@@ -95,29 +79,26 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const CustomDrawer = (props) => {
-    return (
-        <Drawer
-            className={props.classes.drawer}
-            variant="permanent"
-            classes={{
-                paper: props.classes.drawerPaper,
-            }}
-            anchor="left"
-        >
-            <div className={props.classes.toolbar} />
-            <Divider />
-            <List>
-                <ListItem button component={Link} href={"articles"}>
-                    <ListItemIcon>
-                        <BallotIcon />
-                    </ListItemIcon>
-                    <ListItemText primary={"articles"} />
-                </ListItem>
-            </List>
-        </Drawer>
-    );
-}
+const drawerItems = [
+    {
+        id: 1,
+        href: "articles",
+        icon: <BallotIcon/>,
+        text: "articles",
+    },
+    {
+        id: 2,
+        href: "change_password",
+        icon: <LockIcon/>,
+        text: "change password",
+    },
+    {
+        id: 3,
+        href: "delete_account",
+        icon: <DeleteIcon/>,
+        text: "delete account",
+    },
+]
 
 export default function AdminProfile(){
     const classes = useStyles();
@@ -131,14 +112,16 @@ export default function AdminProfile(){
         avatarFile: null,
         avatarUrl: '',
     })
-    
+    console.log("user", user)
     useEffect(()=>{
-        setUserProfile({
-            firstName: user.first_name,
-            lastName: user.last_name,
-            email: user.email,
-            avatarUrl: user.avatar
-        })
+        if(Object.keys(user).length !== 0){
+            setUserProfile({
+                firstName: user.first_name,
+                lastName: user.last_name,
+                email: user.email,
+                avatarUrl: user.avatar
+            })
+        }
     }, [user])
 
     const handleUploadImage = (data) => {
@@ -175,12 +158,12 @@ export default function AdminProfile(){
     }
     return (
         <div className={classes.root}>
-            <CustomDrawer classes={classes} />
+            <CustomDrawer drawerItems={drawerItems} />
             <main className={classes.content}>
                 <div className={classes.toolbar} />
                 <form className={classes.form} noValidate>
                     <Grid container spacing={2}>
-                        <Grid item xs={12} display="flex" alignItems="center">
+                        <Grid item xs={12} display="flex" alignItems="center" container>
                             <div className={classes.avatarContainer}>
                                 <div
                                     src={userProfile.avatarUrl}
@@ -214,13 +197,12 @@ export default function AdminProfile(){
                                 </div>
                             </div>
                         </Grid>
-                        <Grid item xs={12} display="flex" alignItems="center">
+                        <Grid item xs={12} display="flex" alignItems="center" container>
                             <Typography
                                 variant="h6"
                                 gutterBottom
                                 fontWeight="fontWeightBold"
                                 style={{
-                                    width: '30%',
                                     margin: 'auto',
                                 }}
                             >
@@ -256,13 +238,12 @@ export default function AdminProfile(){
                                 onChange={handleChange}
                             />
                         </Grid>
-                        <Grid item xs={12} display="flex" alignContent="center" >
+                        <Grid item xs={12} display="flex" alignContent="center" container>
                             <Typography
                                 variant="h6"
                                 gutterBottom
                                 fontWeight="fontWeightBold"
                                 style={{
-                                    width: '34%',
                                     margin: 'auto',
                                 }}
                             >

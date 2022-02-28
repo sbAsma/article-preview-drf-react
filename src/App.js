@@ -4,7 +4,6 @@ import Articles from './components/articles/articles';
 import ArticleLoadingComponent from './components/articles/articleLoading';
 import Header from './components/header'
 import Footer from './components/footer'
-import axiosInstance from './axios';
 import axios from 'axios'
 
 function App() {
@@ -16,8 +15,8 @@ function App() {
     });
 
     useEffect(() => {
-        const usersReq = axiosInstance.get('user/user/')
-        const articlesReq = axiosInstance.get('articles/')
+        const usersReq = axios.get('http://127.0.0.1:8000/user/user/')
+        const articlesReq = axios.get('http://127.0.0.1:8000/articles/')
         axios.all([usersReq, articlesReq]).then(axios.spread((...responses) => {
             const usersRes = responses[0].data
             const articlesRes = responses[1].data
