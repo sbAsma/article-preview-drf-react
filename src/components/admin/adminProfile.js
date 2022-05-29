@@ -112,7 +112,7 @@ export default function AdminProfile(){
         avatarFile: null,
         avatarUrl: '',
     })
-    console.log("user", user)
+    // console.log("user", user)
     useEffect(()=>{
         if(Object.keys(user).length !== 0){
             setUserProfile({

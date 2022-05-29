@@ -3,7 +3,7 @@ import './App.css';
 import { makeStyles } from '@material-ui/core';
 import Articles from './components/articles/articles';
 import ArticleLoadingComponent from './components/articles/articleLoading';
-import Header from './components/header'
+// import Header from './components/header'
 import Footer from './components/footer'
 import axios from 'axios'
 
