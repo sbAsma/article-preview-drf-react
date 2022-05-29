@@ -29,9 +29,9 @@ const routing = (
 	<Router>
 		<Switch>
 			<ThemeProvider theme={customTheme}>
-				<Route exact path="/" component={App} />
 				<AdminProvider>
 					<Header/>
+					<Route exact path="/" component={App} />
 					<Route exact path="/admin" component={Admin}/>
 					<Route exact path="/admin/articles" component={ManageArticles}/>
 					<Route exact path ="/admin/profile" component={AdminProfile} />

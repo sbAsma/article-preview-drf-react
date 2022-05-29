@@ -12,7 +12,7 @@ const AdminContext = createContext()
 function AdminProvider({children}){
     const [adminState, setAdminState] = useState({
         isLoggedIn: false,
-        isLoggingIn: false,
+        isLoggingIn: true,
         isSigningUp: false,
         username: '',
         user: {},

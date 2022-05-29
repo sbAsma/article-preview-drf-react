@@ -3,6 +3,8 @@ import './App.css';
 import { makeStyles } from '@material-ui/core';
 import Articles from './components/articles/articles';
 import ArticleLoadingComponent from './components/articles/articleLoading';
+import { useAdminContext } from "./components/context/AdminContexProvider";
+
 // import Header from './components/header'
 import Footer from './components/footer'
 import axios from 'axios'
@@ -15,6 +17,9 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 function App() {
+    const {adminState: {
+        isLoggedIn,
+    }, setAdminState} = useAdminContext()
     const ArticleLoading = ArticleLoadingComponent(Articles);
     const [appState, setAppState] = useState({
         loading: true,
@@ -34,6 +39,9 @@ function App() {
                 users: usersRes,
             });
         }))
+        if(!isLoggedIn){
+            setAdminState({isSigningUp:true})
+        }
     }, [setAppState]);
 
     const classes = useStyles()

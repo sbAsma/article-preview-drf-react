@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import {
     Button,
     Typography,
@@ -7,6 +7,8 @@ import {
     Box,
     makeStyles
 } from '@material-ui/core'
+import { useAdminContext } from "../context/AdminContexProvider";
+
 import axiosInstance from '../../axios'
 
 const useStyles = makeStyles((theme) => ({
@@ -35,6 +37,7 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 export default function PasswordReset() {
+    const {setAdminState} = useAdminContext()
     const [email, setEmail] = useState('')
     const [isEmailValid, setIsEmailValid] = useState(false)
     const [serverResponse, setServerResponse] = useState({
@@ -42,7 +45,9 @@ export default function PasswordReset() {
         responseMessage: "",
     })
     const classes = useStyles()
-
+    useEffect(() =>{
+        setAdminState({isSigningUp:true})
+    }, [])
     const handleChange = (e) => {
         const email = e.target.value
         setEmail(email)

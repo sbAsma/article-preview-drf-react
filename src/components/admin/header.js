@@ -112,18 +112,6 @@ const LogInOutButtons = (props) => {
             </div>
         );
 	}
-	else if(props.isSigningUp){
-		return(
-			<Button
-				color="primary"
-				variant="outlined"
-				className={props.classes.link}
-				onClick={() => props.redirectLogin()}
-			>
-				Login
-			</Button>
-		)
-	}
 	else if(props.isLoggingIn){
 		return(
 			<Button
@@ -135,9 +123,21 @@ const LogInOutButtons = (props) => {
 			</Button>
 		)
 	}
-	else{
-		return <div></div>
+	else { // if(props.isSigningUp)
+		return(
+			<Button
+				color="primary"
+				variant="outlined"
+				className={props.classes.link}
+				onClick={() => props.redirectLogin()}
+			>
+				Login
+			</Button>
+		)
 	}
+	// else{
+	// 	return <div></div>
+	// }
 }
 
 export default function Header(props) {
@@ -151,6 +151,7 @@ export default function Header(props) {
     const [hideButton, setHideButton] = useState(false)
 	const redirectLogin = () =>{
         setAdminState({isSigningUp: false, isLoggedIn: false,isLoggingIn: true,})
+		history.push('/admin')
     }
     const redirectSignUp = () =>{
         setAdminState({isSigningUp: true, })
@@ -169,6 +170,7 @@ export default function Header(props) {
                 username: '',
                 user: {},
             })
+			setAdminState({isSigningUp: false, isLoggedIn: false,isLoggingIn: true,})
             history.push('/admin')
         })
     }
