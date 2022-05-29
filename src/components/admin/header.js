@@ -49,6 +49,16 @@ const useStyles = makeStyles((theme) => ({
 	menuItemIcon: {
 		marginRight: '10px',
 	},
+	[theme.breakpoints.down('xs')]: {
+		toolbarTitle:{
+			fontSize: "medium",
+		}
+	},
+	['@media (max-width:300px)']:{
+		toolbarTitle:{
+			fontSize: "small",
+		}
+	},
 }));
 
 const LogInOutButtons = (props) => {
