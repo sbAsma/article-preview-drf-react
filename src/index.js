@@ -40,10 +40,11 @@ const routing = (
 					<Route exact path ="/admin/delete_account" component={DeleteProfile} />
 					<Route exact path ="/admin/password_reset" component={PasswordReset} />
 					<Route path ="/password_reset/token=:token" component={PasswordResetConfirmation} />
-					<Route component={NotFound} />
+					
 				</AdminProvider>
 				<Route path="/logout" component={Logout} />
 			</ThemeProvider>
+			<Route component={NotFound} />
 		</Switch>
   </Router>
 )
