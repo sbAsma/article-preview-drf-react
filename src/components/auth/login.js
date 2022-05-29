@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
 	Button,
 	TextField,
@@ -49,7 +49,10 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Login(props) {
 	const {setAdminState} = useAdminContext()
-
+	const [username_, setUsername_] = useState("")
+	useEffect(() =>{
+		setUsername_(localStorage.getItem("current_user"))
+	}, [])
     const initialFormData = Object.freeze({
         username: "",
         password: "",
@@ -93,7 +96,7 @@ export default function Login(props) {
 
     const classes = useStyles();
 	const visibilityIconStyle = { fontSize: 24 }
-	return (
+	if (username_ === null) return (
 		<Container component="main" maxWidth="xs">
 			<CssBaseline />
 			<div className={classes.paper}>
@@ -183,5 +186,7 @@ export default function Login(props) {
 				</form>
 			</div>
 		</Container>
-	);
+	)
+	else return <div></div>
+	
 }
