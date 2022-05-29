@@ -96,7 +96,7 @@ const LogInOutButtons = (props) => {
 						<PersonIcon className={props.classes.menuItemIcon}/>
 						<Link
 							component={NavLink}
-							to="profile"
+							to={window.location.pathname === "/"? "admin/profile" : "profile"}
 							underline="none"
 							color="textPrimary"
 							onClick={() => setAnchorEl(null)}
@@ -195,7 +195,7 @@ export default function Header(props) {
 							to="/"
 							underline="none"
 							color="textPrimary"
-							onClick={()=>setHideButton(true)}
+							// onClick={()=>setHideButton(true)}
 						>
 						Articles Preview Page
 						</Link>
