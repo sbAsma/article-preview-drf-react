@@ -13,6 +13,7 @@ import {
 	makeStyles
 } from '@material-ui/core'
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
+import BallotIcon from '@material-ui/icons/Ballot';
 import PersonIcon from '@material-ui/icons/Person';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import { useAdminContext } from "../context/AdminContexProvider";
@@ -102,6 +103,21 @@ const LogInOutButtons = (props) => {
 					classes={{ paper: props.classes.profileMenu }}
 					className={props.classes.menuPaper}
                 >
+					{
+						window.location.pathname === "/" && 
+						<MenuItem onClick={handleClose} className={props.classes.menuItem}>
+							<BallotIcon className={props.classes.menuItemIcon}/>
+							<Link
+								component={NavLink}
+								to="admin/articles"
+								underline="none"
+								color="textPrimary"
+								onClick={() => setAnchorEl(null)}
+							>
+								Articles
+							</Link>
+						</MenuItem>
+					}
                     <MenuItem onClick={handleClose} className={props.classes.menuItem}>
 						<PersonIcon className={props.classes.menuItemIcon}/>
 						<Link
