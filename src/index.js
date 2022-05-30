@@ -33,12 +33,12 @@ const routing = (
 				<AdminProvider>
 					<Header/>
 					<Route exact path="/" component={App} />
-					<Route exact path="/admin" component={Admin}/>
-					<Route exact path="/admin/articles" component={ManageArticles}/>
-					<Route exact path ="/admin/profile" component={AdminProfile} />
-					<Route exact path ="/admin/change_password" component={ChangePassword} />
-					<Route exact path ="/admin/delete_account" component={DeleteProfile} />
-					<Route exact path ="/admin/password_reset" component={PasswordReset} />
+					<Route exact path="/user" component={Admin}/>
+					<Route exact path="/user/articles" component={ManageArticles}/>
+					<Route exact path ="/user/profile" component={AdminProfile} />
+					<Route exact path ="/user/change_password" component={ChangePassword} />
+					<Route exact path ="/user/delete_account" component={DeleteProfile} />
+					<Route exact path ="/user/password_reset" component={PasswordReset} />
 					<Route path ="/password_reset/token=:token" component={PasswordResetConfirmation} />
 					
 				</AdminProvider>

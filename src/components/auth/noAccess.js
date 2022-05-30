@@ -24,7 +24,7 @@ export default function NoAccess() {
                     <br/>
                     <Link
                         component={NavLink}
-                        to="/admin"
+                        to="/user"
                         onClick={() => setAdminState({isSigningUp: false, isLoggedIn: false,isLoggingIn: true,})}
                     >
                         Go to login page

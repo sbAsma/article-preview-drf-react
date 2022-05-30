@@ -31,6 +31,6 @@ export default function Admin() {
         </div>
     )
     else return(
-        <Redirect to="/admin/articles" />
+        <Redirect to="/user/articles" />
     )
 }

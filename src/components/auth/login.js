@@ -178,7 +178,7 @@ export default function Login(props) {
 						<Grid item>
                             <Link
 								variant="body2"
-								href="admin/password_reset"
+								href="user/password_reset"
                                 >
                                 Forgot your password?
                             </Link>

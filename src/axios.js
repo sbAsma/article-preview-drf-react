@@ -108,7 +108,7 @@ axiosInstance.interceptors.response.use(
 					localStorage.removeItem('current_user')
 					axiosInstance.defaults.headers['Authorization'] = null
 					
-					window.location.href = '/admin/'; 
+					window.location.href = '/user/'; 
 					// There is no login page and this line created an infinit loop
 				}
 			} else {
@@ -117,7 +117,7 @@ axiosInstance.interceptors.response.use(
 				localStorage.removeItem('refresh_token')
 				localStorage.removeItem('current_user')
 				axiosInstance.defaults.headers['Authorization'] = null
-				window.location.href = '/admin/';
+				window.location.href = '/user/';
 				// took this one off because no login page
 			}
 		}

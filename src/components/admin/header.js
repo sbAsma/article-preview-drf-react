@@ -109,7 +109,7 @@ const LogInOutButtons = (props) => {
 							<BallotIcon className={props.classes.menuItemIcon}/>
 							<Link
 								component={NavLink}
-								to="admin/articles"
+								to="user/articles"
 								underline="none"
 								color="textPrimary"
 								onClick={() => setAnchorEl(null)}
@@ -122,7 +122,7 @@ const LogInOutButtons = (props) => {
 						<PersonIcon className={props.classes.menuItemIcon}/>
 						<Link
 							component={NavLink}
-							to={window.location.pathname === "/"? "admin/profile" : "profile"}
+							to={window.location.pathname === "/"? "user/profile" : "profile"}
 							underline="none"
 							color="textPrimary"
 							onClick={() => setAnchorEl(null)}
@@ -177,7 +177,7 @@ export default function Header(props) {
     const [hideButton, setHideButton] = useState(false)
 	const redirectLogin = () =>{
         setAdminState({isSigningUp: false, isLoggedIn: false,isLoggingIn: true,})
-		history.push('/admin')
+		history.push('/user')
     }
     const redirectSignUp = () =>{
         setAdminState({isSigningUp: true, })
@@ -197,7 +197,7 @@ export default function Header(props) {
             localStorage.removeItem('refresh_token')
             localStorage.removeItem('current_user')
             axiosInstance.defaults.headers['Authorization'] = null
-            history.push('/admin')
+            history.push('/user')
         }).catch((err) => {
             console.log(err)
         })

@@ -74,7 +74,7 @@ export default function DeleteProfile() {
                 localStorage.removeItem('refresh_token')
                 localStorage.removeItem('current_user')
                 axiosInstance.defaults.headers['Authorization'] = null
-                window.location.href = '/admin/';
+                window.location.href = '/user/';
             }).catch((err) => {
                 console.log(err)
             })

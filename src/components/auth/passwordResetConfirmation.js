@@ -158,7 +158,7 @@ export default function PasswordResetConfirmation(props) {
                             </Box>
                             <Button
                                 variant="contained"
-                                onClick={() => window.location.href = '/admin/'}
+                                onClick={() => window.location.href = '/user/'}
                                 className={classes.returnButton}
                                 type="submit"
                                 color="primary"
