@@ -155,13 +155,15 @@ export default function AdminProfile(){
     })
     // console.log("user", user)
     useEffect(()=>{
-        if(Object.keys(user).length !== 0){
-            setUserProfile({
-                firstName: user.first_name,
-                lastName: user.last_name,
-                email: user.email,
-                avatarUrl: user.avatar
-            })
+        if(user !== null && user !== undefined){
+            if(Object.keys(user).length !== 0){
+                setUserProfile({
+                    firstName: user.first_name,
+                    lastName: user.last_name,
+                    email: user.email,
+                    avatarUrl: user.avatar
+                })
+            }
         }
     }, [user])
 
