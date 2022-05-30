@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'corsheaders', # new
     'users', # new users models
     'rest_framework_simplejwt.token_blacklist', # new
+    'django_rest_passwordreset', # reset password
 ]
 
 MIDDLEWARE = [
@@ -148,7 +149,7 @@ CORS_ALLOWED_ORIGINS = [
 AUTH_USER_MODEL = "users.CustomUser"
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=1),
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=1),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=10),
     'ROTATE_REFRESH_TOKENS': True,
     'BLACKLIST_AFTER_ROTATION': True,
@@ -173,3 +174,10 @@ REST_FRAMEWORK = {
 
 MEDIA_ROOT = BASE_DIR # os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'asmadjangotest@gmail.com'
+EMAIL_HOST_PASSWORD =  'yxshzeyazekuztqv'
+EMAIL_USE_TLS = True

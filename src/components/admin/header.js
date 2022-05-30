@@ -1,17 +1,28 @@
-import React, { useEffect, useState }  from 'react';
-
-import { NavLink } from 'react-router-dom';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import Link from '@material-ui/core/Link';
-import Button from '@material-ui/core/Button';
-import { makeStyles } from '@material-ui/core/styles';
+import React, { useState } from 'react';
+import {useHistory, NavLink} from "react-router-dom"
+import {
+	AppBar,
+	Toolbar,
+	Link,
+	Avatar,
+	Menu,
+	MenuItem,
+	Button,
+	Typography,
+	CssBaseline,
+	makeStyles
+} from '@material-ui/core'
+import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
+import BallotIcon from '@material-ui/icons/Ballot';
+import PersonIcon from '@material-ui/icons/Person';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import { useAdminContext } from "../context/AdminContexProvider";
+import axiosInstance from '../../axios';
 
 const useStyles = makeStyles((theme) => ({
 	appBar: {
 		// borderBottom: `1px solid ${theme.palette.divider}`,
+		zIndex: theme.zIndex.drawer + 1,
 		backgroundColor: 'hsl(212, 23%, 69%)',
 	},
 	link: {
@@ -20,128 +31,183 @@ const useStyles = makeStyles((theme) => ({
 	toolbarTitle: {
 		marginLeft: '10px',
 		flexGrow: 1,
-	}
+	},
+	profileButton: {
+		display: 'flex',
+		flexDirection: 'row',
+		width: '80px',
+		padding: '5px',
+		color: 'white',
+	},
+	profileMenu: {
+		marginTop: '40px',
+		width: '120px',
+	},
+	menuPaper: {},
+	menuItem: {
+		fontWeight: 'bold',
+	},
+	menuItemIcon: {
+		marginRight: '10px',
+	},
+	[theme.breakpoints.down('xs')]: {
+		toolbarTitle:{
+			fontSize: "medium",
+		}
+	},
+	['@media (max-width:300px)']:{
+		toolbarTitle:{
+			fontSize: "small",
+		}
+	},
 }));
 
-// const Log = (props) => {
-// 	// 	console.log(props)
-// 	// return <div>hello</div>
-// 	
-// 	// const [appState, setAppState] = useState(props)
-// 	// const [loginState, setLoginState] = useState({
-// 	// 	isLoggedIn: false,
-// 	// 	user: null,
-// 	// })
-// 	// useEffect(() => {
-// 	// 	console.log("userEffect has been called through Log")
-// 	// 	setLoginState({
-// 	// 		isLoggedIn: props.isLoggedIn,
-// 	// 		user: props.user,
-// 	// 	})
-// 	// }, [setLoginState])
-// 	// console.log("login state", loginState.isLoggedIn)
-// 	const classes = useStyles();
-// 
-// 	if(props.isLoggedIn == true) return (
-// 		<React.Fragment>
-// 			<Typography >{loginState.user.user_name}</Typography>
-// 			<Button
-// 				href="#"
-// 				color="primary"
-// 				variant="outlined"
-// 				className={classes.link}
-// 				component={NavLink}
-// 				to="/logout"
-// 			>
-// 				Logout
-// 			</Button>
-// 		</React.Fragment>
-// 	)
-// 	else return(
-// 		<React.Fragment>
-// 			<nav>
-// 				<Link
-// 					color="textPrimary"
-// 					href="#"
-// 					className={classes.link}
-// 					component={NavLink}
-// 					to="/signup"
-// 				>
-// 					Sign up
-// 				</Link>
-// 			</nav>
-// 			<Button
-// 				href="#"
-// 				color="primary"
-// 				variant="outlined"
-// 				className={classes.link}
-// 				component={NavLink}
-// 				to="/login"
-// 			>
-// 				Login
-// 			</Button>
-// 		</React.Fragment>
-// 	)
-// }
-
-function Header(props) {
-	// console.log("header props", props)
-	// const [appState, setAppState] = useState({
-	// 	isLoggedIn: props.isLoggedIn,
-	// 	user: props.user,
-	// })
-	// useEffect(()=>{
-	// 	// console.log("useEffect has been called from Header")
-	// 	// setAppState(props)
-	// }, [setAppState])
-	const classes = useStyles();
-	if(props.isLoggedIn == true) return (
-		<React.Fragment>
-			<CssBaseline />
-			<AppBar
-				position="static"
-				color="white"
-				elevation={0}
-				className={classes.appBar}
-			>
-				<Toolbar>
-					<Typography 
-						variant="h6" 
-						color="inherit" 
-						noWrap 
-						className={classes.toolbarTitle}
-					>
+const LogInOutButtons = (props) => {
+	const [anchorEl, setAnchorEl] = React.useState(null);
+	const open = Boolean(anchorEl);
+	const handleClick = (event) => {
+	  setAnchorEl(event.currentTarget);
+	};
+	const handleClose = () =>{
+		setAnchorEl(null);
+	}
+	const handleLogout = () => {
+		props.handleLogout()
+		setAnchorEl(null);
+	}
+	if(props.isLoggedIn === true && props.user !== undefined){
+		return (
+            <div>
+                <Button
+                    id="basic-button"
+                    aria-controls="basic-menu"
+                    aria-haspopup="true"
+                    aria-expanded={open ? "true" : undefined}
+					className={props.classes.profileButton}
+                    onClick={handleClick}
+					style={{
+						display: (props.hideButton) && "none"
+					}}
+                >
+                    <Avatar src={props.user.avatar}/>
+					<ArrowDropDownIcon/>
+                </Button>
+                <Menu
+                    id="basic-menu"
+                    anchorEl={anchorEl}
+                    open={open}
+                    onClose={handleClose}
+                    MenuListProps={{
+                        "aria-labelledby": "basic-button",
+                    }}
+					classes={{ paper: props.classes.profileMenu }}
+					className={props.classes.menuPaper}
+                >
+					{
+						window.location.pathname === "/" && 
+						<MenuItem onClick={handleClose} className={props.classes.menuItem}>
+							<BallotIcon className={props.classes.menuItemIcon}/>
+							<Link
+								component={NavLink}
+								to="admin/articles"
+								underline="none"
+								color="textPrimary"
+								onClick={() => setAnchorEl(null)}
+							>
+								Articles
+							</Link>
+						</MenuItem>
+					}
+                    <MenuItem onClick={handleClose} className={props.classes.menuItem}>
+						<PersonIcon className={props.classes.menuItemIcon}/>
 						<Link
 							component={NavLink}
-							to="/"
+							to={window.location.pathname === "/"? "admin/profile" : "profile"}
 							underline="none"
 							color="textPrimary"
+							onClick={() => setAnchorEl(null)}
 						>
-						Articles Preview
+							Profile
 						</Link>
-					</Typography>
-				<Typography >{props.username}</Typography>
-				<Button
-					href="#"
-					color="primary"
-					variant="outlined"
-					className={classes.link}
-					onClick = {() => props.handleLogout() }
-					// component={NavLink}
-					// to="/logout"
-				>
-					Logout
-				</Button>
-				</Toolbar>
-			</AppBar>
-		</React.Fragment>
-	)
-	else return(
+					</MenuItem>
+                    <MenuItem onClick={handleLogout} className={props.classes.menuItem}>
+						<ExitToAppIcon className={props.classes.menuItemIcon}/>
+						Logout
+					</MenuItem>
+                </Menu>
+            </div>
+        );
+	}
+	else if(props.isLoggingIn){
+		return(
+			<Button
+				color="textPrimary"
+				className={props.classes.link}
+				onClick = {() => props.redirectSignUp()}
+			>
+				Sign up
+			</Button>
+		)
+	}
+	else { // if(props.isSigningUp)
+		return(
+			<Button
+				color="primary"
+				variant="outlined"
+				className={props.classes.link}
+				onClick={() => props.redirectLogin()}
+			>
+				Login
+			</Button>
+		)
+	}
+	// else{
+	// 	return <div></div>
+	// }
+}
+
+export default function Header(props) {
+	const history = useHistory()
+	const {adminState: {
+		isLoggedIn,
+		isSigningUp,
+		isLoggingIn,
+		username,
+		user}, setAdminState} = useAdminContext()
+    const [hideButton, setHideButton] = useState(false)
+	const redirectLogin = () =>{
+        setAdminState({isSigningUp: false, isLoggedIn: false,isLoggingIn: true,})
+		history.push('/admin')
+    }
+    const redirectSignUp = () =>{
+        setAdminState({isSigningUp: true, })
+    }
+	const handleLogout = () => {
+        axiosInstance.post('user/logout/blacklist/', {
+            refresh_token: localStorage.getItem('refresh_token')
+        }).then((res) => {
+            localStorage.removeItem('access_token')
+            localStorage.removeItem('refresh_token')
+            localStorage.removeItem('current_user')
+            axiosInstance.defaults.headers['Authorization'] = null
+            setAdminState({
+                isLoggedIn: false,
+                isSigningUp: false,
+                username: '',
+                user: {},
+            })
+			setAdminState({isSigningUp: false, isLoggedIn: false,isLoggingIn: true,})
+            history.push('/admin')
+        })
+    }
+	const classes = useStyles();
+
+	return (
 		<React.Fragment>
 			<CssBaseline />
 			<AppBar
-				position="static"
-				color="white"
+				position="fixed"
+				// color="white"
 				elevation={0}
 				className={classes.appBar}
 			>
@@ -157,73 +223,25 @@ function Header(props) {
 							to="/"
 							underline="none"
 							color="textPrimary"
+							// onClick={()=>setHideButton(true)}
 						>
 						Articles Preview Page
 						</Link>
 					</Typography>
-			<nav>
-				<Button
-					color="textPrimary"
-					// href="#"
-					className={classes.link}
-					onClick = {() => props.redirectSignUp()}
-					style={{
-						display: props.isSigningUp && 'none',
-					}}
-					// component={NavLink}
-					// to="/signup"
-				>
-					Sign up
-				</Button>
-			</nav>
-			<Button
-				// href="#"
-				color="primary"
-				variant="outlined"
-				className={classes.link}
-				onClick={() => props.redirectLogin()}
-				style={{
-					display: props.isLoggingIn && 'none',
-				}}
-				// component={NavLink}
-				// to="/login"
-			>
-				Login
-			</Button>
+					<LogInOutButtons
+						hideButton={hideButton}
+						isSigningUp={isSigningUp}
+						isLoggingIn={isLoggingIn}
+						isLoggedIn={isLoggedIn}
+						user={user}
+						username={username}
+						redirectLogin={redirectLogin}
+						redirectSignUp={redirectSignUp}
+						handleLogout={handleLogout}
+						classes={classes}
+					/>
 				</Toolbar>
 			</AppBar>
 		</React.Fragment>
 	)
-	// return (
-	// 	<React.Fragment>
-	// 		<CssBaseline />
-	// 		<AppBar
-	// 			position="static"
-	// 			color="white"
-	// 			elevation={0}
-	// 			className={classes.appBar}
-	// 		>
-	// 			<Toolbar>
-	// 				<Typography 
-	// 					variant="h6" 
-	// 					color="inherit" 
-	// 					noWrap 
-	// 					className={classes.toolbarTitle}
-	// 				>
-	// 					<Link
-	// 						component={NavLink}
-	// 						to="/"
-	// 						underline="none"
-	// 						color="textPrimary"
-	// 					>
-	// 					Articles Preview
-	// 					</Link>
-	// 				</Typography>
-	// 				<Log isLoggedIn={appState.isLoggedIn} user={appState.user}/>
-	// 			</Toolbar>
-	// 		</AppBar>
-	// 	</React.Fragment>
-	// );
 }
-
-export default Header;

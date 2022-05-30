@@ -1,240 +1,366 @@
-import React, { useState }  from 'react';
-import axiosInstance from '../../axios';
-import { useHistory } from 'react-router-dom';
-// import Avatar from '@material-ui/core/Avatar';
-import ImageUploading from 'react-images-uploading'
-import Button from '@material-ui/core/Button';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import TextField from '@material-ui/core/TextField';
-import Link from '@material-ui/core/Link';
-import Grid from '@material-ui/core/Grid';
-import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
-import Container from '@material-ui/core/Container';
-import IconButton from '@material-ui/core/IconButton';
-import PhotoCameraIcon from '@material-ui/icons/PhotoCamera';
+import React, { useState } from "react";
+import {
+    Button,
+    TextField,
+    Link,
+    Grid,
+    Typography,
+    Container,
+    IconButton,
+    CssBaseline,
+    makeStyles 
+} from "@material-ui/core";
+import ImageUploading from "react-images-uploading";
+import PhotoCameraIcon from "@material-ui/icons/PhotoCamera";
+import CheckCircleIcon from '@material-ui/icons/CheckCircle';
+import CancelIcon from '@material-ui/icons/Cancel';
+
+import { useAdminContext } from "../context/AdminContexProvider";
+import axiosInstance from "../../axios";
 
 const useStyles = makeStyles((theme) => ({
-  paper: {
-    marginTop: theme.spacing(8),
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-  },
-    imageContainer: {
-    marginBottom: theme.spacing(3),
-    position: 'relative',
-    display: 'flex', 
-  },
-  imageIcon:{
-    marginRight: 'auto',
-    marginLeft: 'auto',
-      color: 'white',
-      opacity: 1,
-      transition: theme.transitions.create('opacity'),
-      color: 'black',
-    '&:hover': {
-      opacity: 0.5,
-      color: 'black',
-      transition: 'none',
-
+    paper: {
+        marginTop: theme.spacing(8),
+        marginBottom: theme.spacing(8),
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
     },
-    width: '160px',
-    height: '160px',
-    backgroundPosition: 'center',
-    backgroundSize: 'cover',
-    borderRadius: '80px',
-    border: '2px solid gray',
-
-  },
-  avatar: {
-    margin: theme.spacing(1),
-    backgroundColor: theme.palette.secondary.main,
-  },
-  form: {
-    width: '100%', // Fix IE 11 issue.
-    marginTop: theme.spacing(3),
-  },
-  submit: {
-    margin: theme.spacing(3, 0, 2),
-  },
+    imageContainer: {
+        marginBottom: theme.spacing(3),
+        position: "relative",
+        display: "flex",
+        margin: "auto",
+    },
+    imageIcon: {
+        marginRight: "auto",
+        marginLeft: "auto",
+        opacity: 1,
+        transition: theme.transitions.create("opacity"),
+        color: "black",
+        "&:hover": {
+            opacity: 0.5,
+            transition: "none",
+        },
+        width: "160px",
+        height: "160px",
+        backgroundPosition: "center",
+        backgroundSize: "cover",
+        borderRadius: "80px",
+        border: "2px solid gray",
+    },
+    avatar: {
+        margin: theme.spacing(1),
+        backgroundColor: theme.palette.secondary.main,
+    },
+    form: {
+        width: "100%", // Fix IE 11 issue.
+        marginTop: theme.spacing(3),
+    },
+    submit: {
+        margin: theme.spacing(3, 0, 2),
+    },
 }));
 
 export default function SignUp(props) {
-	const history = useHistory()
-	const initialFormData = Object.freeze({
-		firstName: '',
-		lastName: '',
-    avatarUrl: 'http://127.0.0.1:8000/media/media/users/defaut_avatar.png', // hardcoded
-		email: '',
-		username: '',
-		password: '',
-	})
-	const [formData, updateFormData] = useState(initialFormData);
-  const [formAvatar, updateFormAvatar] = useState(null);
+	const {setAdminState} = useAdminContext()
 
-  const handleUploadImage = (data) =>{
-      // console.log(data)
-      updateFormAvatar({
-        avatarFile: data[0].file,
-      });
-      updateFormData({
-        ...formData,
-        avatarUrl: data[0].data_url,
-      });
+    const initialFormData = Object.freeze({
+        firstName: "",
+        lastName: "",
+        avatarUrl: "http://127.0.0.1:8000/media/media/users/defaut_avatar.png", // hardcoded
+        email: "",
+        username: "",
+        password: "",
+    });
+    const [formData, updateFormData] = useState(initialFormData);
+    const [formAvatar, updateFormAvatar] = useState(null);
+    const [formErrors, setFormErrors] = useState({
+        firstName: "",
+        lastName: "",
+        avatar: "", 
+        email: "",
+        isEmailValid: "",
+        username: "",
+        password: "",
+    })
 
-  }
-	const handleChange = (e) => {
-		updateFormData({
-			...formData,
-			// Trimming any whitespace
-			[e.target.name]: e.target.value.trim(),
-		});
-	};
+    const redirectLogin = () =>{
+        setAdminState({isSigningUp: false, isLoggedIn: false,isLoggingIn: true,})
+    }
+    const handleUploadImage = (data) => {
+        updateFormAvatar({
+            avatarFile: data[0].file,
+        });
+        updateFormData({
+            ...formData,
+            avatarUrl: data[0].data_url,
+        });
+    };
+    const handleChange = (e) => {
+        if(e.target.name === "email"){
+            const value = e.target.value
+            updateFormData({
+                ...formData,
+                // Trimming any whitespace
+                email: value,
+            });
+        }else{
+            updateFormData({
+                ...formData,
+                // Trimming any whitespace
+                [e.target.name]: e.target.value.trim(),
+            });
+        }
+    };
+    var emailError
+    var emailErrorMsg
+    const formValidation = (formData) => {
+        console.log("came inside validation")
+        let isValid = true
+        let errors = {
+            firstName: false,
+            lastName: false,
+            avatar: false, 
+            email: false,
+            username: false,
+            password: false,
+        };
+        if(formData["firstName"] === ""){
+            errors["firstName"] = "This field is required"
+            isValid = false
+        }
+        if(formData["lastName"] === ""){
+            errors["lastName"] = "This field is required"
+            isValid = false
+        }
+        if(formData["username"] === ""){
+            errors["username"] = "This field is required"
+            isValid = false
+        }
+        if (formData["email"] !== "") {
+            var pattern = new RegExp(
+                /^(("[\w-\s]+")|([\w-]+(?:\.[\w-]+)*)|("[\w-\s]+")([\w-]+(?:\.[\w-]+)*))(@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$)|(@\[?((25[0-5]\.|2[0-4][0-9]\.|1[0-9]{2}\.|[0-9]{1,2}\.))((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\.){2}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\]?$)/i
+            );
+            if (!pattern.test(formData["email"])) {
+                isValid = false;
+                errors["email"] = "Please enter valid email address";
+            }
+        }else{
+            errors["email"] = "This field is required"
+            isValid = false
+        }
+        if(formData["password"] === ""){
+            errors["password"] = "This field is required"
+            isValid = false
+        }
+        setFormErrors(errors)
+        
+        return isValid
+    }
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        const isValid = formValidation(formData)
+        if(isValid){
+            let postFormData = new FormData();
+            postFormData.append("first_name", formData.firstName);
+            postFormData.append("last_name", formData.lastName);
+            postFormData.append("user_name", formData.username);
+            postFormData.append("email", formData.email);
+            postFormData.append("password", formData.password);
+            if(formAvatar!=null){
+                postFormData.append(
+                    "avatar",
+                    formAvatar.avatarFile,
+                    formAvatar.avatarFile.name
+                );
+            }
+            axiosInstance.post(`user/create/`, postFormData).then((res) => {
+                console.log(res);
+                setAdminState({isSigningUp: false})
+            });
+        }
+    };
+    const classes = useStyles();
 
-	const handleSubmit= (e) => {
-		e.preventDefault()
-    let postFormData = new FormData();
-    postFormData.append('first_name', formData.firstName);
-    postFormData.append('last_name', formData.lastName); 
-    postFormData.append('user_name', formData.username);
-    postFormData.append('email', formData.email); 
-    postFormData.append('password', formData.password);
-    postFormData.append('picture', formAvatar.avatarFile, formAvatar.avatarFile.name)
-    axiosInstance.post(`user/create/`, postFormData)
-		.then((res)=> {
-      console.log(res)
-      props.handleSignup()
-			// history.push('/login');
+    var emailValidationIcon
+    var emailValidationIconColor
 
-		})
-	}
-  	const classes = useStyles();
-
-  return (
-    <Container component="main" maxWidth="xs">
-      <CssBaseline />
-      <div className={classes.paper}>
-        {/* <Avatar className={classes.avatar}> */}
-        {/*   <LockOutlinedIcon /> */}
-        {/* </Avatar> */}
-        <Typography component="h1" variant="h5">
-          Sign up
-        </Typography>
-        <form className={classes.form} noValidate>
-          <Grid container spacing={2}>
-            <Grid item xs={12}  alignItems= 'center'>
-                <div 
-                    className = {classes.imageContainer}
-                  >
-                    <ImageUploading 
-                          multiple = {false}
-                          onChange={handleUploadImage}
-                          acceptType={['jpg', 'png', 'jpeg']}
-                          dataURLKey="data_url"
-                          >
-                          {({
-                              onImageUpload,
-                              }) => (
-                              <IconButton 
-                                color="primary"
-                                className={classes.imageIcon}
-                          style={{
-                            backgroundImage: `url(${formData.avatarUrl})`,
-                          }}
-                          onClick={onImageUpload}
-                          // waves='light'
-                          // disableRipple = {true}
-                                      >
-                                          <PhotoCameraIcon style={{ fontSize: 40 }}/>
-                                      </IconButton>
-                                  )}
-                              </ImageUploading>
-                              </div>
-                  </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                autoComplete="fname"
-                name="firstName"
-                variant="outlined"
-                required
-                fullWidth
-                id="firstName"
-                label="First Name"
-                onChange={handleChange}
-                autoFocus
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                id="lastName"
-                label="Last Name"
-                name="lastName"
-                autoComplete="lname"
-                onChange={handleChange}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                id="email"
-                label="Email Address"
-                name="email"
-                autoComplete="email"
-                onChange={handleChange}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                name="username"
-                label="Username"
-                type="username"
-                id="username"
-                autoComplete="current-username"
-                onChange={handleChange}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                name="password"
-                label="Password"
-                type="password"
-                id="password"
-                autoComplete="current-password"
-                onChange={handleChange}
-              />
-            </Grid>
-          </Grid>
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            color="primary"
-            className={classes.submit}
-            onClick={handleSubmit}
-          >
-            Sign Up
-          </Button>
-          <Grid container justifyContent="flex-end">
-            <Grid item>
-              <Link href="/login" variant="body2">
-                Already have an account? Sign in
-              </Link>
-            </Grid>
-          </Grid>
-        </form>
-      </div>
-    </Container>
-  );
+    if(formData["email"] === ""){
+        emailValidationIcon = <CheckCircleIcon style={{ fontSize: 28 }}/> 
+        if(formErrors["email"]===""){
+            emailValidationIconColor = '#6c6c6c'   
+            emailError = false
+            emailErrorMsg = null
+        }else{
+            emailValidationIconColor = '#FF0000'
+            emailError = true 
+            emailErrorMsg = "This field is required"
+        }
+    }else{
+        var pattern = new RegExp(/^(("[\w-\s]+")|([\w-]+(?:\.[\w-]+)*)|("[\w-\s]+")([\w-]+(?:\.[\w-]+)*))(@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$)|(@\[?((25[0-5]\.|2[0-4][0-9]\.|1[0-9]{2}\.|[0-9]{1,2}\.))((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\.){2}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\]?$)/i);
+        if (pattern.test(formData["email"])) {
+            emailValidationIcon = <CheckCircleIcon style={{ fontSize: 28 }}/>
+            emailValidationIconColor = '#008000'
+            emailError = false
+            emailErrorMsg = null
+        }else{
+            emailValidationIcon = <CancelIcon style={{ fontSize: 28 }}/> 
+            emailValidationIconColor = '#FF0000'    
+            if(formErrors["email"]!==""){
+                emailError = true 
+                emailErrorMsg = "Please enter valid email address" 
+            }
+        }
+    }
+    return (
+        <Container component="main" maxWidth="xs">
+            <CssBaseline />
+            <div className={classes.paper}>
+                <Typography component="h1" variant="h5">
+                    Sign up
+                </Typography>
+                <form className={classes.form} noValidate>
+                    <Grid container spacing={2}>
+                        <Grid item xs={12} alignItems="center" container>
+                            <div className={classes.imageContainer}>
+                                <ImageUploading
+                                    multiple={false}
+                                    onChange={handleUploadImage}
+                                    acceptType={["jpg", "png", "jpeg"]}
+                                    dataURLKey="data_url"
+                                >
+                                    {({ onImageUpload }) => (
+                                        <IconButton
+                                            color="primary"
+                                            className={classes.imageIcon}
+                                            style={{
+                                                backgroundImage: `url(${formData.avatarUrl})`,
+                                            }}
+                                            onClick={onImageUpload}
+                                            // waves='light'
+                                            // disableRipple = {true}
+                                        >
+                                            <PhotoCameraIcon
+                                                style={{ fontSize: 40 }}
+                                            />
+                                        </IconButton>
+                                    )}
+                                </ImageUploading>
+                            </div>
+                        </Grid>
+                        <Grid item xs={12} sm={6}>
+                            <TextField
+                                error = {formErrors["firstName"]!=="" && formData["firstName"]===""}
+                                autoComplete="fname"
+                                name="firstName"
+                                variant="outlined"
+                                required
+                                fullWidth
+                                id="firstName"
+                                label="First Name"
+                                // value={formData["firstName"]}
+                                onChange={handleChange}
+                                autoFocus
+                                helperText={formData["firstName"]==="" ? formErrors["firstName"]: null}
+                            />
+                        </Grid>
+                        <Grid item xs={12} sm={6}>
+                            <TextField
+                                error = {formErrors["lastName"]!=="" && formData["lastName"]===""}
+                                variant="outlined"
+                                required
+                                fullWidth
+                                id="lastName"
+                                label="Last Name"
+                                name="lastName"
+                                autoComplete="lname"
+                                onChange={handleChange}
+                                helperText={formData["lastName"]==="" ? formErrors["lastName"]: null}
+                            />
+                        </Grid>
+                        <Grid item xs={12}
+                            style={{
+                                position: "relative",
+                            }}
+                        >
+                            <TextField
+                                error = {emailError}
+                                variant="outlined"
+                                required
+                                fullWidth
+                                id="email"
+                                label="Email Address"
+                                name="email"
+                                autoComplete="email"
+                                onChange={handleChange}
+                                helperText={emailErrorMsg}
+                            />
+                            <div 
+                                style={{
+                                    color: emailValidationIconColor,
+                                    position: "absolute",
+                                    margin: "auto",
+                                    right: "15px",
+                                    top: "22px",
+                                }}
+                            >
+                                {emailValidationIcon}
+                            </div>
+                        </Grid>
+                        <Grid item xs={12}>
+                            <TextField
+                                error = {formErrors["username"]!=="" && formData["username"]===""}
+                                variant="outlined"
+                                required
+                                fullWidth
+                                name="username"
+                                label="Username"
+                                type="username"
+                                id="username"
+                                autoComplete="current-username"
+                                onChange={handleChange}
+                                helperText={formData["username"]==="" ? formErrors["username"]: null}
+                            />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <TextField
+                                error = {formErrors["password"]!=="" && formData["password"]===""}
+                                variant="outlined"
+                                required
+                                fullWidth
+                                name="password"
+                                label="Password"
+                                type="password"
+                                id="password"
+                                autoComplete="current-password"
+                                onChange={handleChange}
+                                helperText={formData["password"]==="" ? formErrors["password"]: null}
+                            />
+                        </Grid>
+                    </Grid>
+                    <Button
+                        type="submit"
+                        fullWidth
+                        variant="contained"
+                        color="primary"
+                        className={classes.submit}
+                        onClick={handleSubmit}
+                    >
+                        Sign Up
+                    </Button>
+                    <Grid container justifyContent="flex-end">
+                        <Grid item>
+                            <Link
+								variant="body2"
+                                onClick={redirectLogin}
+                                >
+                                Already have an account? Sign in
+                            </Link>
+                        </Grid>
+                    </Grid>
+                </form>
+            </div>
+        </Container>
+    );
 }

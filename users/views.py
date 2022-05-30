@@ -1,11 +1,11 @@
 from rest_framework import status
 from rest_framework.views import APIView
-from rest_framework.generics import ListAPIView, RetrieveAPIView
+from rest_framework.generics import ListAPIView, RetrieveAPIView, UpdateAPIView, RetrieveUpdateDestroyAPIView
 from django.shortcuts import get_object_or_404
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
-from .serializers import CustomUserSerializer
+from .serializers import CustomUserSerializer, ChangePasswordSerializer
 from .models import CustomUser
 
 class CustomUserCreate(APIView):
@@ -20,6 +20,11 @@ class CustomUserCreate(APIView):
 				return Response(json, status=status.HTTP_201_CREATED)
 		return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+class CustomUserManage(RetrieveUpdateDestroyAPIView):
+	permission_classes = [IsAuthenticated]
+	queryset = CustomUser.objects.all()
+	serializer_class = CustomUserSerializer
+
 class CustomUserList(ListAPIView):
 	serializer_class = CustomUserSerializer
 	queryset = CustomUser.objects.all()
@@ -30,6 +35,11 @@ class CustomUserDetail(RetrieveAPIView):
 	def get_object(self, queryset=None, **kwargs):
 		item = self.kwargs.get('pk')
 		return get_object_or_404(CustomUser, user_name=item)
+
+class ChangePasswordView(UpdateAPIView):
+	queryset = CustomUser.objects.all()
+	permission_classes = [IsAuthenticated]
+	serializer_class = ChangePasswordSerializer
 
 class BlacklistTokenUpdateView(APIView):
 	permission_classes = [AllowAny]

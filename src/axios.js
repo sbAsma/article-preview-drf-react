@@ -39,7 +39,7 @@ axiosInstance.interceptors.response.use(
 	},
 	async function (error) {
 		const originalRequest = error.config;
-
+		console.log(error.response.data.code)
 		if (typeof error.response === 'undefined') {
 			alert(
 				'A server/network error occurred. ' +
@@ -53,10 +53,12 @@ axiosInstance.interceptors.response.use(
 			error.response.status === 401 &&
 			originalRequest.url === baseURL + 'token/refresh/'
 		) {
+			// this will be executed only if I do a get request from http://127.0.0.1:8000/
+			// and it is happening in "plop"
 			window.location.href = '/login/';
 			return Promise.reject(error);
 		}
-
+		
 		if (
 			error.response.data.code === 'token_not_valid' &&
 			error.response.status === 401 &&
@@ -73,6 +75,8 @@ axiosInstance.interceptors.response.use(
 				console.log(tokenParts.exp);
 
 				if (tokenParts.exp > now) {
+					// plop
+					console.log("plop")
 					return noInterceptAxios
 						.post('token/refresh/', {
 							refresh: refreshToken,
@@ -93,14 +97,25 @@ axiosInstance.interceptors.response.use(
 						});
 				} else {
 					console.log('Refresh token is expired', tokenParts.exp, now);
-					window.location.href = '/login/';
+					localStorage.removeItem('access_token')
+					localStorage.removeItem('refresh_token')
+					localStorage.removeItem('current_user')
+					axiosInstance.defaults.headers['Authorization'] = null
+					
+					window.location.href = '/admin/'; 
+					// There is no login page and this line created an infinit loop
 				}
 			} else {
 				console.log('Refresh token not available.');
-				window.location.href = '/login/';
+				localStorage.removeItem('access_token')
+				localStorage.removeItem('refresh_token')
+				localStorage.removeItem('current_user')
+				axiosInstance.defaults.headers['Authorization'] = null
+				window.location.href = '/admin/';
+				// took this one off because no login page
 			}
 		}
-
+		
 		// specific error handling done elsewhere
 		return Promise.reject(error);
 	}

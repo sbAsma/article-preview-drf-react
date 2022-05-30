@@ -1,132 +1,193 @@
-import React, { useState }  from 'react';
-import axiosInstance from '../../axios';
-import { useHistory } from 'react-router-dom';
-import { NavLink } from 'react-router-dom';
-import Button from '@material-ui/core/Button';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import TextField from '@material-ui/core/TextField';
-import Grid from '@material-ui/core/Grid';
-import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
-import Container from '@material-ui/core/Container';
+import React, { useState, useEffect } from "react";
+import {
+	Button,
+	TextField,
+	Grid,
+	Typography,
+	Link,
+	Box,
+	Container,
+	CssBaseline,
+	makeStyles 
+} from "@material-ui/core";
+import VisibilityIcon from '@material-ui/icons/Visibility';
+import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
+
+import { useAdminContext } from "../context/AdminContexProvider";
+import axiosInstance from "../../axios";
 
 const useStyles = makeStyles((theme) => ({
-  paper: {
-    marginTop: theme.spacing(8),
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-  },
-  form: {
-    width: '100%', // Fix IE 11 issue.
-    marginTop: theme.spacing(3),
-  },
-  submit: {
-    margin: theme.spacing(3, 0, 2),
-  },
+    paper: {
+        marginTop: theme.spacing(8),
+		marginBottom: theme.spacing(8),
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+    },
+    form: {
+        width: "100%", // Fix IE 11 issue.
+        marginTop: theme.spacing(3),
+    },
+    submit: {
+        margin: theme.spacing(3, 0, 2),
+    },
+	wrongCredentials: {
+		border: "1px solid red",
+		borderRadius: '10px',
+		color: "red",
+		padding: theme.spacing(1),
+		marginBottom: '10px',
+		marginTop: '15px',
+	},
+	visibility: {
+        color: "gray",
+        position: "absolute",
+        margin: "auto",
+        right: "20px",
+        top: "25px",
+    },
 }));
 
 export default function Login(props) {
-	const history = useHistory()
-	const initialFormData = Object.freeze({
-		username: '',
-		password: '',
-	})
-	const [formData, updateFormData] = useState(initialFormData);
+	const {setAdminState} = useAdminContext()
+	const [username_, setUsername_] = useState("")
+	useEffect(() =>{
+		setUsername_(localStorage.getItem("current_user"))
+	}, [])
+    const initialFormData = Object.freeze({
+        username: "",
+        password: "",
+    });
+    const [formData, updateFormData] = useState(initialFormData);
+	const [wrongCred, setWrongCred] = useState(false)
+	const [visibility, setVisibility] = useState(false)
+	const redirectSignUp = () =>{
+        setAdminState({isSigningUp: true, isLoggingIn: false})
+    }
+    const handleChange = (e) => {
+        updateFormData({
+            ...formData,
+            // Trimming any whitespace
+            [e.target.name]: e.target.value.trim(),
+        });
+    };
 
-	const handleChange = (e) => {
-		updateFormData({
-			...formData,
-			// Trimming any whitespace
-			[e.target.name]: e.target.value.trim(),
-		});
-	};
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        axiosInstance
+            .post(`token/`, {
+                user_name: formData.username,
+                password: formData.password,
+            })
+            .then((res) => {
+				console.log(res)
+				localStorage.setItem("access_token", res.data.access);
+				localStorage.setItem("refresh_token", res.data.refresh);
+				localStorage.setItem("current_user", formData.username);
+				axiosInstance.defaults.headers["Authorization"] =
+					"JWT " + localStorage.getItem("access_token");
+				setAdminState({ 
+					isLoggedIn: true,
+				});
+            }).catch((err) => {
+				console.log(err);
+				setWrongCred(true)
+			});
+    };
 
-	const handleSubmit= (e) => {
-		e.preventDefault()
-		axiosInstance.post(`token/`,{
-			user_name: formData.username,
-			password: formData.password,			
-		})
-		.then((res)=> {
-      // test successful response !!!!
-			localStorage.setItem('access_token', res.data.access)
-			localStorage.setItem('refresh_token', res.data.refresh)
-      localStorage.setItem('current_user', formData.username)
-			axiosInstance.defaults.headers['Authorization'] = 
-				'JWT ' + localStorage.getItem('access_token')
-			// history.push('admin/');
-      // window.location.reload();
-        props.handleLogin(formData.username)
-		})
-	}
-  	const classes = useStyles();
-  if(!props.isLoggedIn) {
-    return (
-      <Container component="main" maxWidth="xs">
-        <CssBaseline />
-        <div className={classes.paper}>
-          <Typography component="h1" variant="h5">
-            Login
-          </Typography>
-          <form className={classes.form} noValidate>
-            <Grid container spacing={2}>
-              <Grid item xs={12}>
-                <TextField
-                  variant="outlined"
-                  required
-                  fullWidth
-                  name="username"
-                  label="Username"
-                  type="username"
-                  id="username"
-                  autoComplete="current-username"
-                  onChange={handleChange}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  variant="outlined"
-                  required
-                  fullWidth
-                  name="password"
-                  label="Password"
-                  type="password"
-                  id="password"
-                  autoComplete="current-password"
-                  onChange={handleChange}
-                />
-              </Grid>
-            </Grid>
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              color="primary"
-              className={classes.submit}
-              onClick={handleSubmit}
-            >
-              Login
-            </Button>
-          </form>
-        </div>
-      </Container>
-    )}
-  else return(
-      <Container component="main" maxWidth="xs">
-        <CssBaseline />
-        <div className={classes.paper}>
-          <Button
-            // href="#"
-            color="primary"
-            variant="contained"
-            className={classes.submit}
-            component={NavLink}
-            to="/logout"
-          >
-            Logout
-          </Button>
-        </div>
-      </Container>
-    )
+    const classes = useStyles();
+	const visibilityIconStyle = { fontSize: 24 }
+	if (username_ === null) return (
+		<Container component="main" maxWidth="xs">
+			<CssBaseline />
+			<div className={classes.paper}>
+				<Typography component="h1" variant="h5">
+					Login
+				</Typography>
+				<Box 
+					style={{display: !wrongCred && 'none'}}
+					className={classes.wrongCredentials}
+				>
+					There seems to be an error with your username and/or password. Please
+					verify your credentials.
+				</Box>
+				<form className={classes.form} noValidate>
+					<Grid container spacing={2}>
+						<Grid item xs={12}>
+							<TextField
+								variant="outlined"
+								required
+								fullWidth
+								name="username"
+								label="Username"
+								type="username"
+								id="username"
+								autoComplete="current-username"
+								onChange={handleChange}
+								error={wrongCred}
+							/>
+						</Grid>
+						<Grid item xs={12}
+							style={{
+                                position: "relative",
+                            }}
+						>
+							<TextField
+								variant="outlined"
+								required
+								fullWidth
+								name="password"
+								label="Password"
+								type={!(visibility)? "password": null}
+								id="password"
+								autoComplete="current-password"
+								onChange={handleChange}
+							/>
+							<div
+								className={classes.visibility}
+								onClick={() => setVisibility(!visibility)}
+							>
+								{
+									(visibility)? 
+										<VisibilityOffIcon style={visibilityIconStyle}/> : 
+										<VisibilityIcon style={visibilityIconStyle}/>
+								}
+								
+							</div>
+						</Grid>
+					</Grid>
+					<Button
+						type="submit"
+						fullWidth
+						variant="contained"
+						color="primary"
+						className={classes.submit}
+						onClick={handleSubmit}
+					>
+						Login
+					</Button>
+					<Grid container justifyContent="space-between">
+                        <Grid item>
+                            <Link
+								variant="body2"
+                                onClick={redirectSignUp}
+                                >
+                                Not registered yet? Sign up
+                            </Link>
+                        </Grid>
+						<Grid item>
+                            <Link
+								variant="body2"
+								href="admin/password_reset"
+                                >
+                                Forgot your password?
+                            </Link>
+                        </Grid>
+                    </Grid>
+				</form>
+			</div>
+		</Container>
+	)
+	else return <div></div>
+	
 }

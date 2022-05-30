@@ -1,38 +1,51 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {Route, Redirect, BrowserRouter as Router, Switch} from 'react-router-dom'
+import {Route, BrowserRouter as Router, Switch} from 'react-router-dom'
 import './index.css';
 import App from './App';
 import Admin from './Admin'
+import Header from './components/admin/header'
 import ManageArticles from './components/admin/manageArticles'
-// import Create from './components/admin/create'
-// import Edit from './components/admin/edit'
-// import Delete from './components/admin/delete'
-// import Login from './components/auth/login'
+import AdminProfile from './components/admin/adminProfile'
+import ChangePassword from './components/auth/changePassword'
+import DeleteProfile from './components/auth/deleteProfile'
 import Logout from './components/auth/logout'
-// import Signup from './components/auth/signup'
+import PasswordReset from './components/auth/passwordReset';
+import PasswordResetConfirmation from './components/auth/passwordResetConfirmation';
+import NotFound from './components/notFound'
 import reportWebVitals from './reportWebVitals';
+import {AdminProvider} from './components/context/AdminContexProvider'
 
-const isNotLoggedIn = localStorage.getItem('current_user') == null
+import { ThemeProvider, createTheme } from '@material-ui/core/styles'
+
+const font =  "'Manrope', sans-serif";
+
+const customTheme = createTheme({
+	typography: {
+		fontFamily: font,
+	},
+})
 
 const routing = (
 	<Router>
-		<React.StrictMode>
-			<Switch>
-		    	<Route exact path="/" component={App} />
-		    	<Route exact path="/admin" component={Admin} />
-		    	{/* <Route exact path= component={} /> */}
-		  {/*   	<Route exact path="/admin/manage"> */}
-				{/*   {isNotLoggedIn ? <Redirect to="/admin" /> : <ManageArticles />} */}
-				{/* </Route> */}
-		    	{/* <Route exact path="/admin/create" component={Create} /> */}
-		    	{/* <Route exact path="/admin/edit/:id" component={Edit} /> */}
-		    	{/* <Route exact path="/admin/delete/:id" component={Delete} /> */}
-		    	{/* <Route path="/login" component={Login} /> */}
-		    	<Route path="/logout" component={Logout} />
-		    	{/* <Route path="/signup" component={Signup} /> */}
-		    </Switch>
-		</React.StrictMode>
+		<Switch>
+			<ThemeProvider theme={customTheme}>
+				<AdminProvider>
+					<Header/>
+					<Route exact path="/" component={App} />
+					<Route exact path="/admin" component={Admin}/>
+					<Route exact path="/admin/articles" component={ManageArticles}/>
+					<Route exact path ="/admin/profile" component={AdminProfile} />
+					<Route exact path ="/admin/change_password" component={ChangePassword} />
+					<Route exact path ="/admin/delete_account" component={DeleteProfile} />
+					<Route exact path ="/admin/password_reset" component={PasswordReset} />
+					<Route path ="/password_reset/token=:token" component={PasswordResetConfirmation} />
+					
+				</AdminProvider>
+				<Route path="/logout" component={Logout} />
+			</ThemeProvider>
+			<Route component={NotFound} />
+		</Switch>
   </Router>
 )
 ReactDOM.render(routing, document.getElementById('root'));
