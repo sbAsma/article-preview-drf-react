@@ -11,6 +11,7 @@ import Create from './create'
 import Edit from './edit'
 import Delete from './delete'
 import ArticleLoadingComponent from '../articles/articleLoading';
+import NoAccess from '../auth/noAccess';
 import axiosInstance from '../../axios';
 import {useAdminContext} from '../context/AdminContexProvider'
 
@@ -35,7 +36,7 @@ export default function ManageArticles(props) {
 	const ArticleLoading = ArticleLoadingComponent(Articles);
 	const {adminState: {
 			isLoggedIn,
-			user}} = useAdminContext()
+			user}, setAdminState} = useAdminContext()
     const initialState = Object.freeze({
 		article: {},
         isAdd: false,
@@ -57,6 +58,9 @@ export default function ManageArticles(props) {
 				articles: allArticles,
 			});
 		})
+		if(isLoggedIn === false && localStorage.getItem('current_user') === null){
+            setAdminState({isSigningUp: true, isLoggedIn: false,isLoggingIn: false,})
+        }
 	}, [user])
 	
 	const onOperationClick = (id, operation) =>{
@@ -139,19 +143,7 @@ export default function ManageArticles(props) {
 		setAppState({...appState, [operation]: false, article: {}})
 	}
 	if(isLoggedIn === false && articlesState.loading === false && locStr === null) {
-		return (
-			<React.Fragment>
-				<div className={classes.root}>
-					<Container 
-						maxWidth="md" 
-						component="main"
-					>
-						 403 You don't have permission to access this page
-
-					</Container>
-				</div>
-			</React.Fragment>
-		)
+		return <NoAccess/>
 	}else if (user === undefined) return <div>loading</div>
 	else return(
 		<React.Fragment>
