@@ -65,24 +65,20 @@ export default function PasswordReset() {
         setIsEmailValid(pattern.test(email))
     }
     const handleSentEmail = () => {
-        // console.log(email)
         axiosInstance.post('password_reset/', {
             "email": email,
         }).then((res) =>{
-            // console.log(res)
             setServerResponse({
                 responseStatus: "200",
                 responseMessage: "A reset password email has been successfully sent",
             })
         }).catch((err) =>{
-            // console.log(err.response.status)
-            const status_code = err.response.status
-            if(status_code === 400){
+            if(err.response.status === 400){
                 setServerResponse({
                     responseStatus: "400",
                     responseMessage: "The email address you provided doesn't seem to be linked to any account",
                 })
-            }else if(status_code === 500){
+            }else if(err.response.status === 500){
                 setServerResponse({
                     responseStatus: "500",
                     responseMessage: "There seems to be a problem with the server",
