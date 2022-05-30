@@ -57,7 +57,9 @@ export default function ManageArticles(props) {
 				loading: false, 
 				articles: allArticles,
 			});
-		})
+		}).catch((err) => {
+            console.log(err)
+        })
 		if(isLoggedIn === false && localStorage.getItem('current_user') === null){
             setAdminState({isSigningUp: true, isLoggedIn: false,isLoggingIn: false,})
         }
@@ -108,6 +110,8 @@ export default function ManageArticles(props) {
 					[operation]: false, 
 					article: {},
 				})
+			}).catch((err) => {
+				console.log(err)
 			})
 		}
 		else if(operation === "isDelete"){

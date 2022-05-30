@@ -198,6 +198,8 @@ export default function Header(props) {
             localStorage.removeItem('current_user')
             axiosInstance.defaults.headers['Authorization'] = null
             history.push('/admin')
+        }).catch((err) => {
+            console.log(err)
         })
     }
 	const classes = useStyles();

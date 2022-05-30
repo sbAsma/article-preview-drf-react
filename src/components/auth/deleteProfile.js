@@ -75,8 +75,12 @@ export default function DeleteProfile() {
                 localStorage.removeItem('current_user')
                 axiosInstance.defaults.headers['Authorization'] = null
                 window.location.href = '/admin/';
+            }).catch((err) => {
+                console.log(err)
             })
-        });
+        }).catch((err) => {
+            console.log(err)
+        })
     }
     if(isLoggedIn === false && locStr === null) {
 		return <NoAccess/>

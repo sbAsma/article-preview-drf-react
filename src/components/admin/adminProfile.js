@@ -201,10 +201,14 @@ export default function AdminProfile(){
                                 userProfile.avatarFile.name
                                 );
         }
-        axiosInstance.patch('user/profile/'+ user.id + '/', putFormData).then((res) => {
+        axiosInstance.patch('user/profile/'+ user.id + '/', putFormData)
+        .then((res) => {
             console.log(res);
 			setAdminState({user: res.data})
-        });
+        })
+        .catch((err) => {
+            console.log(err)
+        })
     }
     if(isLoggedIn === false && locStr === null) {
 		return <NoAccess/>

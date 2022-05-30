@@ -175,10 +175,13 @@ export default function SignUp(props) {
                     formAvatar.avatarFile.name
                 );
             }
-            axiosInstance.post(`user/create/`, postFormData).then((res) => {
+            axiosInstance.post(`user/create/`, postFormData)
+            .then((res) => {
                 console.log(res);
                 setAdminState({isSigningUp: false})
-            });
+            }).catch((err) => {
+                console.log(err)
+            })
         }
     };
     const classes = useStyles();
