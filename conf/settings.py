@@ -33,13 +33,13 @@ ALLOWED_HOSTS = ['article-preview-drf-react.herokuapp.com', '127.0.0.1:8000', 'l
 # Application definition
 
 INSTALLED_APPS = [
-    'rest_framework', # new
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework', # new
     'articles', # new
     'corsheaders', # new
     'users', # new users models
