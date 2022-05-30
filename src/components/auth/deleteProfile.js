@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import {
     Button,
     makeStyles,
@@ -11,6 +11,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import {useAdminContext} from '../context/AdminContexProvider'
 import axiosInstance from "../../axios";
 import CustomDrawer from '../customDrawer';
+import NoAccess from './noAccess';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -55,8 +56,14 @@ const drawerItems = [
 ]
 
 export default function DeleteProfile() {
-    const {adminState: {user,}} = useAdminContext()
+    const {adminState: {user, isLoggedIn}, setAdminState} = useAdminContext()
+    var locStr = localStorage.getItem('current_user')
     const classes = useStyles()
+    useEffect(() => {
+        if(isLoggedIn === false && localStorage.getItem('current_user') === null){
+            setAdminState({isSigningUp: true, isLoggedIn: false,isLoggingIn: false,})
+        }
+    }, [])
     const handleDeleteProfile = () => {
         // const token = localStorage.getItem('refresh_token')
         axiosInstance.delete('user/profile/'+ user.id + '/').then((res) => {
@@ -71,7 +78,10 @@ export default function DeleteProfile() {
             })
         });
     }
-    return (
+    if(isLoggedIn === false && locStr === null) {
+		return <NoAccess/>
+	}
+    else return (
         <div className={classes.root}>
             <CustomDrawer drawerItems={drawerItems} />
             <main className={classes.content}>

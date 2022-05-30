@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import {
         Grid,
         TextField,
@@ -17,7 +17,7 @@ import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
 import {useAdminContext} from '../context/AdminContexProvider'
 import axiosInstance from "../../axios";
 import CustomDrawer from '../customDrawer';
-
+import NoAccess from './noAccess';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -116,7 +116,13 @@ const drawerItems = [
 ]
 
 export default function ChangePassword() {
-    const {adminState: {user,}} = useAdminContext()
+    const {adminState: {user, isLoggedIn}, setAdminState} = useAdminContext()
+    var locStr = localStorage.getItem('current_user')
+    useEffect(() => {
+        if(isLoggedIn === false && localStorage.getItem('current_user') === null){
+            setAdminState({isSigningUp: true, isLoggedIn: false,isLoggingIn: false,})
+        }
+    }, [])
     const [passwordState, setPasswordState] = useState({
         password: '',
         newPassword: '',
@@ -226,7 +232,10 @@ export default function ChangePassword() {
         }
     }
     const visibilityIconStyle = { fontSize: 30 }
-    return (
+    if(isLoggedIn === false && locStr === null) {
+		return <NoAccess/>
+	}
+    else return (
         <div className={classes.root}>
             <CustomDrawer drawerItems={drawerItems} />
             <main className={classes.content}>

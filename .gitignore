@@ -23,8 +23,8 @@ yarn-debug.log*
 yarn-error.log*
 
 # database
-/db/*.sqlite3
-db.sqlite3
+# /db/*.sqlite3
+# db.sqlite3
 
 # media files
-media/
+# media/

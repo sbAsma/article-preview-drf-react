@@ -4,6 +4,7 @@ import {
         Typography,
         Box,
         Grid,
+        Container,
         TextField,
         IconButton,
         makeStyles 
@@ -17,6 +18,7 @@ import PhotoCameraIcon from "@material-ui/icons/PhotoCamera";
 import {useAdminContext} from '../context/AdminContexProvider'
 import axiosInstance from "../../axios";
 import CustomDrawer from '../customDrawer';
+import NoAccess from '../auth/noAccess';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -145,6 +147,7 @@ export default function AdminProfile(){
     const classes = useStyles();
     const {adminState: {
         user,
+        isLoggedIn,
     }, setAdminState} = useAdminContext()
     const [userProfile, setUserProfile] = useState({
         firstName: '',
@@ -154,6 +157,7 @@ export default function AdminProfile(){
         avatarUrl: '',
     })
     // console.log("user", user)
+    var locStr = localStorage.getItem('current_user')
     useEffect(()=>{
         if(user !== null && user !== undefined){
             if(Object.keys(user).length !== 0){
@@ -164,6 +168,9 @@ export default function AdminProfile(){
                     avatarUrl: user.avatar
                 })
             }
+        }
+        if(isLoggedIn === false && localStorage.getItem('current_user') === null){
+            setAdminState({isSigningUp: true, isLoggedIn: false,isLoggingIn: false,})
         }
     }, [user])
 
@@ -199,7 +206,10 @@ export default function AdminProfile(){
 			setAdminState({user: res.data})
         });
     }
-    return (
+    if(isLoggedIn === false && locStr === null) {
+		return <NoAccess/>
+	}
+    else return (
         <div className={classes.root}>
             <CustomDrawer drawerItems={drawerItems} />
             <main className={classes.content}>
