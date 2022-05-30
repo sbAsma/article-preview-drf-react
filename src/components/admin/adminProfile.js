@@ -21,6 +21,7 @@ import CustomDrawer from '../customDrawer';
 const useStyles = makeStyles((theme) => ({
     root: {
         display: "flex",
+        minWidth: "280px",
     },
     // necessary for content to be below app bar
     toolbar: theme.mixins.toolbar,
@@ -62,10 +63,13 @@ const useStyles = makeStyles((theme) => ({
         backgroundColor: "gray",
         borderRadius: "30px",
     },
-    imageIcon: {
+    imageIconButton: {
         color: "white",
         width: "100%",
         height: "100%",
+    },
+    imageIcon: {
+        fontSize: 22,
     },
     textFields: {
         display: "flex",
@@ -74,8 +78,45 @@ const useStyles = makeStyles((theme) => ({
         width: "100%",
         alignContent: "space-between",
     },
-    button: {
+    saveButton: {
         marginTop: '15px',
+    },
+    [theme.breakpoints.down('sm')]: {
+        form: {
+            width: "90%",
+        },
+    },
+    [theme.breakpoints.down('xs')]: {
+        saveButton:{
+            width: "100%",
+        },
+    },
+    ['@media (max-width:324px)']:{
+        form: {
+            width: "100%",
+        },
+        avatarContainer: {
+            width: "80px",
+            height: "80px", 
+        },
+        divAvatar: {
+            width: "80px" ,
+            height: "80px" ,
+        },
+        imageIconContainer: {
+            position: "absolute",
+            right: 0,
+            width: "24px",
+            height: "24px",
+            backgroundColor: "gray",
+            borderRadius: "12px",
+        },
+        imageIcon: {
+            fontSize: 13,
+        },
+        saveButtonText:{
+            display: "none",
+        },
     },
 }));
 
@@ -112,7 +153,7 @@ export default function AdminProfile(){
         avatarFile: null,
         avatarUrl: '',
     })
-    console.log("user", user)
+    // console.log("user", user)
     useEffect(()=>{
         if(Object.keys(user).length !== 0){
             setUserProfile({
@@ -186,10 +227,10 @@ export default function AdminProfile(){
                                             >
                                                 <IconButton
                                                     color="default"
-                                                    className={classes.imageIcon}
+                                                    className={classes.imageIconButton}
                                                     onClick={onImageUpload}
                                                 >
-                                                    <PhotoCameraIcon style={{ fontSize: 22 }}/>
+                                                    <PhotoCameraIcon className={classes.imageIcon}/>
                                                 </IconButton>
                                             </div>
                                         )}
@@ -204,6 +245,7 @@ export default function AdminProfile(){
                                 fontWeight="fontWeightBold"
                                 style={{
                                     margin: 'auto',
+                                    textAlign: 'center',
                                 }}
                             >
                                 <Box fontWeight="fontWeightBold">
@@ -245,6 +287,7 @@ export default function AdminProfile(){
                                 fontWeight="fontWeightBold"
                                 style={{
                                     margin: 'auto',
+                                    textAlign: 'center',
                                 }}
                             >
                                 <Box fontWeight="fontWeightBold">
@@ -265,16 +308,16 @@ export default function AdminProfile(){
                                 onChange={handleChange}
                             />
                         </Grid>
-                        <Grid container justifyContent="flex-end">
+                        <Grid item container xs={12} justifyContent="flex-end">
                             <Button
                                 variant="contained"
                                 color="primary"
                                 size="large"
-                                className={classes.button}
+                                className={classes.saveButton}
                                 onClick={handleSubmit}
                                 startIcon={<SaveIcon />}
                             >
-                                Save changes
+                                <span className={classes.saveButtonText}>Save changes</span>
                             </Button>
                         </Grid>
                     </Grid>

@@ -11,24 +11,51 @@ import {
     makeStyles,
 } from '@material-ui/core';
 
-const drawerWidth = 180;
+const largeDrawerWidth = 180;
+const mediumDrawerWidth = 110;
+const smallDrawerWidth = 60;
 
 const useStyles = makeStyles((theme) => ({
     root: {
         display: "flex",
     },
     drawer: {
-        width: drawerWidth,
+        width: largeDrawerWidth,
         flexShrink: 0,
     },
     drawerPaper: {
-        width: drawerWidth,
+        width: largeDrawerWidth,
     },
     toolbar: theme.mixins.toolbar,
     text:{
         color: "gray",
         fontWeight : "bold",
-    }
+    },
+    [theme.breakpoints.down('xs')]: {
+        icon: {
+            display: 'none',
+        },
+        drawer: {
+            width: mediumDrawerWidth,
+        },
+        drawerPaper: {
+            width: mediumDrawerWidth,
+        },
+    },
+    ['@media (max-width:350px)']:{
+		icon: {
+            display: 'inline',
+        },
+        drawer: {
+            width: smallDrawerWidth,
+        },
+        drawerPaper: {
+            width: smallDrawerWidth,
+        },
+        text: {
+            display: 'none',
+        },
+	},
 }))
 
 export default function CustomDrawer({drawerItems}){
@@ -49,7 +76,7 @@ export default function CustomDrawer({drawerItems}){
                 {drawerItems.map((item) => {
                     return(
                         <ListItem key={item.id} button component={Link} href={item.href}>
-                            <ListItemIcon>
+                            <ListItemIcon className={classes.icon}>
                                 {item.icon}
                             </ListItemIcon>
                             <ListItemText 

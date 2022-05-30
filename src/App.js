@@ -1,12 +1,25 @@
 import React, { useEffect, useState } from 'react';
 import './App.css';
+import { makeStyles } from '@material-ui/core';
 import Articles from './components/articles/articles';
 import ArticleLoadingComponent from './components/articles/articleLoading';
-import Header from './components/header'
+import { useAdminContext } from "./components/context/AdminContexProvider";
+
+// import Header from './components/header'
 import Footer from './components/footer'
 import axios from 'axios'
 
+const useStyles = makeStyles((theme) => ({
+    root:{
+        marginTop: "90px",
+        textAlign: "center",
+    },
+}))
+
 function App() {
+    const {adminState: {
+        isLoggedIn,
+    }, setAdminState} = useAdminContext()
     const ArticleLoading = ArticleLoadingComponent(Articles);
     const [appState, setAppState] = useState({
         loading: true,
@@ -26,11 +39,21 @@ function App() {
                 users: usersRes,
             });
         }))
+        if(!isLoggedIn){
+            setAdminState({isSigningUp:true})
+        }
     }, [setAppState]);
+
+    const classes = useStyles()
     return (
         <React.Fragment>
-            <Header />
-                <div className="App">
+            {/* <Header /> */}
+                <div 
+                    className={classes.root}
+                    // style={{
+                    //     marginTop: "40px",
+                    // }}
+                >
                     <h1>Latest Articles</h1>
                     <ArticleLoading 
                         isLoading={appState.loading} 

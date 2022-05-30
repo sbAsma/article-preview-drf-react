@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import {
     Button,
     Typography,
@@ -7,6 +7,8 @@ import {
     Box,
     makeStyles
 } from '@material-ui/core'
+import { useAdminContext } from "../context/AdminContexProvider";
+
 import axiosInstance from '../../axios'
 
 const useStyles = makeStyles((theme) => ({
@@ -15,6 +17,7 @@ const useStyles = makeStyles((theme) => ({
     },
     toolbar: theme.mixins.toolbar,
     content: {
+        flexGrow: 1,
         margin: "10% auto auto auto",
         width: "70%",
     },
@@ -32,9 +35,18 @@ const useStyles = makeStyles((theme) => ({
         textTransform: "lowercase",
         width: "100%",
     },
+    [theme.breakpoints.down('sm')]: {
+        container: {
+            width: "100%",
+            marginTop: "30px",
+            marginBottom: "30px",
+        },
+    },
+
 }))
 
 export default function PasswordReset() {
+    const {setAdminState} = useAdminContext()
     const [email, setEmail] = useState('')
     const [isEmailValid, setIsEmailValid] = useState(false)
     const [serverResponse, setServerResponse] = useState({
@@ -42,7 +54,9 @@ export default function PasswordReset() {
         responseMessage: "",
     })
     const classes = useStyles()
-
+    useEffect(() =>{
+        setAdminState({isSigningUp:true})
+    }, [])
     const handleChange = (e) => {
         const email = e.target.value
         setEmail(email)
@@ -51,24 +65,20 @@ export default function PasswordReset() {
         setIsEmailValid(pattern.test(email))
     }
     const handleSentEmail = () => {
-        // console.log(email)
         axiosInstance.post('password_reset/', {
             "email": email,
         }).then((res) =>{
-            // console.log(res)
             setServerResponse({
                 responseStatus: "200",
                 responseMessage: "A reset password email has been successfully sent",
             })
         }).catch((err) =>{
-            // console.log(err.response.status)
-            const status_code = err.response.status
-            if(status_code === 400){
+            if(err.response.status === 400){
                 setServerResponse({
                     responseStatus: "400",
                     responseMessage: "The email address you provided doesn't seem to be linked to any account",
                 })
-            }else if(status_code === 500){
+            }else if(err.response.status === 500){
                 setServerResponse({
                     responseStatus: "500",
                     responseMessage: "There seems to be a problem with the server",

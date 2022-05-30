@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {useHistory, NavLink} from "react-router-dom"
 import {
 	AppBar,
@@ -13,6 +13,7 @@ import {
 	makeStyles
 } from '@material-ui/core'
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
+import BallotIcon from '@material-ui/icons/Ballot';
 import PersonIcon from '@material-ui/icons/Person';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import { useAdminContext } from "../context/AdminContexProvider";
@@ -49,6 +50,16 @@ const useStyles = makeStyles((theme) => ({
 	menuItemIcon: {
 		marginRight: '10px',
 	},
+	[theme.breakpoints.down('xs')]: {
+		toolbarTitle:{
+			fontSize: "medium",
+		}
+	},
+	['@media (max-width:300px)']:{
+		toolbarTitle:{
+			fontSize: "small",
+		}
+	},
 }));
 
 const LogInOutButtons = (props) => {
@@ -74,6 +85,9 @@ const LogInOutButtons = (props) => {
                     aria-expanded={open ? "true" : undefined}
 					className={props.classes.profileButton}
                     onClick={handleClick}
+					style={{
+						display: (props.hideButton) && "none"
+					}}
                 >
                     <Avatar src={props.user.avatar}/>
 					<ArrowDropDownIcon/>
@@ -89,11 +103,26 @@ const LogInOutButtons = (props) => {
 					classes={{ paper: props.classes.profileMenu }}
 					className={props.classes.menuPaper}
                 >
+					{
+						window.location.pathname === "/" && 
+						<MenuItem onClick={handleClose} className={props.classes.menuItem}>
+							<BallotIcon className={props.classes.menuItemIcon}/>
+							<Link
+								component={NavLink}
+								to="admin/articles"
+								underline="none"
+								color="textPrimary"
+								onClick={() => setAnchorEl(null)}
+							>
+								Articles
+							</Link>
+						</MenuItem>
+					}
                     <MenuItem onClick={handleClose} className={props.classes.menuItem}>
 						<PersonIcon className={props.classes.menuItemIcon}/>
 						<Link
 							component={NavLink}
-							to="profile"
+							to={window.location.pathname === "/"? "admin/profile" : "profile"}
 							underline="none"
 							color="textPrimary"
 							onClick={() => setAnchorEl(null)}
@@ -109,18 +138,6 @@ const LogInOutButtons = (props) => {
             </div>
         );
 	}
-	else if(props.isSigningUp){
-		return(
-			<Button
-				color="primary"
-				variant="outlined"
-				className={props.classes.link}
-				onClick={() => props.redirectLogin()}
-			>
-				Login
-			</Button>
-		)
-	}
 	else if(props.isLoggingIn){
 		return(
 			<Button
@@ -132,9 +149,21 @@ const LogInOutButtons = (props) => {
 			</Button>
 		)
 	}
-	else{
-		return <div></div>
+	else { // if(props.isSigningUp)
+		return(
+			<Button
+				color="primary"
+				variant="outlined"
+				className={props.classes.link}
+				onClick={() => props.redirectLogin()}
+			>
+				Login
+			</Button>
+		)
 	}
+	// else{
+	// 	return <div></div>
+	// }
 }
 
 export default function Header(props) {
@@ -145,9 +174,10 @@ export default function Header(props) {
 		isLoggingIn,
 		username,
 		user}, setAdminState} = useAdminContext()
-    
+    const [hideButton, setHideButton] = useState(false)
 	const redirectLogin = () =>{
         setAdminState({isSigningUp: false, isLoggedIn: false,isLoggingIn: true,})
+		history.push('/admin')
     }
     const redirectSignUp = () =>{
         setAdminState({isSigningUp: true, })
@@ -166,6 +196,7 @@ export default function Header(props) {
                 username: '',
                 user: {},
             })
+			setAdminState({isSigningUp: false, isLoggedIn: false,isLoggingIn: true,})
             history.push('/admin')
         })
     }
@@ -192,11 +223,13 @@ export default function Header(props) {
 							to="/"
 							underline="none"
 							color="textPrimary"
+							// onClick={()=>setHideButton(true)}
 						>
 						Articles Preview Page
 						</Link>
 					</Typography>
 					<LogInOutButtons
+						hideButton={hideButton}
 						isSigningUp={isSigningUp}
 						isLoggingIn={isLoggingIn}
 						isLoggedIn={isLoggedIn}
