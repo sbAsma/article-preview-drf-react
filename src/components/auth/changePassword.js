@@ -20,6 +20,10 @@ import CustomDrawer from '../customDrawer';
 
 
 const useStyles = makeStyles((theme) => ({
+    root: {
+        display: "flex",
+        minWidth: "280px",
+    },
     // necessary for content to be below app bar
     toolbar: theme.mixins.toolbar,
     content: {
@@ -57,6 +61,37 @@ const useStyles = makeStyles((theme) => ({
         border: "1px solid red",
 		color: "red",
 	},
+    typography:{
+        marginTop: "10px",
+    },
+    saveButton:{
+        marginTop: "20px"
+    },
+    [theme.breakpoints.down('sm')]: {
+        form: {
+            width: "90%",
+            // margin: "auto",
+        },
+        messageBox: {
+            width: "auto",
+        },
+    },
+    [theme.breakpoints.down('xs')]: {
+        saveButton:{
+            width: "100%",
+        },
+    },
+    ['@media (max-width:324px)']: {
+        form: {
+            width: "100%",
+        },
+        typography:{
+            textAlign: "center",
+        },
+        saveButtonText:{
+            display: "none",
+        },
+    },
 }))
 
 const drawerItems = [
@@ -220,7 +255,8 @@ export default function ChangePassword() {
                         <Typography
                             variant="body1"
                             gutterBottom
-                            style={{marginTop: "10px"}}
+                            className={classes.typography}
+                            // style={{marginTop: "10px"}}
                         >
                             Please enter your current password
                         </Typography>
@@ -261,7 +297,8 @@ export default function ChangePassword() {
                         <Typography
                             variant="body1"
                             gutterBottom
-                            style={{marginTop: "10px"}}
+                            className={classes.typography}
+                            // style={{marginTop: "10px"}}
                         >
                             Please enter your new password
                         </Typography>
@@ -302,7 +339,8 @@ export default function ChangePassword() {
                         <Typography
                             variant="body1"
                             gutterBottom
-                            style={{marginTop: "10px"}}
+                            className={classes.typography}
+                            // style={{marginTop: "10px"}}
                         >
                             Confirm your new password
                         </Typography>
@@ -340,16 +378,16 @@ export default function ChangePassword() {
                             
                         </div>
                         </Grid>
-                        <Grid container justifyContent="flex-end">
+                        <Grid item container xs={12} justifyContent="flex-end">
                             <Button
                                 variant="contained"
                                 color="primary"
                                 size="large"
-                                style={{marginTop: "20px"}}
+                                className={classes.saveButton}
                                 onClick={handleSubmit}
                                 startIcon={<SaveIcon />}
                             >
-                                Save changes
+                                <span className={classes.saveButtonText}>Save changes</span>
                             </Button>
                         </Grid>
                     </Grid>

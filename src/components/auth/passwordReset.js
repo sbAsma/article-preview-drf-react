@@ -17,6 +17,7 @@ const useStyles = makeStyles((theme) => ({
     },
     toolbar: theme.mixins.toolbar,
     content: {
+        flexGrow: 1,
         margin: "10% auto auto auto",
         width: "70%",
     },
@@ -34,6 +35,14 @@ const useStyles = makeStyles((theme) => ({
         textTransform: "lowercase",
         width: "100%",
     },
+    [theme.breakpoints.down('sm')]: {
+        container: {
+            width: "100%",
+            marginTop: "30px",
+            marginBottom: "30px",
+        },
+    },
+
 }))
 
 export default function PasswordReset() {
