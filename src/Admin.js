@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {Redirect} from 'react-router-dom'
 import Login from './components/auth/login'
 import Signup from './components/auth/signup'
@@ -12,8 +12,10 @@ const useStyles = makeStyles((theme) => ({
 export default function Admin() {
     const {adminState: {
         isLoggedIn,
-        isSigningUp,}} = useAdminContext()
-
+        isSigningUp,}, setAdminState} = useAdminContext()
+    useEffect(() => {
+        setAdminState({isSigningUp: false, isLoggedIn: false,isLoggingIn: true,})
+    }, [])
     const classes = useStyles()
     if(!isLoggedIn && !isSigningUp) {
         return (

@@ -186,17 +186,17 @@ export default function Header(props) {
         axiosInstance.post('user/logout/blacklist/', {
             refresh_token: localStorage.getItem('refresh_token')
         }).then((res) => {
+			setAdminState({
+                isLoggedIn: false,
+                isSigningUp: false,
+				isLoggingIn: true,
+                username: '',
+                user: {},
+            })
             localStorage.removeItem('access_token')
             localStorage.removeItem('refresh_token')
             localStorage.removeItem('current_user')
             axiosInstance.defaults.headers['Authorization'] = null
-            setAdminState({
-                isLoggedIn: false,
-                isSigningUp: false,
-                username: '',
-                user: {},
-            })
-			setAdminState({isSigningUp: false, isLoggedIn: false,isLoggingIn: true,})
             history.push('/admin')
         })
     }
