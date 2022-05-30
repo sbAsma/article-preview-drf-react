@@ -1,6 +1,12 @@
 import axios from 'axios';
 
-const baseURL = 'http://127.0.0.1:8000/';
+var baseURL
+
+if (window.location.origin === "http://localhost:3000") {
+  baseURL = "http://127.0.0.1:8000"; // development address
+} else {
+  baseURL = window.location.origin; // production address
+}
 
 const axiosInstance = axios.create({
 	baseURL: baseURL,
