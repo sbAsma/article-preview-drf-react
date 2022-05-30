@@ -27,7 +27,7 @@ SECRET_KEY = 'django-insecure-)1dv3x&db+8091!(qw^3_-)0)tw#t=zha)2dg(wwdz=@s@lh_=
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['article-preview-drf-react.herokuapp.com', '127.0.0.1:8000', 'localhost']
+ALLOWED_HOSTS = ['article-preview-drf-react.herokuapp.com', '127.0.0.1', '127.0.0.1:8000', 'localhost']
 
 
 # Application definition

@@ -9,6 +9,12 @@ import { useAdminContext } from "./components/context/AdminContexProvider";
 import Footer from './components/footer'
 import axios from 'axios'
 
+if (window.location.origin === "http://localhost:3000") {
+    axios.defaults.baseURL = "http://127.0.0.1:8000"; // development address
+} else {
+    axios.defaults.baseURL = window.location.origin; // production address
+}
+
 const useStyles = makeStyles((theme) => ({
     root:{
         marginTop: "90px",
@@ -28,8 +34,8 @@ function App() {
     });
 
     useEffect(() => {
-        const usersReq = axios.get('http://127.0.0.1:8000/user/user/')
-        const articlesReq = axios.get('http://127.0.0.1:8000/articles/')
+        const usersReq = axios.get('user/user/')
+        const articlesReq = axios.get('articles/')
         axios.all([usersReq, articlesReq]).then(axios.spread((...responses) => {
             const usersRes = responses[0].data
             const articlesRes = responses[1].data
