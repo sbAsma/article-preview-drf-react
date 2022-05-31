@@ -9,7 +9,6 @@ import ManageArticles from './components/admin/manageArticles'
 import AdminProfile from './components/admin/adminProfile'
 import ChangePassword from './components/auth/changePassword'
 import DeleteProfile from './components/auth/deleteProfile'
-import Logout from './components/auth/logout'
 import PasswordReset from './components/auth/passwordReset';
 import PasswordResetConfirmation from './components/auth/passwordResetConfirmation';
 import NotFound from './components/notFound'
@@ -40,9 +39,7 @@ const routing = (
 					<Route exact path ="/user/delete_account" component={DeleteProfile} />
 					<Route exact path ="/user/password_reset" component={PasswordReset} />
 					<Route path ="/password_reset/token=:token" component={PasswordResetConfirmation} />
-					
 				</AdminProvider>
-				<Route path="/logout" component={Logout} />
 			</ThemeProvider>
 			<Route component={NotFound} />
 		</Switch>
