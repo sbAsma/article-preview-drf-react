@@ -62,13 +62,21 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
+var avatarUrl_
+
+if (window.location.origin === "http://localhost:3000") {
+    avatarUrl_ = "http://127.0.0.1:8000/media/users/defaut_avatar.png"; // development address
+} else {
+    avatarUrl_ = "https://article-preview-drf-react.herokuapp.com/media/users/defaut_avatar.png"; // production address
+}
+
 export default function SignUp(props) {
 	const {setAdminState} = useAdminContext()
 
     const initialFormData = Object.freeze({
         firstName: "",
         lastName: "",
-        avatarUrl: "http://127.0.0.1:8000/media/users/defaut_avatar.png", // hardcoded
+        avatarUrl: avatarUrl_, // hardcoded
         email: "",
         username: "",
         password: "",

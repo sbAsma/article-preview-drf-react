@@ -62,10 +62,17 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
+var pictureUrl_
+
+if (window.location.origin === "http://localhost:3000") {
+    pictureUrl_ = "http://127.0.0.1:8000/media/articles/blank-img.jpg"; // development address
+} else {
+    pictureUrl_ = "https://article-preview-drf-react.herokuapp.com/media/articles/blank-img.jpg"; // production address
+}
 export default function Create(props) {
     const initialFormData = Object.freeze({
         title: "",
-        pictureUrl: "http://127.0.0.1:8000/media/articles/blank-img.jpg", // hardcoded
+        pictureUrl: pictureUrl_,
         content: "",
     });
 
