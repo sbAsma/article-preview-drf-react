@@ -80,7 +80,6 @@ export default function Login(props) {
                 password: formData.password,
             })
             .then((res) => {
-				console.log(res)
 				localStorage.setItem("access_token", res.data.access);
 				localStorage.setItem("refresh_token", res.data.refresh);
 				localStorage.setItem("current_user", formData.username);

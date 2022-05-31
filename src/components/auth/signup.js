@@ -124,7 +124,6 @@ export default function SignUp(props) {
     var emailError
     var emailErrorMsg
     const formValidation = (formData) => {
-        console.log("came inside validation")
         let isValid = true
         let errors = {
             firstName: false,
@@ -185,7 +184,6 @@ export default function SignUp(props) {
             }
             axiosInstance.post(`user/create/`, postFormData)
             .then((res) => {
-                console.log(res);
                 setAdminState({isSigningUp: false})
             }).catch((err) => {
                 console.log(err)

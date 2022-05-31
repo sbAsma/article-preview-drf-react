@@ -164,7 +164,6 @@ const Articles = (props) => {
 							articleText = article.content
 						}
 						const author = authors.find((author) => author.id === article.author)
-						// console.log(author)
 						return (
 							<Grid item key={article.id} xs={12} sm={12} md={6} lg={6}>
 								<Card className={classes.card}>

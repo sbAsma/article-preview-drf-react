@@ -78,7 +78,6 @@ export default function ManageArticles(props) {
 		if(operation === "isAdd"){
 			axiosInstance.post('admin/create/', formData)
 			.then((res) => {
-				console.log("response", res)
 				const newArticle = res.data
 				setArticlesState({
 					...articlesState,
@@ -96,7 +95,6 @@ export default function ManageArticles(props) {
 		else if(operation === "isEdit"){
 			axiosInstance.patch(`admin/article/` + id + "/", formData)
 			.then((res) => {
-				console.log(res)
 				const updateArticles = articlesState.articles.map((article) =>{
 					if(article.id !== id) return article
 					else return res.data
@@ -115,7 +113,6 @@ export default function ManageArticles(props) {
 			})
 		}
 		else if(operation === "isDelete"){
-			console.log("delete article N° ", id)
 			axiosInstance
 				.delete('admin/article/' + id +'/')
 				.catch((error) => {

@@ -4,7 +4,6 @@ import {
         Typography,
         Box,
         Grid,
-        Container,
         TextField,
         IconButton,
         makeStyles 
@@ -156,7 +155,6 @@ export default function AdminProfile(){
         avatarFile: null,
         avatarUrl: '',
     })
-    // console.log("user", user)
     var locStr = localStorage.getItem('current_user')
     useEffect(()=>{
         if(user !== null && user !== undefined){
@@ -189,7 +187,6 @@ export default function AdminProfile(){
     }
     const handleSubmit = (e) => {
         e.preventDefault()
-        console.log(userProfile)
         let putFormData = new FormData();
         putFormData.append("first_name", userProfile.firstName);
         putFormData.append("last_name", userProfile.lastName);
@@ -203,7 +200,6 @@ export default function AdminProfile(){
         }
         axiosInstance.patch('user/profile/'+ user.id + '/', putFormData)
         .then((res) => {
-            console.log(res);
 			setAdminState({user: res.data})
         })
         .catch((err) => {

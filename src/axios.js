@@ -20,15 +20,6 @@ const axiosInstance = axios.create({
 	},
 });
 
-// axiosInstance.interceptors.request.use(
-// 	(request) => {
-// 		if (request.method == "post"){
-// 			console.log(request)
-// 		}
-// 		return request
-// 	}
-// )
-
 const noInterceptAxios = axios.create({
 	baseURL: baseURL,
 	timeout: 5000,
@@ -81,8 +72,6 @@ axiosInstance.interceptors.response.use(
 				console.log(tokenParts.exp);
 
 				if (tokenParts.exp > now) {
-					// plop
-					console.log("plop")
 					return noInterceptAxios
 						.post('token/refresh/', {
 							refresh: refreshToken,

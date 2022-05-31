@@ -101,7 +101,6 @@ export default function PasswordResetConfirmation(props) {
             
             axiosInstance.post('password_reset/confirm/', postFormData)
             .then((res) => {
-                // console.log(res)
                 setServerResponse({
                     responseStatus: "200",
                     responseErrorMessage: "",

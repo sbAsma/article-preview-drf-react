@@ -189,7 +189,6 @@ export default function ChangePassword() {
             
             axiosInstance.put('user/change_password/'+ user.id + '/', putFormData)
             .then((res) => {
-                // console.log(res)
                 setServerResponse({
                     responseStatus: "200",
                     responseError: "",
@@ -213,7 +212,6 @@ export default function ChangePassword() {
                 })
             })
             .catch((err)=> {
-                // console.log(err.response.data)
                 var message
                 var field
                 if(err.response.data.new_password !== undefined){

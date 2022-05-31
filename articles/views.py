@@ -16,7 +16,6 @@ class ArticleDetail(generics.RetrieveAPIView):
 	# define new function for get item by slug which would help in search
 
 class CreateArticle(APIView):
-	print("came inside CreateArticle")
 	permission_classes = [permissions.IsAuthenticated]
 	parser_classes = [MultiPartParser, FormParser]
 

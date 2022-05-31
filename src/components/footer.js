@@ -2,7 +2,6 @@ import React from 'react';
 import {
 	Container,
 	Typography,
-	Grid,
 	Link,
 	Box,
 	makeStyles 
