@@ -21,7 +21,6 @@ import axiosInstance from '../../axios';
 
 const useStyles = makeStyles((theme) => ({
 	appBar: {
-		// borderBottom: `1px solid ${theme.palette.divider}`,
 		zIndex: theme.zIndex.drawer + 1,
 		backgroundColor: 'hsl(212, 23%, 69%)',
 	},
