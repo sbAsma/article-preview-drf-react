@@ -68,7 +68,7 @@ export default function SignUp(props) {
     const initialFormData = Object.freeze({
         firstName: "",
         lastName: "",
-        avatarUrl: "http://127.0.0.1:8000/media/media/users/defaut_avatar.png", // hardcoded
+        avatarUrl: "http://127.0.0.1:8000/media/users/defaut_avatar.png", // hardcoded
         email: "",
         username: "",
         password: "",

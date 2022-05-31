@@ -65,7 +65,7 @@ const useStyles = makeStyles((theme) => ({
 export default function Create(props) {
     const initialFormData = Object.freeze({
         title: "",
-        pictureUrl: "http://127.0.0.1:8000/media/media/articles/blank-img.jpg", // hardcoded
+        pictureUrl: "http://127.0.0.1:8000/media/articles/blank-img.jpg", // hardcoded
         content: "",
     });
 
