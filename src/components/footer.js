@@ -45,6 +45,10 @@ function Copyright() {
 			<Link color="inherit" href="https://github.com/sbAsma/article-preview-drf-react">
 				Source Code
 			</Link>
+			<br/>
+			<Link color="inherit" href="https://www.frontendmentor.io/challenges/article-preview-component-dYBN_pYFT">
+				Frontend Mentor Inspired Design
+			</Link>
 		</Typography>
 	);
 }
