@@ -71,7 +71,7 @@ def password_reset_token_created(sender, instance, reset_password_token, *args, 
         # title:
         "Password Reset for {title}".format(title="Articles Previer"),
         # message:
-        "http://localhost:3000" + email_plaintext_message,
+        "https://article-preview-drf-react.herokuapp.com" + email_plaintext_message,
         # from:
         settings.EMAIL_HOST_USER,
         # to:
