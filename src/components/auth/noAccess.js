@@ -10,6 +10,7 @@ import { useAdminContext } from "../context/AdminContexProvider";
 const useStyles = makeStyles((theme) => ({
     root: {
 		marginTop: '100px',
+        minHeight: "calc(100vh - 221px)",
 	},
 }))
 

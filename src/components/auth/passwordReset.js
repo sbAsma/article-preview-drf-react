@@ -14,6 +14,7 @@ import axiosInstance from '../../axios'
 const useStyles = makeStyles((theme) => ({
     root: {
         display: "flex",
+        minHeight: "calc(100vh - 221px)",
     },
     toolbar: theme.mixins.toolbar,
     content: {

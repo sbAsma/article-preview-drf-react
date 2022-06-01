@@ -19,6 +19,7 @@ const useStyles = makeStyles((theme) => ({
         flexGrow: 1,
         backgroundColor: theme.palette.background.default,
         padding: theme.spacing(3),
+        minHeight: "calc(100vh - 221px)",
     },
     form: {
         display: "flex",

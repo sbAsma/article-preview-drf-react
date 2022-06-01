@@ -19,6 +19,7 @@ const useStyles = makeStyles((theme) => ({
     root:{
         marginTop: "90px",
         textAlign: "center",
+        minHeight: "calc(100vh - 221px)",
     },
 }))
 

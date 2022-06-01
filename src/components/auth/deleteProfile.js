@@ -16,6 +16,7 @@ import NoAccess from './noAccess';
 const useStyles = makeStyles((theme) => ({
     root: {
         display: "flex",
+        minHeight: "calc(100vh - 221px)",
     },
     // necessary for content to be below app bar
     toolbar: theme.mixins.toolbar,

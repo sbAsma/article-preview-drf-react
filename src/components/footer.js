@@ -16,19 +16,22 @@ const useStyles = makeStyles((theme) => ({
 		},
 	},
 	root: {
-		marginTop: theme.spacing(16),
+		marginTop: theme.spacing(6), // theme.spacing(16),
 		backgroundColor: 'hsl(210, 46%, 95%)', //45%
-		// minHeight: '17.3vh',
+		minHeight: '157px', // new
+		display: "flex", // new
+		justify: "center", // new
 	},
 	footer: {
+		margin: 'auto', // took off old styling
 		// borderTop: `1px solid ${theme.palette.divider}`,
-		marginTop: theme.spacing(8),
-		paddingTop: theme.spacing(3),
-		paddingBottom: theme.spacing(3),
-		[theme.breakpoints.up('sm')]: {
-			paddingTop: theme.spacing(6),
-			paddingBottom: theme.spacing(6),
-		},
+		// marginTop: theme.spacing(8),
+		// paddingTop: theme.spacing(3),
+		// paddingBottom: theme.spacing(3),
+		// [theme.breakpoints.up('sm')]: {
+		// 	paddingTop: theme.spacing(6),
+		// 	paddingBottom: theme.spacing(6),
+		// },
 	},
 }));
 

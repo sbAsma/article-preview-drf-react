@@ -25,6 +25,7 @@ const useStyles = makeStyles((theme) => ({
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
+        minHeight: "calc(100vh - 221px)",
     },
     imageContainer: {
         marginBottom: theme.spacing(3),
