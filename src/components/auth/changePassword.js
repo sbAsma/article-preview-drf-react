@@ -221,6 +221,9 @@ export default function ChangePassword() {
                 }else if(err.response.data.old_password !== undefined){
                     message = err.response.data.old_password["old_password"]
                     field = "old_password"
+                }else if(err.response.data.password !== undefined){
+                    message = err.response.data.password[0]
+                    field = "new_password"
                 }
                 setServerResponse({
                     responseStatus: "400",
