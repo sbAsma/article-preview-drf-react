@@ -23,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
-		minHeight: "calc(100vh - 221px)",
+		// minHeight: "calc(100% - 221px)",
     },
     form: {
         width: "100%", // Fix IE 11 issue.
