@@ -263,14 +263,16 @@ export default function ChangePassword() {
                 </Grid>
                 <form className={classes.form} noValidate>
                     <Grid container spacing={1} display="flex">
-                        <Typography
-                            variant="body1"
-                            gutterBottom
-                            className={classes.typography}
-                            // style={{marginTop: "10px"}}
-                        >
-                            Please enter your current password
-                        </Typography>
+                        <Grid item xs={12}>
+                            <Typography
+                                variant="body1"
+                                gutterBottom
+                                className={classes.typography}
+                                // style={{marginTop: "10px"}}
+                            >
+                                Please enter your current password
+                            </Typography>
+                        </Grid>
                         <Grid item xs={12}
                             style={{
                                 position: "relative",
@@ -305,14 +307,16 @@ export default function ChangePassword() {
                             
                         </div>
                         </Grid>
-                        <Typography
-                            variant="body1"
-                            gutterBottom
-                            className={classes.typography}
-                            // style={{marginTop: "10px"}}
-                        >
-                            Please enter your new password
-                        </Typography>
+                        <Grid item xs={12}>
+                            <Typography
+                                variant="body1"
+                                gutterBottom
+                                className={classes.typography}
+                                // style={{marginTop: "10px"}}
+                            >
+                                Please enter your new password
+                            </Typography>
+                        </Grid>
                         <Grid item xs={12}
                             style={{
                                 position: "relative",
@@ -347,14 +351,16 @@ export default function ChangePassword() {
                             
                         </div>
                         </Grid>
-                        <Typography
-                            variant="body1"
-                            gutterBottom
-                            className={classes.typography}
-                            // style={{marginTop: "10px"}}
-                        >
-                            Confirm your new password
-                        </Typography>
+                        <Grid item xs={12}>
+                            <Typography
+                                variant="body1"
+                                gutterBottom
+                                className={classes.typography}
+                                // style={{marginTop: "10px"}}
+                            >
+                                Confirm your new password
+                            </Typography>
+                        </Grid>
                         <Grid item xs={12}
                             style={{
                                 position: "relative",

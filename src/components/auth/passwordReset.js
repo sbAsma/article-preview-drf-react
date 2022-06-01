@@ -28,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
         backgroundColor: theme.palette.background.default,
         alignContent: "center",
         margin: "auto",
-        width: "80%",
+        width: "500px",
         height: "100%",
     },
     resetButton: {
@@ -36,7 +36,7 @@ const useStyles = makeStyles((theme) => ({
         textTransform: "lowercase",
         width: "100%",
     },
-    [theme.breakpoints.down('sm')]: {
+    [theme.breakpoints.down('xs')]: {
         container: {
             width: "100%",
             marginTop: "30px",
