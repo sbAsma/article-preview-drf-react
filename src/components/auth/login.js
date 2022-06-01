@@ -66,11 +66,19 @@ export default function Login(props) {
         setAdminState({isSigningUp: true, isLoggingIn: false})
     }
     const handleChange = (e) => {
-        updateFormData({
-            ...formData,
-            // Trimming any whitespace
-            [e.target.name]: e.target.value.trim(),
-        });
+		if(e.target.name === "username"){
+			updateFormData({
+				...formData,
+				// Trimming any whitespace
+				username: e.target.value.trim().toLowerCase(),
+			});
+		}else{
+			updateFormData({
+				...formData,
+				// Trimming any whitespace
+				password: e.target.value.trim(),
+			});
+		}
     };
 
     const handleSubmit = (e) => {
@@ -123,6 +131,7 @@ export default function Login(props) {
 								type="username"
 								id="username"
 								autoComplete="current-username"
+								value={formData.username}
 								onChange={handleChange}
 								error={wrongCred}
 							/>
@@ -141,6 +150,7 @@ export default function Login(props) {
 								type={!(visibility)? "password": null}
 								id="password"
 								autoComplete="current-password"
+								value={formData.password}
 								onChange={handleChange}
 							/>
 							<div

@@ -107,18 +107,24 @@ export default function SignUp(props) {
         });
     };
     const handleChange = (e) => {
-        if(e.target.name === "email"){
+        if(e.target.name === "email" || e.target.name === "username"){
             const value = e.target.value
             updateFormData({
                 ...formData,
                 // Trimming any whitespace
-                email: value,
+                [e.target.name]: value.trim().toLowerCase(),
+            });
+        }else if(e.target.name === "password"){
+            updateFormData({
+                ...formData,
+                // Trimming any whitespace
+                [e.target.name]: e.target.value.trim(),
             });
         }else{
             updateFormData({
                 ...formData,
                 // Trimming any whitespace
-                [e.target.name]: e.target.value.trim(),
+                [e.target.name]: e.target.value,
             });
         }
     };
@@ -303,6 +309,7 @@ export default function SignUp(props) {
                                 label="Email Address"
                                 name="email"
                                 autoComplete="email"
+                                value={formData.email}
                                 onChange={handleChange}
                                 helperText={emailErrorMsg}
                             />
@@ -329,6 +336,7 @@ export default function SignUp(props) {
                                 type="username"
                                 id="username"
                                 autoComplete="current-username"
+                                value={formData.username}
                                 onChange={handleChange}
                                 helperText={formData["username"]==="" ? formErrors["username"]: null}
                             />
@@ -344,6 +352,7 @@ export default function SignUp(props) {
                                 type="password"
                                 id="password"
                                 autoComplete="current-password"
+                                value={formData.password}
                                 onChange={handleChange}
                                 helperText={formData["password"]==="" ? formErrors["password"]: null}
                             />

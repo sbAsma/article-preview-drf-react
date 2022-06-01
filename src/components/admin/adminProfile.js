@@ -180,10 +180,17 @@ export default function AdminProfile(){
         });
     };
     const handleChange = (e) => {
-        setUserProfile({
-            ...userProfile,
-            [e.target.name]: e.target.value,
-        })
+        if(e.target.name === "email"){
+            setUserProfile({
+                ...userProfile,
+                email: e.target.value.trim().toLowerCase(),
+            })
+        }else{
+            setUserProfile({
+                ...userProfile,
+                [e.target.name]: e.target.value,
+            })
+        }
     }
     const handleSubmit = (e) => {
         e.preventDefault()
