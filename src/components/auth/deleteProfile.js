@@ -2,6 +2,7 @@ import React, {useEffect} from 'react'
 import {
     Button,
     makeStyles,
+    Typography,
 } from '@material-ui/core';
 import BallotIcon from '@material-ui/icons/Ballot';
 import PersonIcon from '@material-ui/icons/Person';
@@ -32,6 +33,11 @@ const useStyles = makeStyles((theme) => ({
         display: "flex",
         justifyContent: "center",
         margin: "30px auto auto auto", 
+    },
+    [theme.breakpoints.down('xs')]:{
+        typography:{
+            textAlign: "center"
+        }
     },
 }))
 
@@ -92,7 +98,13 @@ export default function DeleteProfile() {
             <main className={classes.content}>
                 <div className={classes.toolbar} />
                 <div className={classes.container}>
-                    <div>Do you really want to delete your profile?</div>
+                    <Typography
+                        variant="body1"
+                        gutterBottom
+                        className={classes.typography}
+                    >
+                        Do you really want to delete your profile?
+                    </Typography>
                     <div 
                         className={classes.deleteButtonContainer}
                     >
