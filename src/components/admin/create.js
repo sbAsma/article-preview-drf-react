@@ -78,7 +78,10 @@ export default function Create(props) {
 
     const [formData, updateFormData] = useState(initialFormData);
     const [postImage, setPostImage] = useState(null);
-
+    const [formErrors, setFormErrors] = useState({
+        title: "",
+        content: "",
+    })
     const handleUploadImage = (data) => {
         setPostImage({
             pictureFile: data[0].file,
@@ -94,19 +97,46 @@ export default function Create(props) {
             [e.target.name]: e.target.value,
         });
     };
+    const formValidation = (formData) => {
+        let isValid = true
+        let errors = {
+            title: "",
+            content: "",
+        };
+        if(formData["title"] === ""){
+            errors["title"] = "This field is required"
+            isValid = false
+        }
+        if(formData["content"] === ""){
+            errors["content"] = "This field is required"
+            isValid = false
+        }
+        setFormErrors(errors)
+        
+        return isValid
+    }
     const handleSubmit = (e) => {
         e.preventDefault();
-        let postFormData = new FormData();
-        postFormData.append("title", formData.title);
-        postFormData.append("author", props.userId);
-        postFormData.append("content", formData.content);
-        postFormData.append(
-            "picture",
-            postImage.pictureFile,
-            postImage.pictureFile.name
-        );
-        props.handleOperation(null, "isAdd", postFormData);
-		updateFormData(initialFormData);
+        const isValid = formValidation(formData)
+        if(isValid){
+            let postFormData = new FormData();
+            postFormData.append("title", formData.title);
+            postFormData.append("author", props.userId);
+            postFormData.append("content", formData.content);
+            if(postImage!=null){
+                postFormData.append(
+                    "picture",
+                    postImage.pictureFile,
+                    postImage.pictureFile.name
+                );
+            }
+            props.handleOperation(null, "isAdd", postFormData);
+            updateFormData(initialFormData);
+            setFormErrors({
+                title: "",
+                content: "",
+            })
+        }
     };
     const cancelCreateClick = () => {
         updateFormData(initialFormData);
@@ -163,6 +193,7 @@ export default function Create(props) {
                             <Grid container spacing={2}>
                                 <Grid item xs={12}>
                                     <TextField
+                                        error = {formErrors["title"]!=="" && formData["title"]===""}
                                         id="article-name"
                                         className={classes.title}
                                         name="title"
@@ -173,10 +204,12 @@ export default function Create(props) {
                                         fullWidth
                                         rows={2}
                                         multiline
+                                        helperText={formData["title"]==="" ? formErrors["title"]: null}
                                     />
                                 </Grid>
                                 <Grid item xs={12}>
                                     <TextField
+                                        error = {formErrors["content"]!=="" && formData["content"]===""}
                                         id="article-content"
                                         className={classes.content}
                                         name="content"
@@ -187,6 +220,7 @@ export default function Create(props) {
                                         fullWidth
                                         rows={8}
                                         multiline
+                                        helperText={formData["content"]==="" ? formErrors["content"]: null}
                                     />
                                 </Grid>
                             </Grid>

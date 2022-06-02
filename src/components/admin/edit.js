@@ -73,6 +73,10 @@ export default function Edit(props) {
 
     const [formData, updateFormData] = useState(initialFormData);
     const [putImage, setPutImage] = useState(null);
+    const [formErrors, setFormErrors] = useState({
+        title: "",
+        content: "",
+    })
     var editOp = props.isEdit === true
     useEffect(() => {
 		updateFormData({
@@ -99,20 +103,45 @@ export default function Edit(props) {
             [e.target.name]: e.target.value,
         });
     };
+    const formValidation = (formData) => {
+        let isValid = true
+        let errors = {
+            title: "",
+            content: "",
+        };
+        if(formData["title"] === ""){
+            errors["title"] = "This field is required"
+            isValid = false
+        }
+        if(formData["content"] === ""){
+            errors["content"] = "This field is required"
+            isValid = false
+        }
+        setFormErrors(errors)
+        
+        return isValid
+    }
     const handleSubmit = (e) => {
         e.preventDefault();
-        let putFormData = new FormData();
-        putFormData.append("title", formData.title);
-        putFormData.append("author", formData.author);
-        putFormData.append("content", formData.content);
-        if (putImage != null)
-            putFormData.append(
-                "picture",
-                putImage.pictureFile,
-                putImage.pictureFile.name
-            );
-		props.handleOperation(formData.id, "isEdit", putFormData);
-		updateFormData(initialFormData);
+        const isValid = formValidation(formData)
+        if(isValid){
+            let putFormData = new FormData();
+            putFormData.append("title", formData.title);
+            putFormData.append("author", formData.author);
+            putFormData.append("content", formData.content);
+            if (putImage != null)
+                putFormData.append(
+                    "picture",
+                    putImage.pictureFile,
+                    putImage.pictureFile.name
+                );
+            props.handleOperation(formData.id, "isEdit", putFormData);
+            updateFormData(initialFormData);
+            setFormErrors({
+                title: "",
+                content: "",
+            })
+        }
     };
     const cancelEditClick = () => {
         updateFormData(initialFormData);
@@ -166,6 +195,7 @@ export default function Edit(props) {
                             <Grid container spacing={2}>
                                 <Grid item xs={12}>
                                     <TextField
+                                        error = {formErrors["title"]!=="" && formData["title"]===""}
                                         id="article-name"
                                         className={classes.title}
                                         name="title"
@@ -176,10 +206,12 @@ export default function Edit(props) {
                                         fullWidth
                                         rows={2}
                                         multiline
+                                        helperText={formData["title"]==="" ? formErrors["title"]: null}
                                     />
                                 </Grid>
                                 <Grid item xs={12}>
                                     <TextField
+                                        error = {formErrors["content"]!=="" && formData["content"]===""}
                                         id="article-content"
                                         className={classes.content}
                                         name="content"
@@ -190,6 +222,7 @@ export default function Edit(props) {
                                         fullWidth
                                         rows={8}
                                         multiline
+                                        helperText={formData["content"]==="" ? formErrors["content"]: null}
                                     />
                                 </Grid>
                             </Grid>
