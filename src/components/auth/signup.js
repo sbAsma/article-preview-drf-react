@@ -14,6 +14,8 @@ import ImageUploading from "react-images-uploading";
 import PhotoCameraIcon from "@material-ui/icons/PhotoCamera";
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import CancelIcon from '@material-ui/icons/Cancel';
+import VisibilityIcon from '@material-ui/icons/Visibility';
+import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
 
 import { useAdminContext } from "../context/AdminContexProvider";
 import axiosInstance from "../../axios";
@@ -61,6 +63,13 @@ const useStyles = makeStyles((theme) => ({
     submit: {
         margin: theme.spacing(3, 0, 2),
     },
+    visibility: {
+        color: "gray",
+        position: "absolute",
+        margin: "auto",
+        right: "15px",
+        top: "22px",
+    },
 }));
 
 var avatarUrl_
@@ -93,7 +102,7 @@ export default function SignUp(props) {
         username: "",
         password: "",
     })
-
+    const [visibility, setVisibility] = useState(false)
     const redirectLogin = () =>{
         setAdminState({isSigningUp: false, isLoggedIn: false,isLoggingIn: true,})
     }
@@ -198,7 +207,7 @@ export default function SignUp(props) {
         }
     };
     const classes = useStyles();
-
+    const visibilityIconStyle = { fontSize: 28 }
     var emailValidationIcon
     var emailValidationIconColor
 
@@ -341,7 +350,11 @@ export default function SignUp(props) {
                                 helperText={formData["username"]==="" ? formErrors["username"]: null}
                             />
                         </Grid>
-                        <Grid item xs={12}>
+                        <Grid item xs={12}
+                            style={{
+                                position: "relative",
+                            }}
+                        >
                             <TextField
                                 error = {formErrors["password"]!=="" && formData["password"]===""}
                                 variant="outlined"
@@ -349,13 +362,24 @@ export default function SignUp(props) {
                                 fullWidth
                                 name="password"
                                 label="Password"
-                                type="password"
+                                type={!(visibility)? "password": null}
                                 id="password"
                                 autoComplete="current-password"
                                 value={formData.password}
                                 onChange={handleChange}
                                 helperText={formData["password"]==="" ? formErrors["password"]: null}
                             />
+                            <div
+								className={classes.visibility}
+								onClick={() => setVisibility(!visibility)}
+							>
+								{
+									(visibility)? 
+										<VisibilityOffIcon style={visibilityIconStyle}/> : 
+										<VisibilityIcon style={visibilityIconStyle}/>
+								}
+								
+							</div>
                         </Grid>
                     </Grid>
                     <Button
