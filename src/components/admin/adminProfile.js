@@ -155,6 +155,11 @@ export default function AdminProfile(){
         avatarFile: null,
         avatarUrl: '',
     })
+    const [formErrors, setFormErrors] = useState({
+        firstName: "",
+        lastName: "",
+        email: "",
+    })
     var locStr = localStorage.getItem('current_user')
     useEffect(()=>{
         if(user !== null && user !== undefined){
@@ -192,26 +197,82 @@ export default function AdminProfile(){
             })
         }
     }
+    const formValidation = (userProfile) => {
+        let isValid = true
+        let errors = {
+            firstName: "",
+            lastName: "",
+            email: "",
+        };
+        if(userProfile["firstName"] === ""){
+            errors["firstName"] = "This field is required"
+            isValid = false
+        }
+        if(userProfile["lastName"] === ""){
+            errors["lastName"] = "This field is required"
+            isValid = false
+        }
+        if (userProfile["email"] !== "") {
+            var pattern = new RegExp(
+                /^(("[\w-\s]+")|([\w-]+(?:\.[\w-]+)*)|("[\w-\s]+")([\w-]+(?:\.[\w-]+)*))(@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$)|(@\[?((25[0-5]\.|2[0-4][0-9]\.|1[0-9]{2}\.|[0-9]{1,2}\.))((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\.){2}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\]?$)/i
+            );
+            if (!pattern.test(userProfile["email"])) {
+                isValid = false;
+                errors["email"] = "Please enter valid email address";
+            }
+        }else{
+            errors["email"] = "This field is required"
+            isValid = false
+        }
+        setFormErrors(errors)
+        
+        return isValid
+    }
     const handleSubmit = (e) => {
         e.preventDefault()
-        let putFormData = new FormData();
-        putFormData.append("first_name", userProfile.firstName);
-        putFormData.append("last_name", userProfile.lastName);
-        putFormData.append("email", userProfile.email);
-        if(userProfile.avatarFile != null){
-            putFormData.append(
-                                "avatar", 
-                                userProfile.avatarFile,
-                                userProfile.avatarFile.name
-                                );
+        const isValid = formValidation(userProfile)
+        if(isValid){
+            let putuserProfile = new FormData();
+            putuserProfile.append("first_name", userProfile.firstName);
+            putuserProfile.append("last_name", userProfile.lastName);
+            putuserProfile.append("email", userProfile.email);
+            if(userProfile.avatarFile != null){
+                putuserProfile.append(
+                                    "avatar", 
+                                    userProfile.avatarFile,
+                                    userProfile.avatarFile.name
+                                    );
+            }
+            axiosInstance.patch('user/profile/'+ user.id + '/', putuserProfile)
+            .then((res) => {
+                setAdminState({user: res.data})
+            })
+            .catch((err) => {
+                console.log(err)
+            })
         }
-        axiosInstance.patch('user/profile/'+ user.id + '/', putFormData)
-        .then((res) => {
-			setAdminState({user: res.data})
-        })
-        .catch((err) => {
-            console.log(err)
-        })
+    }
+    var emailError
+    var emailErrorMsg
+    if(userProfile["email"] === ""){
+        if(formErrors["email"]===""){
+            emailError = false
+            emailErrorMsg = null
+        }else{
+            emailError = true 
+            emailErrorMsg = "This field is required"
+        }
+    }else{
+        var pattern = new RegExp(/^(("[\w-\s]+")|([\w-]+(?:\.[\w-]+)*)|("[\w-\s]+")([\w-]+(?:\.[\w-]+)*))(@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$)|(@\[?((25[0-5]\.|2[0-4][0-9]\.|1[0-9]{2}\.|[0-9]{1,2}\.))((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\.){2}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\]?$)/i);
+        if (pattern.test(userProfile["email"])) {
+            emailError = false
+            emailErrorMsg = null
+        }else{
+            if(formErrors["email"]!==""){
+                emailError = true 
+                emailErrorMsg = "Please enter valid email address" 
+            }
+        }
     }
     if(isLoggedIn === false && locStr === null) {
 		return <NoAccess/>
@@ -274,6 +335,7 @@ export default function AdminProfile(){
                         </Grid>
                         <Grid item xs={12} sm={6}>
                             <TextField
+                                error = {formErrors["firstName"]!=="" && userProfile["firstName"]===""}
                                 autoComplete="fname"
                                 name="firstName"
                                 variant="outlined"
@@ -284,10 +346,12 @@ export default function AdminProfile(){
                                 value={userProfile.firstName}
                                 onChange={handleChange}
                                 autoFocus
+                                helperText={userProfile["firstName"]==="" ? formErrors["firstName"]: null}
                             />
                         </Grid>
                         <Grid item xs={12} sm={6}>
                             <TextField
+                                error = {formErrors["lastName"]!=="" && userProfile["lastName"]===""}
                                 variant="outlined"
                                 required
                                 fullWidth
@@ -297,6 +361,7 @@ export default function AdminProfile(){
                                 autoComplete="lname"
                                 value={userProfile.lastName}
                                 onChange={handleChange}
+                                helperText={userProfile["lastName"]==="" ? formErrors["lastName"]: null}
                             />
                         </Grid>
                         <Grid item xs={12} display="flex" alignContent="center" container>
@@ -316,6 +381,7 @@ export default function AdminProfile(){
                         </Grid>
                         <Grid item xs={12}>
                             <TextField
+                                error = {emailError}
                                 variant="outlined"
                                 required
                                 fullWidth
@@ -325,6 +391,7 @@ export default function AdminProfile(){
                                 autoComplete="email"
                                 value={userProfile.email}
                                 onChange={handleChange}
+                                helperText={emailErrorMsg}
                             />
                         </Grid>
                         <Grid item container xs={12} justifyContent="flex-end">
