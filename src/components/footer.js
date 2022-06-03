@@ -44,11 +44,21 @@ function Copyright() {
 			{new Date().getFullYear()}
 			{'.'}
 			<br/>
-			<Link color="inherit" href="https://github.com/sbAsma/article-preview-drf-react">
+			<Link 
+				color="inherit" 
+				href="https://github.com/sbAsma/article-preview-drf-react"
+				target="_blank"
+				rel="noopener"
+			>
 				Source Code
 			</Link>
 			<br/>
-			<Link color="inherit" href="https://www.frontendmentor.io/challenges/article-preview-component-dYBN_pYFT">
+			<Link 
+				color="inherit" 
+				href="https://www.frontendmentor.io/challenges/article-preview-component-dYBN_pYFT"
+				target="_blank"
+				rel="noopener"
+			>
 				Frontend Mentor Inspired Design
 			</Link>
 		</Typography>
