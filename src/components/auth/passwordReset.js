@@ -7,7 +7,7 @@ import {
     Box,
     makeStyles
 } from '@material-ui/core'
-import { useAdminContext } from "../context/AdminContexProvider";
+import { useUserContext } from "../context/UserContexProvider";
 
 import axiosInstance from '../../axios'
 
@@ -47,7 +47,7 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 export default function PasswordReset() {
-    const {setAdminState} = useAdminContext()
+    const {setUserState} = useUserContext()
     const [email, setEmail] = useState('')
     const [isEmailValid, setIsEmailValid] = useState(false)
     const [serverResponse, setServerResponse] = useState({
@@ -56,7 +56,7 @@ export default function PasswordReset() {
     })
     const classes = useStyles()
     useEffect(() =>{
-        setAdminState({isSigningUp:true})
+        setUserState({isSigningUp:true})
     }, [])
     const handleChange = (e) => {
         const email = e.target.value

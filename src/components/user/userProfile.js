@@ -14,7 +14,7 @@ import SaveIcon from '@material-ui/icons/Save';
 import LockIcon from '@material-ui/icons/Lock';
 import DeleteIcon from '@material-ui/icons/Delete';
 import PhotoCameraIcon from "@material-ui/icons/PhotoCamera";
-import {useAdminContext} from '../context/AdminContexProvider'
+import {useUserContext} from '../context/UserContexProvider'
 import axiosInstance from "../../axios";
 import CustomDrawer from '../customDrawer';
 import NoAccess from '../auth/noAccess';
@@ -142,12 +142,12 @@ const drawerItems = [
     },
 ]
 
-export default function AdminProfile(){
+export default function UserProfile(){
     const classes = useStyles();
-    const {adminState: {
+    const {userState: {
         user,
         isLoggedIn,
-    }, setAdminState} = useAdminContext()
+    }, setUserState} = useUserContext()
     const [userProfile, setUserProfile] = useState({
         firstName: '',
         lastName: '',
@@ -173,7 +173,7 @@ export default function AdminProfile(){
             }
         }
         if(isLoggedIn === false && localStorage.getItem('current_user') === null){
-            setAdminState({isSigningUp: true, isLoggedIn: false,isLoggingIn: false,})
+            setUserState({isSigningUp: true, isLoggedIn: false,isLoggingIn: false,})
         }
     }, [user])
 
@@ -245,7 +245,7 @@ export default function AdminProfile(){
             }
             axiosInstance.patch('user/profile/'+ user.id + '/', putuserProfile)
             .then((res) => {
-                setAdminState({user: res.data})
+                setUserState({user: res.data})
             })
             .catch((err) => {
                 console.log(err)

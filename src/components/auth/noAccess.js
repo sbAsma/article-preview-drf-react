@@ -5,7 +5,7 @@ import {
     Link,
     makeStyles,
 } from "@material-ui/core"
-import { useAdminContext } from "../context/AdminContexProvider";
+import { useUserContext } from "../context/UserContexProvider";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -15,7 +15,7 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 export default function NoAccess() {
-    const {setAdminState} = useAdminContext()
+    const {setUserState} = useUserContext()
     const classes = useStyles()
     return (
         <React.Fragment>
@@ -26,7 +26,7 @@ export default function NoAccess() {
                     <Link
                         component={NavLink}
                         to="/user"
-                        onClick={() => setAdminState({isSigningUp: false, isLoggedIn: false,isLoggingIn: true,})}
+                        onClick={() => setUserState({isSigningUp: false, isLoggedIn: false,isLoggingIn: true,})}
                     >
                         Go to login page
                     </Link>

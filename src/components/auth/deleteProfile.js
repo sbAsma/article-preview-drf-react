@@ -9,7 +9,7 @@ import PersonIcon from '@material-ui/icons/Person';
 import LockIcon from '@material-ui/icons/Lock';
 import DeleteIcon from '@material-ui/icons/Delete';
 
-import {useAdminContext} from '../context/AdminContexProvider'
+import {useUserContext} from '../context/UserContexProvider'
 import axiosInstance from "../../axios";
 import CustomDrawer from '../customDrawer';
 import NoAccess from './noAccess';
@@ -63,12 +63,12 @@ const drawerItems = [
 ]
 
 export default function DeleteProfile() {
-    const {adminState: {user, isLoggedIn}, setAdminState} = useAdminContext()
+    const {userState: {user, isLoggedIn}, setUserState} = useUserContext()
     var locStr = localStorage.getItem('current_user')
     const classes = useStyles()
     useEffect(() => {
         if(isLoggedIn === false && localStorage.getItem('current_user') === null){
-            setAdminState({isSigningUp: true, isLoggedIn: false,isLoggingIn: false,})
+            setUserState({isSigningUp: true, isLoggedIn: false,isLoggingIn: false,})
         }
     }, [])
     const handleDeleteProfile = () => {

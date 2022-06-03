@@ -140,6 +140,10 @@ export default function Create(props) {
     };
     const cancelCreateClick = () => {
         updateFormData(initialFormData);
+        setFormErrors({
+            title: "",
+            content: "",
+        })
         props.onCancleAdd("isAdd");
     };
 

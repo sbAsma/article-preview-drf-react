@@ -3,7 +3,7 @@ import './App.css';
 import { makeStyles } from '@material-ui/core';
 import Articles from './components/articles/articles';
 import ArticleLoadingComponent from './components/articles/articleLoading';
-import { useAdminContext } from "./components/context/AdminContexProvider";
+import { useUserContext } from "./components/context/UserContexProvider";
 
 // import Header from './components/header'
 import Footer from './components/footer'
@@ -24,9 +24,9 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 function App() {
-    const {adminState: {
+    const {userState: {
         isLoggedIn,
-    }, setAdminState} = useAdminContext()
+    }, setUserState} = useUserContext()
     const ArticleLoading = ArticleLoadingComponent(Articles);
     const [appState, setAppState] = useState({
         loading: true,
@@ -47,7 +47,7 @@ function App() {
             });
         }))
         if(!isLoggedIn){
-            setAdminState({isSigningUp:true})
+            setUserState({isSigningUp:true})
         }
     }, [setAppState]);
 

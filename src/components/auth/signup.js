@@ -17,7 +17,7 @@ import CancelIcon from '@material-ui/icons/Cancel';
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
 
-import { useAdminContext } from "../context/AdminContexProvider";
+import { useUserContext } from "../context/UserContexProvider";
 import axiosInstance from "../../axios";
 
 const useStyles = makeStyles((theme) => ({
@@ -81,7 +81,7 @@ if (window.location.origin === "http://localhost:3000") {
 }
 
 export default function SignUp(props) {
-	const {setAdminState} = useAdminContext()
+	const {setUserState} = useUserContext()
 
     const initialFormData = Object.freeze({
         firstName: "",
@@ -104,7 +104,7 @@ export default function SignUp(props) {
     })
     const [visibility, setVisibility] = useState(false)
     const redirectLogin = () =>{
-        setAdminState({isSigningUp: false, isLoggedIn: false,isLoggingIn: true,})
+        setUserState({isSigningUp: false, isLoggedIn: false,isLoggingIn: true,})
     }
     const handleUploadImage = (data) => {
         updateFormAvatar({
@@ -200,7 +200,7 @@ export default function SignUp(props) {
             }
             axiosInstance.post(`user/create/`, postFormData)
             .then((res) => {
-                setAdminState({isSigningUp: false})
+                setUserState({isSigningUp: false})
             }).catch((err) => {
                 console.log(err)
             })

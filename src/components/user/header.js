@@ -16,7 +16,7 @@ import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 import BallotIcon from '@material-ui/icons/Ballot';
 import PersonIcon from '@material-ui/icons/Person';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
-import { useAdminContext } from "../context/AdminContexProvider";
+import { useUserContext } from "../context/UserContexProvider";
 import axiosInstance from '../../axios';
 
 const useStyles = makeStyles((theme) => ({
@@ -164,24 +164,24 @@ const LogInOutButtons = (props) => {
 
 export default function Header(props) {
 	const history = useHistory()
-	const {adminState: {
+	const {userState: {
 		isLoggedIn,
 		isSigningUp,
 		isLoggingIn,
 		username,
-		user}, setAdminState} = useAdminContext()
+		user}, setUserState} = useUserContext()
 	const redirectLogin = () =>{
-        setAdminState({isSigningUp: false, isLoggedIn: false,isLoggingIn: true,})
+        setUserState({isSigningUp: false, isLoggedIn: false,isLoggingIn: true,})
 		history.push('/user')
     }
     const redirectSignUp = () =>{
-        setAdminState({isSigningUp: true, })
+        setUserState({isSigningUp: true, })
     }
 	const handleLogout = () => {
         axiosInstance.post('user/logout/blacklist/', {
             refresh_token: localStorage.getItem('refresh_token')
         }).then((res) => {
-			setAdminState({
+			setUserState({
                 isLoggedIn: false,
                 isSigningUp: false,
 				isLoggingIn: true,

@@ -30,7 +30,7 @@ class CreateArticle(APIView):
 			return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class AdminManageArticle(generics.RetrieveUpdateDestroyAPIView):
+class ManageArticle(generics.RetrieveUpdateDestroyAPIView):
 	permission_classes = [permissions.IsAuthenticated]
 	queryset = Article.objects.all()
 	serializer_class = ArticleSerializer

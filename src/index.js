@@ -3,17 +3,17 @@ import ReactDOM from 'react-dom';
 import {Route, BrowserRouter as Router, Switch} from 'react-router-dom'
 import './index.css';
 import App from './App';
-import Admin from './Admin'
-import Header from './components/admin/header'
-import ManageArticles from './components/admin/manageArticles'
-import AdminProfile from './components/admin/adminProfile'
+import User from './User'
+import Header from './components/user/header'
+import ManageArticles from './components/user/manageArticles'
+import UserProfile from './components/user/userProfile'
 import ChangePassword from './components/auth/changePassword'
 import DeleteProfile from './components/auth/deleteProfile'
 import PasswordReset from './components/auth/passwordReset';
 import PasswordResetConfirmation from './components/auth/passwordResetConfirmation';
 import NotFound from './components/notFound'
 import reportWebVitals from './reportWebVitals';
-import {AdminProvider} from './components/context/AdminContexProvider'
+import {UserProvider} from './components/context/UserContexProvider'
 
 import { ThemeProvider, createTheme } from '@material-ui/core/styles'
 
@@ -29,17 +29,17 @@ const routing = (
 	<Router>
 		<Switch>
 			<ThemeProvider theme={customTheme}>
-				<AdminProvider>
+				<UserProvider>
 					<Header/>
 					<Route exact path="/" component={App} />
-					<Route exact path="/user" component={Admin}/>
+					<Route exact path="/user" component={User}/>
 					<Route exact path="/user/articles" component={ManageArticles}/>
-					<Route exact path ="/user/profile" component={AdminProfile} />
+					<Route exact path ="/user/profile" component={UserProfile} />
 					<Route exact path ="/user/change_password" component={ChangePassword} />
 					<Route exact path ="/user/delete_account" component={DeleteProfile} />
 					<Route exact path ="/user/password_reset" component={PasswordReset} />
 					<Route path ="/password_reset/token=:token" component={PasswordResetConfirmation} />
-				</AdminProvider>
+				</UserProvider>
 			</ThemeProvider>
 			<Route component={NotFound} />
 		</Switch>

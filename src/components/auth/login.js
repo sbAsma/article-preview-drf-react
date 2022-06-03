@@ -13,7 +13,7 @@ import {
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
 
-import { useAdminContext } from "../context/AdminContexProvider";
+import { useUserContext } from "../context/UserContexProvider";
 import axiosInstance from "../../axios";
 
 const useStyles = makeStyles((theme) => ({
@@ -50,7 +50,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function Login(props) {
-	const {setAdminState} = useAdminContext()
+	const {setUserState} = useUserContext()
 	const [username_, setUsername_] = useState("")
 	useEffect(() =>{
 		setUsername_(localStorage.getItem("current_user"))
@@ -63,7 +63,7 @@ export default function Login(props) {
 	const [wrongCred, setWrongCred] = useState(false)
 	const [visibility, setVisibility] = useState(false)
 	const redirectSignUp = () =>{
-        setAdminState({isSigningUp: true, isLoggingIn: false})
+        setUserState({isSigningUp: true, isLoggingIn: false})
     }
     const handleChange = (e) => {
 		if(e.target.name === "username"){
@@ -94,7 +94,7 @@ export default function Login(props) {
 				localStorage.setItem("current_user", formData.username);
 				axiosInstance.defaults.headers["Authorization"] =
 					"JWT " + localStorage.getItem("access_token");
-				setAdminState({ 
+				setUserState({ 
 					isLoggedIn: true,
 				});
             }).catch((err) => {

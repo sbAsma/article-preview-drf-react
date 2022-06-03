@@ -13,7 +13,7 @@ import Delete from './delete'
 import ArticleLoadingComponent from '../articles/articleLoading';
 import NoAccess from '../auth/noAccess';
 import axiosInstance from '../../axios';
-import {useAdminContext} from '../context/AdminContexProvider'
+import {useUserContext} from '../context/UserContexProvider'
 
 const useStyles = makeStyles((theme) => ({
 	root: {
@@ -34,9 +34,9 @@ const useStyles = makeStyles((theme) => ({
 export default function ManageArticles(props) {
 	const classes = useStyles()
 	const ArticleLoading = ArticleLoadingComponent(Articles);
-	const {adminState: {
+	const {userState: {
 			isLoggedIn,
-			user}, setAdminState} = useAdminContext()
+			user}, setUserState} = useUserContext()
     const initialState = Object.freeze({
 		article: {},
         isAdd: false,
@@ -61,7 +61,7 @@ export default function ManageArticles(props) {
             console.log(err)
         })
 		if(isLoggedIn === false && localStorage.getItem('current_user') === null){
-            setAdminState({isSigningUp: true, isLoggedIn: false,isLoggingIn: false,})
+            setUserState({isSigningUp: true, isLoggedIn: false,isLoggingIn: false,})
         }
 	}, [user])
 	
@@ -76,7 +76,7 @@ export default function ManageArticles(props) {
 	}
 	const handleOperation = (id, operation, formData) =>{
 		if(operation === "isAdd"){
-			axiosInstance.post('admin/create/', formData)
+			axiosInstance.post('articles/create/', formData) // used to be "admin/
 			.then((res) => {
 				const newArticle = res.data
 				setArticlesState({
@@ -93,7 +93,7 @@ export default function ManageArticles(props) {
 			})
 		}
 		else if(operation === "isEdit"){
-			axiosInstance.patch(`admin/article/` + id + "/", formData)
+			axiosInstance.patch(`articles/article/` + id + "/", formData)
 			.then((res) => {
 				const updateArticles = articlesState.articles.map((article) =>{
 					if(article.id !== id) return article
@@ -114,7 +114,7 @@ export default function ManageArticles(props) {
 		}
 		else if(operation === "isDelete"){
 			axiosInstance
-				.delete('admin/article/' + id +'/')
+				.delete('articles/article/' + id +'/')
 				.catch((error) => {
 					if (error.response) {
 						console.log(error.response.data);

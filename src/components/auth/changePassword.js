@@ -14,7 +14,7 @@ import SaveIcon from '@material-ui/icons/Save';
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
 
-import {useAdminContext} from '../context/AdminContexProvider'
+import {useUserContext} from '../context/UserContexProvider'
 import axiosInstance from "../../axios";
 import CustomDrawer from '../customDrawer';
 import NoAccess from './noAccess';
@@ -117,11 +117,11 @@ const drawerItems = [
 ]
 
 export default function ChangePassword() {
-    const {adminState: {user, isLoggedIn}, setAdminState} = useAdminContext()
+    const {userState: {user, isLoggedIn}, setUserState} = useUserContext()
     var locStr = localStorage.getItem('current_user')
     useEffect(() => {
         if(isLoggedIn === false && localStorage.getItem('current_user') === null){
-            setAdminState({isSigningUp: true, isLoggedIn: false,isLoggingIn: false,})
+            setUserState({isSigningUp: true, isLoggedIn: false,isLoggingIn: false,})
         }
     }, [])
     const [passwordState, setPasswordState] = useState({
