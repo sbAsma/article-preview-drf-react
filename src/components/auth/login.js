@@ -177,7 +177,7 @@ export default function Login(props) {
 						Login
 					</Button>
 					<Grid container justifyContent="space-between">
-                        <Grid item>
+                        <Grid item xs={12} sm={6}>
                             <Link
 								variant="body2"
                                 onClick={redirectSignUp}
