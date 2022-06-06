@@ -47,6 +47,11 @@ const useStyles = makeStyles((theme) => ({
         right: "20px",
         top: "25px",
     },
+	[theme.breakpoints.down('xs')]:{
+		NotRegisteredTxt:{
+			display: 'none',
+		}
+	},
 }));
 
 export default function Login(props) {
@@ -177,20 +182,23 @@ export default function Login(props) {
 						Login
 					</Button>
 					<Grid container justifyContent="space-between">
-                        <Grid item xs={12} sm={6}>
-                            <Link
-								variant="body2"
-                                onClick={redirectSignUp}
-                                >
-                                Not registered yet? Sign up
-                            </Link>
-                        </Grid>
-						<Grid item>
+					<Grid item>
                             <Link
 								variant="body2"
 								href="user/password_reset"
                                 >
                                 Forgot your password?
+                            </Link>
+                        </Grid>
+                        <Grid item 
+						// xs={12} sm={6}
+						>
+                            <Link
+								variant="body2"
+                                onClick={redirectSignUp}
+                                >
+                                <span className={classes.NotRegisteredTxt}>Not registered yet? </span> 
+								Sign up
                             </Link>
                         </Grid>
                     </Grid>
