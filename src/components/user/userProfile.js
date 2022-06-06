@@ -17,7 +17,12 @@ import PhotoCameraIcon from "@material-ui/icons/PhotoCamera";
 import {useUserContext} from '../context/UserContexProvider'
 import axiosInstance from "../../axios";
 import CustomDrawer from '../customDrawer';
+import CustomDrawer2 from '../customDrawer2';
+
 import NoAccess from '../auth/noAccess';
+
+const drawerWidth = 200;
+
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -274,12 +279,13 @@ export default function UserProfile(){
             }
         }
     }
+
     if(isLoggedIn === false && locStr === null) {
 		return <NoAccess/>
 	}
     else return (
         <div className={classes.root}>
-            <CustomDrawer drawerItems={drawerItems} />
+            <CustomDrawer2 drawerItems={drawerItems} />
             <main className={classes.content}>
                 <div className={classes.toolbar} />
                 <form className={classes.form} noValidate>

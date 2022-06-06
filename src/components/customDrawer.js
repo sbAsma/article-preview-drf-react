@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import {
     Link,
     Drawer,
@@ -7,9 +7,13 @@ import {
     ListItem,
     ListItemIcon,
     ListItemText,
+    IconButton,
     Typography,
     makeStyles,
 } from '@material-ui/core';
+import ArrowRightIcon from '@material-ui/icons/ArrowRight';
+import ArrowLeftIcon from '@material-ui/icons/ArrowLeft';
+import ReorderIcon from '@material-ui/icons/Reorder';
 
 const largeDrawerWidth = 180;
 const mediumDrawerWidth = 110;
@@ -31,34 +35,57 @@ const useStyles = makeStyles((theme) => ({
         color: "gray",
         fontWeight : "bold",
     },
-    [theme.breakpoints.down('xs')]: {
-        icon: {
-            display: 'none',
-        },
-        drawer: {
-            width: mediumDrawerWidth,
-        },
-        drawerPaper: {
-            width: mediumDrawerWidth,
-        },
+    drawerOpenClose:{
+        display: 'none',
     },
-    ['@media (max-width:350px)']:{
-		icon: {
+    // secondDivider: {
+    //     display: 'none'
+    // },
+    [theme.breakpoints.down('xs')]: {
+        drawerOpenClose:{
             display: 'inline',
         },
-        drawer: {
-            width: smallDrawerWidth,
-        },
-        drawerPaper: {
-            width: smallDrawerWidth,
-        },
-        text: {
-            display: 'none',
-        },
-	},
+        // secondDivider: {
+        //     display: 'inline',
+        // },
+        // drawer: {
+        //     width: smallDrawerWidth,
+        // },
+        // drawerPaper: {
+        //     width: smallDrawerWidth,
+        // },
+        // text: {
+        //     display: 'none',
+        // },
+        // icon: {
+        //     display: 'none',
+        // },
+        // drawer: {
+        //     width: mediumDrawerWidth,
+        // },
+        // drawerPaper: {
+        //     width: mediumDrawerWidth,
+        // },
+        
+    },
+    // ['@media (max-width:350px)']:{
+	// 	icon: {
+    //         display: 'inline',
+    //     },
+    //     drawer: {
+    //         width: smallDrawerWidth,
+    //     },
+    //     drawerPaper: {
+    //         width: smallDrawerWidth,
+    //     },
+    //     text: {
+    //         display: 'none',
+    //     },
+	// },
 }))
 
 export default function CustomDrawer({drawerItems}){
+    const [open, setOpen] = useState(false)
     const classes = useStyles()
 
     return (
@@ -69,9 +96,24 @@ export default function CustomDrawer({drawerItems}){
                 paper: classes.drawerPaper,
             }}
             anchor="left"
+            role="presentation" // new
+            onClick={() => console.log("drawer clicked")}
         >
             <div className={classes.toolbar} />
             <Divider />
+            <IconButton
+                className={classes.drawerOpenClose}
+                onClick={() => setOpen(!open)}
+            >
+                {open===true? <ArrowLeftIcon/> : <ReorderIcon/>}
+            </IconButton>
+            
+            <Divider 
+                // className={classes.secondDivider}
+                style={{
+                    display: !open && "none",
+                }}
+            />
             <List>
                 {drawerItems.map((item) => {
                     return(
