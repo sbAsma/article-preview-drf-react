@@ -18,6 +18,7 @@ import {useUserContext} from '../context/UserContexProvider'
 const useStyles = makeStyles((theme) => ({
 	root: {
 		marginTop: '100px',
+		marginBottom: '50px',
 	},
 	addButton: {
 		[theme.breakpoints.down('xs')]: {
