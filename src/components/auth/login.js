@@ -66,6 +66,10 @@ export default function Login(props) {
     });
     const [formData, updateFormData] = useState(initialFormData);
 	const [wrongCred, setWrongCred] = useState(false)
+	const [formErrors, setFormErrors] = useState({
+        username: "",
+        password: "",
+    })
 	const [visibility, setVisibility] = useState(false)
 	const redirectSignUp = () =>{
         setUserState({isSigningUp: true, isLoggingIn: false})
@@ -85,10 +89,29 @@ export default function Login(props) {
 			});
 		}
     };
-
+	const formValidation = (formData) => {
+        let isValid = true
+        let errors = {
+            username: "",
+            password: "",
+        };
+        if(formData["username"] === ""){
+            errors["username"] = "This field is required"
+            isValid = false
+        }
+        if(formData["password"] === ""){
+            errors["password"] = "This field is required"
+            isValid = false
+        }
+        setFormErrors(errors)
+        
+        return isValid
+    }
     const handleSubmit = (e) => {
         e.preventDefault();
-        axiosInstance
+		const isValid = formValidation(formData)
+        if(isValid){
+			axiosInstance
             .post(`token/`, {
                 user_name: formData.username,
                 password: formData.password,
@@ -102,10 +125,15 @@ export default function Login(props) {
 				setUserState({ 
 					isLoggedIn: true,
 				});
+				setFormErrors({
+					username: "",
+					password: "",
+				})
             }).catch((err) => {
 				console.log(err);
 				setWrongCred(true)
 			});
+		}
     };
 
     const classes = useStyles();
@@ -138,7 +166,8 @@ export default function Login(props) {
 								autoComplete="current-username"
 								value={formData.username}
 								onChange={handleChange}
-								error={wrongCred}
+								error={(formErrors["username"]!=="" && formData["username"]==="") || wrongCred}
+								helperText={formData["username"]==="" ? formErrors["username"]: null}
 							/>
 						</Grid>
 						<Grid item xs={12}
@@ -157,6 +186,8 @@ export default function Login(props) {
 								autoComplete="current-password"
 								value={formData.password}
 								onChange={handleChange}
+								error = {formErrors["password"]!=="" && formData["password"]===""}
+								helperText={formData["password"]==="" ? formErrors["password"]: null}
 							/>
 							<div
 								className={classes.visibility}
