@@ -54,12 +54,8 @@ function App() {
     const classes = useStyles()
     return (
         <React.Fragment>
-            {/* <Header /> */}
                 <div 
                     className={classes.root}
-                    // style={{
-                    //     marginTop: "40px",
-                    // }}
                 >
                     <h1>Latest Articles</h1>
                     <ArticleLoading 
