@@ -17,7 +17,6 @@ import PhotoCameraIcon from "@material-ui/icons/PhotoCamera";
 import {useUserContext} from '../context/UserContexProvider'
 import axiosInstance from "../../axios";
 import CustomDrawer from '../customDrawer';
-import CustomDrawer2 from '../customDrawer2';
 
 import NoAccess from '../auth/noAccess';
 
@@ -285,7 +284,7 @@ export default function UserProfile(){
 	}
     else return (
         <div className={classes.root}>
-            <CustomDrawer2 drawerItems={drawerItems} />
+            <CustomDrawer drawerItems={drawerItems} />
             <main className={classes.content}>
                 <div className={classes.toolbar} />
                 <form className={classes.form} noValidate>

@@ -1,125 +1,139 @@
-import React from "react";
-import { makeStyles, useTheme } from "@material-ui/core/styles";
-import useMediaQuery from "@material-ui/core/useMediaQuery";
-import Drawer from "@material-ui/core/Drawer";
-import IconButton from "@material-ui/core/IconButton";
-import List from "@material-ui/core/List";
-import Divider from "@material-ui/core/Divider";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
-import ListItemText from "@material-ui/core/ListItemText";
-import InboxIcon from "@material-ui/icons/MoveToInbox";
-import MailIcon from "@material-ui/icons/Mail";
-import MenuIcon from "@material-ui/icons/Menu";
+import React, { useState } from 'react'
+import {
+    Link,
+    Drawer,
+    Divider,
+    List,
+    ListItem,
+    ListItemIcon,
+    ListItemText,
+    IconButton,
+    Typography,
+    makeStyles,
+} from '@material-ui/core';
+import ArrowRightIcon from '@material-ui/icons/ArrowRight';
+import ArrowLeftIcon from '@material-ui/icons/ArrowLeft';
+import ReorderIcon from '@material-ui/icons/Reorder';
 
-const drawerWidth = 200;
+const largeDrawerWidth = 180;
+const mediumDrawerWidth = 110;
 const smallDrawerWidth = 60;
 
 const useStyles = makeStyles((theme) => ({
-    smallDrawer: {
-        flexShrink: 0,
-        width: smallDrawerWidth,
-    },
-    smallDrawerPaper: {
-        width: smallDrawerWidth,
+    root: {
+        display: "flex",
     },
     drawer: {
+        width: largeDrawerWidth,
         flexShrink: 0,
-        width: drawerWidth,
     },
     drawerPaper: {
-        width: drawerWidth,
-    },
-    menuButton: {
-        // marginRight: theme.spacing(2),
-        [theme.breakpoints.up("md")]: {
-            display: "none",
-        },
+        width: largeDrawerWidth,
     },
     toolbar: theme.mixins.toolbar,
-    //   toolbar: {
-    //     ...theme.mixins.toolbar,
-    //     [theme.breakpoints.down("sm")]: {
-    //       display: "none"
-    //     }
-    //   },
-}));
+    text:{
+        color: "gray",
+        fontWeight : "bold",
+    },
+    drawerOpenClose:{
+        display: 'none',
+    },
+    // secondDivider: {
+    //     display: 'none'
+    // },
+    [theme.breakpoints.down('xs')]: {
+        drawerOpenClose:{
+            display: 'inline',
+        },
+        // secondDivider: {
+        //     display: 'inline',
+        // },
+        // drawer: {
+        //     width: smallDrawerWidth,
+        // },
+        // drawerPaper: {
+        //     width: smallDrawerWidth,
+        // },
+        // text: {
+        //     display: 'none',
+        // },
+        // icon: {
+        //     display: 'none',
+        // },
+        // drawer: {
+        //     width: mediumDrawerWidth,
+        // },
+        // drawerPaper: {
+        //     width: mediumDrawerWidth,
+        // },
+        
+    },
+    ['@media (max-width:350px)']:{
+		icon: {
+            display: 'inline',
+        },
+        drawer: {
+            width: smallDrawerWidth,
+        },
+        drawerPaper: {
+            width: smallDrawerWidth,
+        },
+        text: {
+            display: 'none',
+        },
+	},
+}))
 
-export default function CustomDrawer2({drawerItems}) {
+export default function CustomDrawer2({drawerItems}){
+    const [open, setOpen] = useState(false)
     const classes = useStyles()
-    const theme = useTheme();
-    const isSmUp = useMediaQuery(theme.breakpoints.up("sm"));
 
-    const [open, setOpen] = React.useState(false);
-
-    const toggleDrawer = (event) => {
-        if (
-            event.type === "keydown" &&
-            (event.key === "Tab" || event.key === "Shift")
-        ) {
-            return;
-        }
-
-        setOpen(!open);
-    };
-    if(!open && !isSmUp) {
-        return(
-            <Drawer
-                className={classes.smallDrawer}
-                variant="permanent"
-                classes={{
-                    paper: classes.smallDrawerPaper,
-                }}
-                anchor="left"
-                role="presentation" // new
-            >
-                <div className={classes.toolbar} />
-                <IconButton
-                    color="inherit"
-                    aria-label="open drawer"
-                    edge="start"
-                    onClick={toggleDrawer}
-                    className={classes.menuButton}
-                >
-                    <MenuIcon />
-                </IconButton>
-            </Drawer>
-        )
-    }else return (
+    return (
         <Drawer
             className={classes.drawer}
-            variant={isSmUp ? "permanent" : "temporary"}
+            variant="permanent"
             classes={{
                 paper: classes.drawerPaper,
             }}
             anchor="left"
-            open={open}
-            onClose={toggleDrawer}
+            role="presentation" // new
+            onClick={() => console.log("drawer clicked")}
         >
             <div className={classes.toolbar} />
             <Divider />
+            <IconButton
+                className={classes.drawerOpenClose}
+                onClick={() => setOpen(!open)}
+            >
+                {open===true? <ArrowLeftIcon/> : <ReorderIcon/>}
+            </IconButton>
+            
+            <Divider 
+                // className={classes.secondDivider}
+                style={{
+                    display: !open && "none",
+                }}
+            />
             <List>
-                {["Inbox", "Starred", "Send email", "Drafts"].map(
-                    (text, index) => (
-                        <ListItem button key={text}>
-                            <ListItemIcon>
-                                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                {drawerItems.map((item) => {
+                    return(
+                        <ListItem key={item.id} button component={Link} href={item.href}>
+                            <ListItemIcon className={classes.icon}>
+                                {item.icon}
                             </ListItemIcon>
-                            <ListItemText primary={text} />
+                            <ListItemText 
+                                primary={
+                                    <Typography 
+                                        variant="body1" 
+                                        className={classes.text}
+                                    >
+                                      {item.text}
+                                    </Typography>
+                                }
+                            />
                         </ListItem>
                     )
-                )}
-            </List>
-            <Divider />
-            <List>
-                {["All mail", "Trash", "Spam"].map((text, index) => (
-                    <ListItem button key={text}>
-                        <ListItemIcon>
-                            {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                        </ListItemIcon>
-                        <ListItemText primary={text} />
-                    </ListItem>
-                ))}
+                })}
             </List>
         </Drawer>
     );

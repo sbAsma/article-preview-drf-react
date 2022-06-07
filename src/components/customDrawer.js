@@ -1,6 +1,7 @@
-import React, { useState } from 'react'
+import React from "react";
 import {
     Link,
+    Avatar,
     Drawer,
     Divider,
     List,
@@ -10,131 +11,169 @@ import {
     IconButton,
     Typography,
     makeStyles,
+    useTheme,
+    useMediaQuery,
 } from '@material-ui/core';
-import ArrowRightIcon from '@material-ui/icons/ArrowRight';
-import ArrowLeftIcon from '@material-ui/icons/ArrowLeft';
-import ReorderIcon from '@material-ui/icons/Reorder';
+import MenuIcon from "@material-ui/icons/Menu";
+import {useUserContext} from './context/UserContexProvider'
 
-const largeDrawerWidth = 180;
-const mediumDrawerWidth = 110;
+
+const drawerWidth = 200;
 const smallDrawerWidth = 60;
 
 const useStyles = makeStyles((theme) => ({
-    root: {
-        display: "flex",
+    smallDrawer: {
+        flexShrink: 0,
+        width: smallDrawerWidth,
+    },
+    smallDrawerPaper: {
+        width: smallDrawerWidth,
     },
     drawer: {
-        width: largeDrawerWidth,
         flexShrink: 0,
+        width: drawerWidth,
     },
     drawerPaper: {
-        width: largeDrawerWidth,
+        width: drawerWidth,
+    },
+    menuButton:{
+        display: 'inline',
+    },
+    menuButton: {
+        [theme.breakpoints.up("md")]: {
+            display: "none",
+        },
     },
     toolbar: theme.mixins.toolbar,
     text:{
         color: "gray",
-        fontWeight : "bold",
     },
-    drawerOpenClose:{
-        display: 'none',
+    userFirstLastName: {
+        fontWeight: "bold",
+        color: "black",
     },
-    // secondDivider: {
-    //     display: 'none'
-    // },
-    [theme.breakpoints.down('xs')]: {
-        drawerOpenClose:{
-            display: 'inline',
-        },
-        // secondDivider: {
-        //     display: 'inline',
-        // },
-        // drawer: {
-        //     width: smallDrawerWidth,
-        // },
-        // drawerPaper: {
-        //     width: smallDrawerWidth,
-        // },
-        // text: {
-        //     display: 'none',
-        // },
-        // icon: {
-        //     display: 'none',
-        // },
-        // drawer: {
-        //     width: mediumDrawerWidth,
-        // },
-        // drawerPaper: {
-        //     width: mediumDrawerWidth,
-        // },
-        
+    userEmail: {
+        color: "gray",
     },
-    // ['@media (max-width:350px)']:{
-	// 	icon: {
-    //         display: 'inline',
-    //     },
-    //     drawer: {
-    //         width: smallDrawerWidth,
-    //     },
-    //     drawerPaper: {
-    //         width: smallDrawerWidth,
-    //     },
-    //     text: {
-    //         display: 'none',
-    //     },
-	// },
-}))
+}));
 
-export default function CustomDrawer({drawerItems}){
-    const [open, setOpen] = useState(false)
+export default function CustomDrawer({drawerItems}) {
+    const {userState: {user,}} = useUserContext()
+    const [open, setOpen] = React.useState(false);
     const classes = useStyles()
+    const theme = useTheme();
+    const isSmUp = useMediaQuery(theme.breakpoints.up("sm"));
+    const toggleDrawer = (event) => {
+        if (
+            event.type === "keydown" &&
+            (event.key === "Tab" || event.key === "Shift")
+        ) {
+            return;
+        }
 
-    return (
-        <Drawer
-            className={classes.drawer}
-            variant="permanent"
-            classes={{
-                paper: classes.drawerPaper,
-            }}
-            anchor="left"
-            role="presentation" // new
-            onClick={() => console.log("drawer clicked")}
-        >
-            <div className={classes.toolbar} />
-            <Divider />
-            <IconButton
-                className={classes.drawerOpenClose}
-                onClick={() => setOpen(!open)}
-            >
-                {open===true? <ArrowLeftIcon/> : <ReorderIcon/>}
-            </IconButton>
-            
-            <Divider 
-                // className={classes.secondDivider}
-                style={{
-                    display: !open && "none",
+        setOpen(!open);
+    };
+    if(!open && !isSmUp) {
+        return(
+            <Drawer
+                className={classes.smallDrawer}
+                variant="permanent"
+                classes={{
+                    paper: classes.smallDrawerPaper,
                 }}
+                anchor="left"
+                role="presentation" // new
+            >
+                <div className={classes.toolbar} />
+                <IconButton
+                    color="inherit"
+                    aria-label="open drawer"
+                    onClick={toggleDrawer}
+                    className={classes.menuButton}
+                >
+                    <MenuIcon />
+                </IconButton>
+            </Drawer>
+        )
+    }else return (
+        <React.Fragment>
+            <Drawer
+                className={classes.drawer}
+                variant={isSmUp ? "permanent" : "temporary"}
+                classes={{
+                    paper: classes.drawerPaper,
+                }}
+                anchor="left"
+                open={open}
+                onClose={toggleDrawer}
+            >
+                <div
+                    style={{
+                        display: isSmUp && "none",
+                        margin: "15px auto 15px 15px",
+                    }}
+                >
+                    <Avatar
+                        src={user.avatar}
+                        style={{
+                            marginBottom: "10px",
+                        }}
+                    />
+                    <Typography 
+                        variant="body1" 
+                        className={classes.userFirstLastName}
+                    >
+                        {user.first_name}{' '}{user.last_name}
+                    </Typography>
+                    <Typography 
+                        variant="body1" 
+                        className={classes.userEmail}
+                    >
+                        {user.email}
+                    </Typography>
+                </div>
+                <div 
+                    className={classes.toolbar} 
+                    style={{
+                        display: !isSmUp && "none",
+                    }}
+                />
+                <Divider />
+                <List>
+                    {drawerItems.map((item) => {
+                        return(
+                            <ListItem key={item.id} button component={Link} href={item.href}>
+                                <ListItemIcon>
+                                    {item.icon}
+                                </ListItemIcon>
+                                <ListItemText 
+                                    primary={
+                                        <Typography 
+                                            variant="body1" 
+                                            className={classes.text}
+                                        >
+                                        {item.text}
+                                        </Typography>
+                                    }
+                                />
+                            </ListItem>
+                        )
+                    })}
+                </List>
+            </Drawer>
+            <Drawer
+                // just a quick fix for main content shifting
+                className={classes.smallDrawer}
+                style={{
+                    display: isSmUp && "none",
+                }}
+                variant="permanent"
+                classes={{
+                    paper: classes.smallDrawerPaper,
+                }}
+                anchor="left"
+                role="presentation" // new
             />
-            <List>
-                {drawerItems.map((item) => {
-                    return(
-                        <ListItem key={item.id} button component={Link} href={item.href}>
-                            <ListItemIcon className={classes.icon}>
-                                {item.icon}
-                            </ListItemIcon>
-                            <ListItemText 
-                                primary={
-                                    <Typography 
-                                        variant="body1" 
-                                        className={classes.text}
-                                    >
-                                      {item.text}
-                                    </Typography>
-                                }
-                            />
-                        </ListItem>
-                    )
-                })}
-            </List>
-        </Drawer>
+        </React.Fragment>
     );
 }
