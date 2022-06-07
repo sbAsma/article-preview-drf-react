@@ -20,6 +20,12 @@ const useStyles = makeStyles((theme) => ({
         marginTop: "90px",
         textAlign: "center",
         minHeight: "calc(100vh - 221px)",
+        height: "100%",
+    },
+    [theme.breakpoints.between("xs", "sm")]:{
+        root:{
+            minHeight: "calc(100vh - 300px)",
+        },
     },
 }))
 
