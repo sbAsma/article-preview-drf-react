@@ -4,7 +4,7 @@ import {Route, BrowserRouter as Router, Switch} from 'react-router-dom'
 import './index.css';
 import App from './App';
 import User from './User'
-import Header from './components/user/header'
+import Header from './components/header'
 import ManageArticles from './components/user/manageArticles'
 import UserProfile from './components/user/userProfile'
 import ChangePassword from './components/auth/changePassword'

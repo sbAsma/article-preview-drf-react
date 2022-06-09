@@ -16,8 +16,8 @@ import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 import BallotIcon from '@material-ui/icons/Ballot';
 import PersonIcon from '@material-ui/icons/Person';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
-import { useUserContext } from "../context/UserContexProvider";
-import axiosInstance from '../../axios';
+import { useUserContext } from "./context/UserContexProvider";
+import axiosInstance from '../axios';
 
 const useStyles = makeStyles((theme) => ({
 	appBar: {
@@ -221,7 +221,7 @@ export default function Header(props) {
 							underline="none"
 							color="textPrimary"
 						>
-						Articles Preview Page
+						Articles Preview
 						</Link>
 					</Typography>
 					<LogInOutButtons
